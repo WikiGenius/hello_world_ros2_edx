@@ -4,6 +4,7 @@ import rclpy
 from rclpy.node import Node
 from hrwros_msgs.msg import SensorInformation
 
+
 class SensorInfoSubscriber(Node):
 
     def __init__(self):
@@ -16,7 +17,10 @@ class SensorInfoSubscriber(Node):
         self.subscription  # prevent unused variable warning
 
     def sensor_info_callback(self, msg):
-        self.get_logger().info('Distance reading from the sensor is: %f' % msg.sensor_data.range)
+        sensor_range = msg.sensor_data.range
+        self.get_logger().info(
+            f'Received sensor data: Range = {round(sensor_range, 3)} meters')
+
 
 def main(args=None):
     rclpy.init(args=args)
@@ -25,11 +29,10 @@ def main(args=None):
 
     rclpy.spin(sensor_info_subscriber)
 
-    # Destroy the node explicitly
-    # (optional - otherwise it will be done automatically
-    # when the garbage collector destroys the node object)
+    # Cleanup
     sensor_info_subscriber.destroy_node()
     rclpy.shutdown()
+
 
 if __name__ == '__main__':
     main()
