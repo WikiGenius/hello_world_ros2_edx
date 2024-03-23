@@ -23,10 +23,14 @@ rosidl_generate_interfaces(${PROJECT_NAME}
   "msg/TargetToolPoses.msg"
   "msg/RobotTrajectories.msg"
   "msg/SensorInformation.msg"
+  "msg/CounterWithDelayFeedback.msg"
+  "msg/CounterWithDelayGoal.msg"
+  "msg/CounterWithDelayResult.msg"
   "srv/ConvertMetresToFeet.srv"
   "action/CounterWithDelay.action"
   DEPENDENCIES std_msgs geometry_msgs trajectory_msgs moveit_msgs action_msgs builtin_interfaces
 )
+
 ament_export_dependencies(rosidl_default_runtime)
 
 if(BUILD_TESTING)
