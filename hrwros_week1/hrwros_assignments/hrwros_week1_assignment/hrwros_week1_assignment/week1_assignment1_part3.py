@@ -37,7 +37,7 @@ class BoxHeightPublisher(Node):
             box_height_info.box_height = height_box
             # Publish box height using the publisher argument passed to the
             # callback function.
-            self.get_logger().info('Height of box %0.3f' % height_box)
+            self.get_logger().info('Height of box %0.3f m' % height_box)
             self.bhi_publisher.publish(box_height_info)
 
 def main(args=None):

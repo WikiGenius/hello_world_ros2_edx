@@ -1,7 +1,7 @@
 #! /usr/bin/env python
 import rclpy
 from rclpy.node import Node
-from hrwros_week1_assignment.msg import <write-your-code-here-Part1>
+from hrwros_msgs.msg import BoxHeightInformation
 from hrwros_msgs.srv import ConvertMetresToFeet
 
 class BoxHeightFeetConverter(Node):
@@ -9,17 +9,13 @@ class BoxHeightFeetConverter(Node):
     def __init__(self):
         super().__init__('box_height_in_feet')
         # First wait for the service to become available - Part2.
-        self.get_logger().info("Waiting for service...")
-        rclpy.wait_for_service('<use the correct service name here>')
-        self.get_logger().info("Service %s is now available", '<use the correct service name here>')
-
+        self.get_logger().info("Waiting for subscription...")
         # Create a subscriber to the box height topic - Part1.
         self.subscription = self.create_subscription(
-            <write-your-code-here-Part1>, '<use the correct topic name here>', self.box_height_info_callback, 10)
-        self.subscription  # prevent unused variable warning
+            BoxHeightInformation, 'box_height_info', self.box_height_info_callback, 10)
 
         # Create a client for the service to convert metres to feet - Part2.
-        self.metres_to_feet_client = self.create_client(ConvertMetresToFeet, '<update the correct details here>')
+        self.metres_to_feet_client = self.create_client(ConvertMetresToFeet, 'metres_to_feet')
 
     def box_height_info_callback(self, data):
         try:
@@ -30,7 +26,7 @@ class BoxHeightFeetConverter(Node):
             # Create a request object
             request = ConvertMetresToFeet.Request()
             # Set request data here
-            <write-your-code-here-Part2>
+            request.distance_metres = data.box_height
 
             # Call the service here.
             self.future = self.metres_to_feet_client.call_async(request)
@@ -42,8 +38,7 @@ class BoxHeightFeetConverter(Node):
     def future_callback(self, future):
         try:
             response = future.result()
-            # Write a log message here to print the height of this box in feet.
-            <write-your-code-here-Part2>
+            self.get_logger().info(('Height of box %0.3f Feet' % response.distance_feet))
         except Exception as e:
             self.get_logger().info('Service call failed %r' % (e,))
 
