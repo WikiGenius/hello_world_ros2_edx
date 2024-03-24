@@ -1,1 +1,1 @@
-SensorInformation sensor_info
+float32 box_height
