@@ -46,7 +46,7 @@ def main(args=None):
 
     action_client = CounterWithDelayClientAsync()
 
-    action_client.send_goal(20)
+    action_client.send_goal(5)
 
     rclpy.spin(action_client)
 

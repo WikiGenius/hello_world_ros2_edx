@@ -30,6 +30,7 @@ class CounterWithDelayActionServer(Node):
                 return CounterWithDelay.Result()
     
             feedback_msg.counts_elapsed = counter_idx
+            self.get_logger().info('Feedback: {0}'.format(feedback_msg.counts_elapsed))
             goal_handle.publish_feedback(feedback_msg)
             time.sleep(counter_delay_value)  # Directly use counter_delay_value for sleep
 
