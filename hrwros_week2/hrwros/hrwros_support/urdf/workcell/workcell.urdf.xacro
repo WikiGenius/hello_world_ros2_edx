@@ -1,9 +1,8 @@
 <?xml version="1.0" ?>
 <robot name="workcell_urdf" xmlns:xacro="http://www.ros.org/wiki/xacro">
-    <xacro:macro name="workcell_urdf" params="workcell_parent">
+    <xacro:macro name="workcell_urdf" params="parent">
 
     <!-- Links -->
-    <link name="world_interface"/>
     <link name="workcell">
       <visual>
         <geometry>
@@ -23,8 +22,8 @@
       </inertial>
     </link>
 
-    <joint name="workcell_to_world_interface" type="fixed">
-      <parent link="${workcell_parent}" />
+    <joint name="workcell_to_${parent}" type="fixed">
+      <parent link="${parent}" />
       <child link="workcell" />
       <origin xyz="0 0 0" rpy="0 0 ${radians(90)}" />
     </joint>

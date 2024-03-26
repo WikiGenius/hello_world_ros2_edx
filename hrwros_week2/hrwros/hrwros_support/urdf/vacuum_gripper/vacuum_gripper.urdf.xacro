@@ -1,8 +1,8 @@
 <?xml version="1.0"?>
 <robot xmlns:xacro="http://www.ros.org/wiki/xacro">
-  <xacro:macro name="vacuum_gripper_urdf" params="prefix joint_prefix">
+  <xacro:macro name="vacuum_gripper_urdf" params="prefix parent robot_name">
     <!-- link list -->
-    <link name="${prefix}base_link">
+    <link name="${prefix}_base_link">
       <visual>
         <origin xyz="0 0 0" rpy="0 0 0" />
         <geometry>
@@ -27,7 +27,7 @@
         <mass value="1.0" />
       </inertial>
     </link>
-    <link name="${prefix}suction_cup">
+    <link name="${prefix}_suction_cup">
       <visual>
         <origin xyz="0 0 0" rpy="0 0 0" />
         <geometry>
@@ -54,10 +54,16 @@
     </link>
 
     <!-- joint list -->
-    <joint name="${joint_prefix}" type="fixed">
+    <joint name="${prefix}_joint" type="fixed">
       <origin xyz="0 0 0.01" rpy="0 0 0" />
-      <parent link="${prefix}base_link" />
-      <child link="${prefix}suction_cup" />
+      <parent link="${prefix}_base_link" />
+      <child link="${prefix}_suction_cup" />
     </joint>
+
+  <joint name="{prefix}_to_${robot_name}" type="fixed">
+    <parent link="${parent}" />
+    <child link="${prefix}_base_link" />
+  </joint>
+
   </xacro:macro>
 </robot>
