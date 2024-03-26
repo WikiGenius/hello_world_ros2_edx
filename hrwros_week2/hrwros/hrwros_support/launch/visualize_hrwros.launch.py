@@ -4,6 +4,8 @@ from launch.conditions import IfCondition, UnlessCondition
 from launch.substitutions import LaunchConfiguration, Command, FindExecutable, PathJoinSubstitution
 from launch_ros.actions import Node
 from ament_index_python.packages import get_package_share_directory
+from launch_ros.parameter_descriptions import ParameterValue
+# ParameterValue(value, value_type=str)
 
 
 def generate_launch_description():
@@ -15,16 +17,6 @@ def generate_launch_description():
             description='Flag to enable GUI for joint state publisher.'
         ),
         DeclareLaunchArgument(
-            'name',
-            default_value='robot1',
-            description='Name of the arm robot'
-        ),
-        DeclareLaunchArgument(
-            'ur_type',
-            default_value='ur10',
-            description='Type of the arm robot'
-        ),
-        DeclareLaunchArgument(
             'robot_description',
             default_value=Command([
                 FindExecutable(name='xacro'),
@@ -34,10 +26,6 @@ def generate_launch_description():
                     'urdf',
                     'hrwros.xacro'
                 ]),
-                ' ',
-                'name:=', LaunchConfiguration('name'),
-                ' ',
-                'ur_type:=', LaunchConfiguration('ur_type')
             ]),
             description='Full robot description'
         ),
@@ -50,7 +38,9 @@ def generate_launch_description():
         name='robot_state_publisher',
         output='screen',
         parameters=[
-            {'robot_description': LaunchConfiguration('robot_description')}]
+            {'robot_description': ParameterValue(
+                LaunchConfiguration('robot_description'), value_type=str)},
+        ]
     )
 
     joint_state_publisher_gui_node = Node(
@@ -58,11 +48,6 @@ def generate_launch_description():
         executable='joint_state_publisher_gui',
         name='joint_state_publisher',
         condition=IfCondition(LaunchConfiguration('gui')),
-        parameters=[PathJoinSubstitution([
-            get_package_share_directory('hrwros_support'),
-            'config',
-            'zeros.yaml'
-        ])]
     )
 
     joint_state_publisher_node = Node(
@@ -70,9 +55,6 @@ def generate_launch_description():
         executable='joint_state_publisher',
         name='joint_state_publisher',
         condition=UnlessCondition(LaunchConfiguration('gui')),
-        parameters=[{
-            'zeros': LaunchConfiguration('zeros')
-        }],
     )
     rviz_node = Node(
         package='rviz2',
