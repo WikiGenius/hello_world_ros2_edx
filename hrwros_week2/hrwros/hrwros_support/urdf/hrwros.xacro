@@ -22,10 +22,6 @@
     <origin xyz="0 0 0.95" rpy="0 0 0" />
   </xacro:custom_arm_robot>
 
-  <!-- Vacuum Gripper1 -->
-  <xacro:include filename="$(find hrwros_support)/urdf/vacuum_gripper/vacuum_gripper.urdf.xacro"/>
-  <xacro:vacuum_gripper_urdf prefix="vacuum_gripper1" parent="robot1_tool0" robot_name="robot1"/>
-
   <!-- bins -->
   <xacro:include filename="$(find hrwros_support)/urdf/bin/bin.urdf.xacro"/>
   <xacro:bin_urdf prefix="bin_1" parent="world"/>

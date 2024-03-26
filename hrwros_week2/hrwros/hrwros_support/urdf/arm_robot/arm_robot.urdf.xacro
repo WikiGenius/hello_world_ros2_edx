@@ -75,7 +75,9 @@
         </gazebo>
     </xacro:if>
 
-
+  <!-- Vacuum Gripper1 -->
+  <xacro:include filename="$(find hrwros_support)/urdf/vacuum_gripper/vacuum_gripper.urdf.xacro"/>
+  <xacro:vacuum_gripper_urdf prefix="${name}" parent="${name}_tool0"/>
     </xacro:macro>
 
 </robot>
