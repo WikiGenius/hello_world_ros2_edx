@@ -1,0 +1,23 @@
+<?xml version="1.0" ?>
+<robot name="container_arm_robot_pedestal_urdf"
+    xmlns:xacro="http://www.ros.org/wiki/xacro">
+
+    <!-- robot pedestal -->
+    <xacro:macro name = "container_arm_robot_pedestal_urdf" params = "robot_name ur_type parent_pedestal height_pedestal  *origin_pedestal">
+
+        <!-- Robot Pedestal -->
+        <xacro:include filename="$(find hrwros_support)/urdf/container_arm_robot_pedestal/robot_pedestal/robot_pedestal.urdf.xacro"/>
+        <xacro:robot_pedestal_urdf prefix="${robot_name}" parent="${parent_pedestal}" pedestal_height="${height_pedestal}">
+            <xacro:insert_block name="origin_pedestal" />
+        </xacro:robot_pedestal_urdf>
+
+        <!-- Robot -->
+        <xacro:include filename="$(find hrwros_support)/urdf/container_arm_robot_pedestal/arm_robot/arm_robot_prop.urdf.xacro"/>
+        <xacro:include filename="$(find hrwros_support)/urdf/container_arm_robot_pedestal/arm_robot/arm_robot.urdf.xacro"/>
+        <xacro:custom_arm_robot name="${robot_name}" ur_type="${ur_type}" parent="${robot_name}_pedestal_link">
+            <origin xyz="0 0 ${height_pedestal}" rpy="0 0 0" />
+        </xacro:custom_arm_robot>
+
+    </xacro:macro>
+
+</robot>

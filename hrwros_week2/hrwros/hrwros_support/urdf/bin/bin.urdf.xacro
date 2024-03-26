@@ -1,6 +1,6 @@
 <?xml version="1.0"?>
 <robot xmlns:xacro="http://www.ros.org/wiki/xacro">
-  <xacro:macro name="bin_urdf" params="prefix parent">
+  <xacro:macro name="bin_urdf" params="prefix parent *origin">
     <!-- link list -->
     <link name="${prefix}_base_link">
       <visual>
@@ -38,7 +38,7 @@
     <joint name="${prefix}_joint_1" type="fixed">
       <parent link="${parent}" />
       <child link="${prefix}_base_link" />
-      <origin xyz="-0.3 1.2 0.0" rpy="0 0 0" />
+      <xacro:insert_block name="origin" />
     </joint>
 
     <joint name="${prefix}_joint_2" type="fixed">

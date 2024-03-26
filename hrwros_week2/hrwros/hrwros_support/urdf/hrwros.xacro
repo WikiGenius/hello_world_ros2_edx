@@ -1,5 +1,6 @@
 <?xml version="1.0" ?>
-<robot name="robot" xmlns:xacro="http://www.ros.org/wiki/xacro">
+<robot name="robot"
+  xmlns:xacro="http://www.ros.org/wiki/xacro">
 
   <!-- world -->
   <link name="world" />
@@ -8,22 +9,23 @@
   <xacro:include filename="$(find hrwros_support)/urdf/workcell/workcell.urdf.xacro"/>
   <xacro:workcell_urdf parent="world"/>
 
-
-  <!-- Robot1 Pedestal -->
-  <xacro:include filename="$(find hrwros_support)/urdf/robot_pedestal/robot_pedestal.urdf.xacro"/>
-  <xacro:robot_pedestal_urdf prefix="robot1" parent="world" pedestal_height="0.95">
-    <origin xyz="0.5 1.8 0.0" rpy="0 0 0"/>
-  </xacro:robot_pedestal_urdf>
+  <!-- Robots -->
+  <xacro:include filename="$(find hrwros_support)/urdf/container_arm_robot_pedestal/container_arm_robot_pedestal.urdf.xacro"/>
 
   <!-- Robot1 -->
-  <xacro:include filename="$(find hrwros_support)/urdf/arm_robot/arm_robot_prop.urdf.xacro"/>
-  <xacro:include filename="$(find hrwros_support)/urdf/arm_robot/arm_robot.urdf.xacro"/>
-  <xacro:custom_arm_robot name="robot1" ur_type="ur10" parent="robot1_pedestal_link">
-    <origin xyz="0 0 0.95" rpy="0 0 0" />
-  </xacro:custom_arm_robot>
+  <xacro:container_arm_robot_pedestal_urdf robot_name="robot1" ur_type="ur10" parent_pedestal="world" height_pedestal="0.95">
+    <origin xyz="0.5 1.8 0.0" rpy="0 0 0"/>
+  </xacro:container_arm_robot_pedestal_urdf>
 
-  <!-- bins -->
+  <!-- Robot2 -->
+  <xacro:container_arm_robot_pedestal_urdf robot_name="robot2" ur_type="ur10" parent_pedestal="world" height_pedestal="0.5">
+    <origin xyz="-7.6 -0.5 0.0" rpy="0 0 0"/>
+  </xacro:container_arm_robot_pedestal_urdf>
+
+  <!-- bin1 -->
   <xacro:include filename="$(find hrwros_support)/urdf/bin/bin.urdf.xacro"/>
-  <xacro:bin_urdf prefix="bin_1" parent="world"/>
+  <xacro:bin_urdf prefix="bin_1" parent="world">
+    <origin xyz="-7.6 -1.7 0" rpy="0 0 0" />
+  </xacro:bin_urdf>
 
 </robot>
