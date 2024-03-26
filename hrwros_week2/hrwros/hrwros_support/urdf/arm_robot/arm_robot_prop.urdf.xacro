@@ -1,0 +1,49 @@
+<?xml version="1.0"?>
+<robot xmlns:xacro="http://www.ros.org/wiki/xacro">
+
+    <!-- Define default values and include necessary macros -->
+
+    <xacro:property name="transmission_hw_interface" value=""/>
+    <xacro:property name="safety_limits" value="false"/>
+    <xacro:property name="safety_pos_margin" value="0.15"/>
+    <xacro:property name="safety_k_position" value="20"/>
+    <!-- ros2_control related parameters -->
+    <xacro:property name="headless_mode" value="false" />
+    <xacro:property name="robot_ip" value="0.0.0.0" />
+    <xacro:property name="script_filename" value=""/>
+    <xacro:property name="output_recipe_filename" value=""/>
+    <xacro:property name="input_recipe_filename" value=""/>
+    <xacro:property name="reverse_ip" value="0.0.0.0"/>
+    <xacro:property name="script_command_port" value="50004"/>
+    <xacro:property name="reverse_port" value="50001"/>
+    <xacro:property name="script_sender_port" value="50002"/>
+    <xacro:property name="trajectory_port" value="50003"/>
+    <!--   tool communication related parameters-->
+    <xacro:property name="use_tool_communication" value="false" />
+    <xacro:property name="tool_voltage" value="0" />
+    <xacro:property name="tool_parity" value="0" />
+    <xacro:property name="tool_baud_rate" value="115200" />
+    <xacro:property name="tool_stop_bits" value="1" />
+    <xacro:property name="tool_rx_idle_chars" value="1.5" />
+    <xacro:property name="tool_tx_idle_chars" value="3.5" />
+    <xacro:property name="tool_device_name" value="/tmp/ttyUR" />
+    <xacro:property name="tool_tcp_port" value="54321" />
+
+    <!-- Simulation parameters -->
+    <xacro:property name="use_fake_hardware" value="false" />
+    <xacro:property name="fake_sensor_commands" value="false" />
+    <xacro:property name="sim_gazebo" value="false" />
+    <xacro:property name="sim_ignition" value="false" />
+    <xacro:property name="simulation_controllers" value="" />
+
+   <!-- initial position for simulations (Fake Hardware, Gazebo, Ignition) -->
+   <xacro:arg name="initial_positions_file" default="$(find ur_description)/config/initial_positions.yaml"/>
+
+   <!-- convert to property to use substitution in function -->
+   <xacro:property name="initial_positions_file" default="$(arg initial_positions_file)"/>
+
+
+</robot>
+  
+  
+  
