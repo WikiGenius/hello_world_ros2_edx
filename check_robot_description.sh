@@ -48,6 +48,8 @@ else
   exit 1
 fi
 
+ros2 run tf2_tools view_frames
+
 echo "Process completed successfully."
 
 
