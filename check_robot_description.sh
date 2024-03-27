@@ -2,8 +2,8 @@
 
 # Define paths and filenames
 WORKSPACE_DIR=~/Main/programming/ros2_ws
-HRWROS_DIR="$WORKSPACE_DIR/src/hello_world_ros2_edx/hrwros_week2/hrwros"
-HRWROS_XACRO="$HRWROS_DIR/hrwros_support/urdf/hrwros.xacro"
+HRWROS_DIR="$WORKSPACE_DIR/src/hello_world_ros2_edx/hrwros_week2/hrwros_assignments"
+HRWROS_XACRO="$HRWROS_DIR/hrwros_week2_assignment/urdf/hrwros_assignment1.xacro"
 
 DEBUG_DIR=~/Downloads/debug_hrwros_support
 HRWROS_URDF="$DEBUG_DIR/hrwros.urdf"  # Store URDF in the Downloads directory

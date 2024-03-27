@@ -1,0 +1,38 @@
+<?xml version="1.0" ?>
+<robot name="robot" xmlns:xacro="http://www.ros.org/wiki/xacro">
+
+  <!-- world -->
+  <link name="world" />
+
+  <!-- workcell -->
+  <xacro:include filename="$(find hrwros_support)/urdf/workcell/workcell.urdf.xacro"/>
+  <xacro:workcell_urdf parent="world"/>
+
+  <!-- Robots -->
+  <xacro:include filename="$(find hrwros_support)/urdf/container_arm_robot_pedestal/container_arm_robot_pedestal.urdf.xacro"/>
+
+  <!-- Robot1 -->
+  <xacro:container_arm_robot_pedestal_urdf robot_name="robot1" ur_type="ur10" parent_pedestal="world" height_pedestal="0.95">
+    <origin xyz="0.5 1.8 0.0" rpy="0 0 0"/>
+  </xacro:container_arm_robot_pedestal_urdf>
+
+  <!-- Robot2 -->
+  <xacro:container_arm_robot_pedestal_urdf robot_name="robot2" ur_type="ur5" parent_pedestal="world" height_pedestal="0.6">
+    <origin xyz="-7.8 -1.5 0" rpy="0 0 0"/>
+  </xacro:container_arm_robot_pedestal_urdf>
+  
+  <!-- bin1 -->
+  <xacro:include filename="$(find hrwros_support)/urdf/bin/bin.urdf.xacro"/>
+  <xacro:bin_urdf prefix="bin_1" parent="world">
+    <origin xyz="-8.0 -2.2 0" rpy="0 0 0" />
+  </xacro:bin_urdf>
+
+
+
+  <!-- Add your solution to assignment 2 here -->
+
+
+
+
+
+</robot>
