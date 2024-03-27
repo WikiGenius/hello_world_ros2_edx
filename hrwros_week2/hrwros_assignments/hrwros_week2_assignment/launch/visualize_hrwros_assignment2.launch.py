@@ -23,7 +23,7 @@ def generate_launch_description():
                 PathJoinSubstitution([
                     get_package_share_directory('hrwros_week2_assignment'),
                     'urdf',
-                    'hrwros_assignment3.xacro'
+                    'hrwros_assignment2.xacro'
                 ]),
             ]),
             description='Full robot description'

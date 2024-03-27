@@ -30,7 +30,11 @@
 
 
   <!-- Add your solution to assignment 2 here -->
-
+  <!-- sphere1 -->
+  <xacro:include filename="$(find hrwros_week2_assignment)/urdf/include/sphere.xacro"/>
+  <xacro:sphere_urdf prefix="sphere_1" parent="world" radius="0.4">
+    <origin xyz="5.2 -6 0" rpy="0 0 0" />
+  </xacro:sphere_urdf>
 
 
 

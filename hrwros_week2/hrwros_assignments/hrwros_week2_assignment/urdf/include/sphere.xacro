@@ -1,0 +1,32 @@
+<?xml version="1.0"?>
+<robot xmlns:xacro="http://www.ros.org/wiki/xacro">
+    <xacro:macro name="sphere_urdf" params="prefix parent radius *origin">
+        <!-- link list -->
+        <link name="${prefix}_sphere_link">
+            <visual>
+                <origin xyz="0 0 ${radius}" rpy="0 0 0" />
+                <material name="green">
+                    <color rgba="0.0 1.0 0.0 1.0"/>
+                </material>
+                <geometry>
+                    <sphere radius="${radius}"/>
+                </geometry>
+            </visual>
+            <collision>
+                <material name="green"/>
+                <origin xyz="0 0 ${radius}" rpy="0 0 0"/>
+                <geometry>
+                    <sphere radius="${radius}"/>
+                </geometry>
+            </collision>
+        </link>
+
+        <!-- joint list -->
+        <joint name="${prefix}_joint_1" type="fixed">
+            <parent link="${parent}" />
+            <child link="${prefix}_sphere_link" />
+            <xacro:insert_block name="origin" />
+        </joint>
+
+    </xacro:macro>
+</robot>
