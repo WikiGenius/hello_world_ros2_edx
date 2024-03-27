@@ -62,7 +62,6 @@ def generate_launch_description():
         arguments=['-d', PathJoinSubstitution(
             [get_package_share_directory('hrwros_week2_assignment'), 'config', 'assignment1.rviz'])],
         output='screen',
-        on_exit=Shutdown(),
     )
 
     launch_description_elements = declare_arguments + [
