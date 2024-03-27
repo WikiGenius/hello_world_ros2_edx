@@ -1,5 +1,5 @@
 from launch import LaunchDescription
-from launch.actions import DeclareLaunchArgument
+from launch.actions import DeclareLaunchArgument, Shutdown
 from launch.conditions import IfCondition, UnlessCondition
 from launch.substitutions import LaunchConfiguration, Command, FindExecutable, PathJoinSubstitution
 from launch_ros.actions import Node
@@ -62,6 +62,8 @@ def generate_launch_description():
         arguments=['-d', PathJoinSubstitution(
             [get_package_share_directory('hrwros_week2_assignment'), 'config', 'assignment2.rviz'])],
         output='screen',
+        on_exit=Shutdown(),
+
     )
 
     launch_description_elements = declare_arguments + [

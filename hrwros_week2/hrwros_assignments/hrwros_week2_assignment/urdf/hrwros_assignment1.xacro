@@ -23,11 +23,16 @@
   
   <!-- bin1 -->
   <xacro:include filename="$(find hrwros_support)/urdf/bin/bin.urdf.xacro"/>
+
   <xacro:bin_urdf prefix="bin_1" parent="world">
     <origin xyz="-8.0 -2.2 0" rpy="0 0 0" />
   </xacro:bin_urdf>
 
 
+  <!-- bin2 -->
+  <xacro:bin_urdf prefix="bin_2" parent="world">
+    <origin xyz="2.5 -3.2 0" rpy="0 0 0" />
+  </xacro:bin_urdf>
 
   <!-- Add your solution to assignment 1 here -->
 
