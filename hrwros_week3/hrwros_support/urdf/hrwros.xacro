@@ -43,6 +43,7 @@
   </xacro:logical_camera_urdf>
 
   <!-- Break Beam -->
-  <xacro:break_beam_urdf prefix="break_beam_" parent="world"/>
-
+  <xacro:break_beam_urdf prefix="break_beam_" parent="world">
+    <origin xyz="1.6 1.9 0.925" rpy="0 0 ${radians(180)}" />
+  </xacro:break_beam_urdf>
 </robot>
