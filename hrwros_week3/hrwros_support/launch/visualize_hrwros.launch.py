@@ -52,6 +52,7 @@ def get_robot_state_publisher_node():
 
 
 def get_joint_state_publisher_nodes():
+    # https://index.ros.org/p/joint_state_publisher/
     joint_state_publisher_params = PathJoinSubstitution([
         FindPackageShare('hrwros_support'),
         'config',
