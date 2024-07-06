@@ -3,10 +3,8 @@ from launch.actions import DeclareLaunchArgument
 from launch.substitutions import LaunchConfiguration, Command, FindExecutable, PathJoinSubstitution
 from ament_index_python.packages import get_package_share_directory
 
-
-def generate_launch_description():
-    #  List to hold all declarations for cleaner assembly
-    declare_arguments = [
+def get_declare_arguments():
+    return [
         DeclareLaunchArgument(
             'robot_description',
             default_value=Command([
@@ -22,4 +20,8 @@ def generate_launch_description():
         ),
     ]
 
+def generate_launch_description():
+    # Call the function to get the list of declare arguments
+    declare_arguments = get_declare_arguments()
     return LaunchDescription(declare_arguments)
+

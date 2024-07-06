@@ -1,5 +1,4 @@
 import os
-
 from ament_index_python.packages import get_package_share_directory
 from launch import LaunchDescription
 from launch.actions import DeclareLaunchArgument, IncludeLaunchDescription, ExecuteProcess
@@ -25,6 +24,69 @@ def include_launch_description(package_name, launch_file_name, launch_arguments)
         PythonLaunchDescriptionSource(launch_file_path),
         launch_arguments=launch_arguments.items()
     )
+
+def create_execute_process():
+    return ExecuteProcess(
+        cmd=['timed_roslaunch.sh', '7', 'hrwros_gazebo', 'spawn_turtlebot.launch'],
+        output='screen'
+    )
+
+def create_nodelet_manager_nodes(hrwros_gazebo_share):
+    return [
+        Node(
+            package='nodelet',
+            executable='nodelet',
+            name='mobile_base_nodelet_manager',
+            arguments=['manager']
+        ),
+        Node(
+            package='nodelet',
+            executable='nodelet',
+            name='cmd_vel_mux',
+            arguments=['load', 'yocs_cmd_vel_mux/CmdVelMuxNodelet', 'mobile_base_nodelet_manager'],
+            parameters=[{'yaml_cfg_file': os.path.join(hrwros_gazebo_share, 'param', 'mux.yaml')}],
+            remappings=[
+                ('cmd_vel_mux/output', 'mobile_base/commands/velocity')
+            ]
+        ),
+        Node(
+            package='nodelet',
+            executable='nodelet',
+            name='laserscan_nodelet_manager',
+            arguments=['manager']
+        ),
+        Node(
+            package='nodelet',
+            executable='nodelet',
+            name='depthimage_to_laserscan',
+            arguments=['load', 'depthimage_to_laserscan/DepthImageToLaserScanNodelet', 'laserscan_nodelet_manager'],
+            parameters=[
+                {'scan_height': 10},
+                {'output_frame_id': 'camera_depth_frame'},
+                {'range_min': 0.45}
+            ],
+            remappings=[
+                ('image', '/camera/depth/image_raw'),
+                ('scan', '/scan')
+            ]
+        )
+    ]
+
+def create_static_transform_nodes():
+    return [
+        Node(
+            package='tf2_ros',
+            executable='static_transform_publisher',
+            name='map_to_target1',
+            arguments=['0.13', '1.44', '0', '0', '0', '0', '1', 'map', 'turtlebot_target1']
+        ),
+        Node(
+            package='tf2_ros',
+            executable='static_transform_publisher',
+            name='map_to_target2',
+            arguments=['-8.1', '-1.43', '0', '0', '0', '0', '1', 'map', 'turtlebot_target2']
+        )
+    ]
 
 def generate_launch_description():
     paused = LaunchConfiguration('paused')
@@ -53,66 +115,11 @@ def generate_launch_description():
         include_launch_description('hrwros_gazebo', 'spawn_static_world_objects.launch.py', {}),
         include_launch_description('hrwros_gazebo', 'spawn_robots.launch.py', {}),
 
-        # Timed roslaunch to spawn turtlebot
-        ExecuteProcess(
-            cmd=['timed_roslaunch.sh', '7', 'hrwros_gazebo', 'spawn_turtlebot.launch'],
-            output='screen'
-        ),
+        create_execute_process(),
 
-        # Velocity muxer and controller for turtlebot
-        Node(
-            package='nodelet',
-            executable='nodelet',
-            name='mobile_base_nodelet_manager',
-            arguments=['manager']
-        ),
-        Node(
-            package='nodelet',
-            executable='nodelet',
-            name='cmd_vel_mux',
-            arguments=['load', 'yocs_cmd_vel_mux/CmdVelMuxNodelet', 'mobile_base_nodelet_manager'],
-            parameters=[{'yaml_cfg_file': os.path.join(hrwros_gazebo_share, 'param', 'mux.yaml')}],
-            remappings=[
-                ('cmd_vel_mux/output', 'mobile_base/commands/velocity')
-            ]
-        ),
+        *create_nodelet_manager_nodes(hrwros_gazebo_share),
 
-        # Fake laser
-        Node(
-            package='nodelet',
-            executable='nodelet',
-            name='laserscan_nodelet_manager',
-            arguments=['manager']
-        ),
-        Node(
-            package='nodelet',
-            executable='nodelet',
-            name='depthimage_to_laserscan',
-            arguments=['load', 'depthimage_to_laserscan/DepthImageToLaserScanNodelet', 'laserscan_nodelet_manager'],
-            parameters=[
-                {'scan_height': 10},
-                {'output_frame_id': 'camera_depth_frame'},
-                {'range_min': 0.45}
-            ],
-            remappings=[
-                ('image', '/camera/depth/image_raw'),
-                ('scan', '/scan')
-            ]
-        ),
-
-        # Static transforms
-        Node(
-            package='tf2_ros',
-            executable='static_transform_publisher',
-            name='map_to_target1',
-            arguments=['0.13', '1.44', '0', '0', '0', '0', '1', 'map', 'turtlebot_target1']
-        ),
-        Node(
-            package='tf2_ros',
-            executable='static_transform_publisher',
-            name='map_to_target2',
-            arguments=['-8.1', '-1.43', '0', '0', '0', '0', '1', 'map', 'turtlebot_target2']
-        ),
+        *create_static_transform_nodes()
     ])
 
 if __name__ == '__main__':
