@@ -7,7 +7,7 @@ Authors: the HRWROS mooc instructors
 */
 
 #include <boost/filesystem.hpp>
-#include <gazebo_msgs/srv/spawn_entity.hpp>
+#include <hrwros_gazebo_interface/srv/spawn_entity.hpp>
 #include "hrwros_gazebo/conveyor_spawner.h"
 #include "hrwros_gazebo/urdf_creator.h"
 #include <random>

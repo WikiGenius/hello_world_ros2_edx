@@ -6,8 +6,8 @@
 #include <rclcpp/rclcpp.hpp>
 #include <sdf/sdf.hh>
 #include "hrwros_gazebo/plugins/ROSVacuumGripperPlugin.hh"
-#include "hrwros_gazebo/srv/vacuum_gripper_control.hpp"
-#include "hrwros_gazebo/msg/vacuum_gripper_state.hpp"
+#include "hrwros_gazebo_interface/srv/vacuum_gripper_control.hpp"
+#include "hrwros_gazebo_interface/msg/vacuum_gripper_state.hpp"
 
 namespace gazebo
 {

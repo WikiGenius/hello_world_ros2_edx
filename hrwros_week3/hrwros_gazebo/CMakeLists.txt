@@ -10,7 +10,8 @@ endif()
 find_package(ament_cmake REQUIRED)
 find_package(rclcpp REQUIRED)
 find_package(std_msgs REQUIRED)
-find_package(geometry_msgs REQUIRED)
+find_package(std_msgs REQUIRED)
+find_package(hrwros_gazebo_interface REQUIRED)
 find_package(sensor_msgs REQUIRED)
 find_package(std_srvs REQUIRED)
 find_package(tf2 REQUIRED)
@@ -19,18 +20,9 @@ find_package(gazebo_dev REQUIRED)
 find_package(gazebo_msgs REQUIRED)
 find_package(tinyxml_vendor REQUIRED)
 find_package(TinyXML REQUIRED)
+find_package(rosidl_default_generators REQUIRED)
+find_package(urdf REQUIRED)
 
-# Generate messages and services
-rosidl_generate_interfaces(${PROJECT_NAME}
-  "msg/ConveyorBeltState.msg"
-  "msg/VacuumGripperState.msg"
-  "msg/Proximity.msg"
-  "msg/Model.msg"
-  "msg/LogicalCameraImage.msg"
-  "srv/ConveyorBeltControl.srv"
-  "srv/VacuumGripperControl.srv"
-  DEPENDENCIES std_msgs geometry_msgs
-)
 
 ament_export_dependencies(rosidl_default_runtime)
 
@@ -48,6 +40,8 @@ include_directories(
   ${gazebo_dev_INCLUDE_DIRS}
   ${gazebo_msgs_INCLUDE_DIRS}
   ${TinyXML_INCLUDE_DIRS}
+  ${urdf_INCLUDE_DIRS}
+
 )
 
 link_directories(

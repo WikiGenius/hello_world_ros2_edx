@@ -21,7 +21,7 @@
 #include <memory>
 #include <gazebo/physics/PhysicsTypes.hh>
 #include <sdf/sdf.hh>
-#include "hrwros_gazebo/VacuumGripperControl.h"
+#include "hrwros_gazebo_interface/srv/vacuum_gripper_control.hpp"
 #include "VacuumGripperPlugin.hh"
 
 namespace gazebo

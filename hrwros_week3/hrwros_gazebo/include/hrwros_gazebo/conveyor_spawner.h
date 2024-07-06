@@ -2,11 +2,13 @@
 #define GILBRETH_SUPPORT_CONVEYOR_SPAWNER_H
 
 #include <geometry_msgs/msg/pose.hpp>
+#include <std_msgs/msg/string.hpp>
 #include <rclcpp/rclcpp.hpp>
 #include <std_srvs/srv/empty.hpp>
 #include <urdf/model.h>
 #include <vector>
 #include <string>
+
 
 namespace hrwros
 {

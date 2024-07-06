@@ -1,7 +1,7 @@
 #include "hrwros_gazebo/plugins/ROSLogicalCameraPlugin.hh"
 
 #include "hrwros_gazebo/plugins/ARIAC.hh"
-#include "hrwros_gazebo/msg/logical_camera_image.hpp"
+#include "hrwros_gazebo_interface/msg/logical_camera_image.hpp"
 
 #include <gazebo/physics/Link.hh>
 #include <gazebo/physics/Model.hh>

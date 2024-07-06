@@ -8,7 +8,7 @@
 
 // ROS 2
 #include <rclcpp/rclcpp.hpp>
-#include <hrwros_gazebo/msg/proximity.hpp>
+#include <hrwros_gazebo_interface/msg/proximity.hpp>
 
 namespace gazebo
 {

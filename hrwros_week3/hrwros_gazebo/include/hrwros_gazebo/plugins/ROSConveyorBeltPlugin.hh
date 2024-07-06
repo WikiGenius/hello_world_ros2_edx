@@ -9,7 +9,7 @@
 
 // ROS 2
 #include <rclcpp/rclcpp.hpp>
-#include "hrwros_gazebo/srv/conveyor_belt_control.hpp"
+#include "hrwros_gazebo_interface/srv/conveyor_belt_control.hpp"
 
 namespace gazebo
 {

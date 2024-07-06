@@ -19,7 +19,8 @@
 
 // ROS 2
 #include <rclcpp/rclcpp.hpp>
-#include "hrwros_gazebo/msg/logical_camera_image.hpp"
+#include "hrwros_gazebo_interface/msg/logical_camera_image.hpp"
+
 #include <tf2_ros/transform_broadcaster.h>
 
 namespace gazebo

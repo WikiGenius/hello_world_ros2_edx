@@ -3,7 +3,7 @@
 #include <gazebo_ros/node.hpp>
 #include <rclcpp/rclcpp.hpp>
 #include <std_msgs/msg/header.hpp>
-#include "hrwros_gazebo/msg/proximity.hpp"
+#include "hrwros_gazebo_interface/msg/proximity.hpp"
 
 using namespace gazebo;
 GZ_REGISTER_SENSOR_PLUGIN(ROSProximityRayPlugin)
