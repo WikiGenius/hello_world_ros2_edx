@@ -1,12 +1,13 @@
 from launch import LaunchDescription
 from launch.actions import DeclareLaunchArgument
 from launch.conditions import IfCondition, UnlessCondition
-from launch.substitutions import LaunchConfiguration, Command, FindExecutable, PathJoinSubstitution
+from launch.substitutions import LaunchConfiguration, PathJoinSubstitution
 from launch_ros.actions import Node
 from ament_index_python.packages import get_package_share_directory
 from launch_ros.parameter_descriptions import ParameterValue
 from launch.launch_description_sources import PythonLaunchDescriptionSource
 from launch.actions import IncludeLaunchDescription
+from launch_ros.substitutions import FindPackageShare
 
 
 def get_declare_arguments():
@@ -19,7 +20,7 @@ def get_declare_arguments():
         DeclareLaunchArgument(
             'rviz_config_file',
             default_value=PathJoinSubstitution(
-                [get_package_share_directory('hrwros_support'), 'config', 'hrwros.rviz']),
+                [get_package_share_directory('hrwros_support'), 'rviz', 'hrwros.rviz']),
             description='Full path to the RViz config file'
         )
     ]
@@ -51,16 +52,23 @@ def get_robot_state_publisher_node():
 
 
 def get_joint_state_publisher_nodes():
+    joint_state_publisher_params = PathJoinSubstitution([
+        FindPackageShare('hrwros_support'),
+        'config',
+        'joint_states.yaml'
+    ])
     gui_node = Node(
         package='joint_state_publisher_gui',
         executable='joint_state_publisher_gui',
         name='joint_state_publisher',
+        parameters=[joint_state_publisher_params],
         condition=IfCondition(LaunchConfiguration('gui')),
     )
     non_gui_node = Node(
         package='joint_state_publisher',
         executable='joint_state_publisher',
         name='joint_state_publisher',
+        parameters=[joint_state_publisher_params],
         condition=UnlessCondition(LaunchConfiguration('gui')),
     )
     return [gui_node, non_gui_node]
