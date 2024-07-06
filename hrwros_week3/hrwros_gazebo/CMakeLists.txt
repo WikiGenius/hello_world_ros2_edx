@@ -17,6 +17,7 @@ find_package(tf2 REQUIRED)
 find_package(tf2_ros REQUIRED)
 find_package(gazebo_dev REQUIRED)
 find_package(gazebo_msgs REQUIRED)
+find_package(tinyxml_vendor REQUIRED)
 find_package(TinyXML REQUIRED)
 
 # Generate messages and services

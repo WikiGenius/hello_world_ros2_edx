@@ -11,9 +11,9 @@
 
   <depend>rclcpp</depend>
   <depend>ur_description</depend>
-  <depend>turtlebot4_description</depend>
   <depend>rviz2</depend>
   <depend>xacro</depend>
+  <exec_depend>turtlebot3_gazebo</exec_depend>
 
   <test_depend>ament_lint_auto</test_depend>
   <test_depend>ament_lint_common</test_depend>
