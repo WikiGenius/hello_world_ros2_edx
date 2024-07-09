@@ -64,9 +64,9 @@ void ROSProximityRayPlugin::Load(sensors::SensorPtr _parent, sdf::ElementPtr _sd
   this->rosnode = gazebo_ros::Node::Get(_sdf);
 
   // Initialize the publishers
-  this->statePub = this->rosnode->create_publisher<hrwros_gazebo::msg::Proximity>(
+  this->statePub = this->rosnode->create_publisher<hrwros_gazebo_interface::msg::Proximity>(
     this->stateTopic, 10);
-  this->stateChangePub = this->rosnode->create_publisher<hrwros_gazebo::msg::Proximity>(
+  this->stateChangePub = this->rosnode->create_publisher<hrwros_gazebo_interface::msg::Proximity>(
     this->stateChangeTopic, 10);
 
   // Callback for laser scans

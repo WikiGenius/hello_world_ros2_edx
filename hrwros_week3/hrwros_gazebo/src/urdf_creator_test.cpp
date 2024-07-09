@@ -1,6 +1,6 @@
 #include <rclcpp/rclcpp.hpp>
 #include "hrwros_gazebo/urdf_creator.h"
-#include <hrwros_gazebo_interface/srv/spawn_entity.hpp>
+#include <gazebo_msgs/srv/spawn_entity.hpp>
 
 int main(int argc, char **argv)
 {

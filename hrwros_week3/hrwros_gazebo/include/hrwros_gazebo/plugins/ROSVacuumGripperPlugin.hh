@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  *
-*/
+ */
 
 #ifndef _ROS_VACUUM_GRIPPER_PLUGIN_HH_
 #define _ROS_VACUUM_GRIPPER_PLUGIN_HH_
@@ -26,37 +26,42 @@
 
 namespace gazebo
 {
-  /// \brief Forward declaration of the private data class.
-  class ROSVacuumGripperPluginPrivate;
+/// \brief Forward declaration of the private data class.
+class ROSVacuumGripperPluginPrivate;
 
-  /// \brief ROS interface for the VacuumGripperPlugin plugin.
-  class ROSVacuumGripperPlugin : public VacuumGripperPlugin
-  {
-    /// \brief Constructor.
-    public: ROSVacuumGripperPlugin();
+/// \brief ROS interface for the VacuumGripperPlugin plugin.
+class ROSVacuumGripperPlugin : public VacuumGripperPlugin
+{
+  /// \brief Constructor.
+public:
+  ROSVacuumGripperPlugin();
 
-    /// \brief Destructor.
-    public: virtual ~ROSVacuumGripperPlugin();
+  /// \brief Destructor.
+public:
+  virtual ~ROSVacuumGripperPlugin();
 
-    // Documentation inherited.
-    public: virtual void Load(physics::ModelPtr _parent, sdf::ElementPtr _sdf);
+  // Documentation inherited.
+public:
+  virtual void Load(physics::ModelPtr _parent, sdf::ElementPtr _sdf);
 
-    /// \brief Documentation inherited.
-    public: virtual void Reset();
+  /// \brief Documentation inherited.
+public:
+  virtual void Reset();
 
-    /// \brief Receives messages on the gripper's topic.
-    /// \param[in] _req The message to control the gripper.
-    /// \param[out] _rep If the service succeed or not.
-    public: bool OnGripperControl(
-      hrwros_gazebo::VacuumGripperControl::Request &_req,
-      hrwros_gazebo::VacuumGripperControl::Response &_res);
+  /// \brief Receives messages on the gripper's topic.
+  /// \param[in] _req The message to control the gripper.
+  /// \param[out] _rep If the service succeed or not.
+  bool OnGripperControl(const std::shared_ptr<hrwros_gazebo_interface::srv::VacuumGripperControl::Request> request,
+                        std::shared_ptr<hrwros_gazebo_interface::srv::VacuumGripperControl::Response> response);
 
-    // Documentation inherited.
-    private: virtual void Publish() const;
+  // Documentation inherited.
+private:
+  virtual void Publish() const;
 
-    /// \internal
-    /// \brief Pointer to private data.
-    private: std::unique_ptr<ROSVacuumGripperPluginPrivate> dataPtr;
-  };
-}
+  /// \internal
+  /// \brief Pointer to private data.
+private:
+  std::unique_ptr<ROSVacuumGripperPluginPrivate> dataPtr;
+};
+}  // namespace gazebo
 #endif

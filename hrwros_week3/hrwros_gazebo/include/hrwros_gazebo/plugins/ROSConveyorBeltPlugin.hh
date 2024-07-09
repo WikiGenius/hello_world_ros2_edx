@@ -30,8 +30,8 @@ namespace gazebo
     /// \brief Receives requests on the conveyor belt's topic.
     /// \param[in] request The desired state of the conveyor belt.
     /// \param[in] response If the service succeeded or not.
-    public: bool OnControlCommand(const std::shared_ptr<hrwros_gazebo::srv::ConveyorBeltControl::Request> request,
-                                  std::shared_ptr<hrwros_gazebo::srv::ConveyorBeltControl::Response> response);
+    public: bool OnControlCommand(const std::shared_ptr<hrwros_gazebo_interface::srv::ConveyorBeltControl::Request> request,
+                                  std::shared_ptr<hrwros_gazebo_interface::srv::ConveyorBeltControl::Response> response);
 
     /// \brief for setting ROS name space
     private: std::string robotNamespace_;
@@ -40,7 +40,7 @@ namespace gazebo
     private: std::shared_ptr<rclcpp::Node> rosnode_;
 
     /// \brief Receives service calls to control the conveyor belt.
-    public: rclcpp::Service<hrwros_gazebo::srv::ConveyorBeltControl>::SharedPtr controlService_;
+    public: rclcpp::Service<hrwros_gazebo_interface::srv::ConveyorBeltControl>::SharedPtr controlService_;
   };
 }
 #endif

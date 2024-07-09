@@ -8,7 +8,7 @@
 
 // ROS 2
 #include <rclcpp/rclcpp.hpp>
-#include <hrwros_gazebo_interface/msg/proximity.hpp>
+#include "hrwros_gazebo_interface/msg/proximity.hpp"
 
 namespace gazebo
 {
@@ -35,13 +35,13 @@ namespace gazebo
     protected: rclcpp::Node::SharedPtr rosnode;
 
     /// \brief ROS 2 publisher for the sensor state
-    protected: rclcpp::Publisher<hrwros_gazebo::msg::Proximity>::SharedPtr statePub;
+    protected: rclcpp::Publisher<hrwros_gazebo_interface::msg::Proximity>::SharedPtr statePub;
 
     /// \brief ROS 2 publisher for the sensor state changes
-    protected: rclcpp::Publisher<hrwros_gazebo::msg::Proximity>::SharedPtr stateChangePub;
+    protected: rclcpp::Publisher<hrwros_gazebo_interface::msg::Proximity>::SharedPtr stateChangePub;
 
     /// \brief ROS 2 message for the sensor state
-    protected: hrwros_gazebo::msg::Proximity state_msg;
+    protected: hrwros_gazebo_interface::msg::Proximity state_msg;
 
     /// \brief for setting ROS 2 namespace
     protected: std::string robotNamespace;

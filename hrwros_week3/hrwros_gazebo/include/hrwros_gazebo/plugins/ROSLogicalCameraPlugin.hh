@@ -70,7 +70,7 @@ namespace gazebo
     /// \brief Add model info to the message to be published
     protected: void AddModelToMsg(
       const std::string & modelType, const ignition::math::Pose3d & modelPose,
-      hrwros_gazebo::msg::LogicalCameraImage & imageMsg);
+      hrwros_gazebo_interface::msg::LogicalCameraImage & imageMsg);
 
     /// \brief Publish the TF frame of a model
     protected: void PublishTF(
@@ -98,7 +98,7 @@ namespace gazebo
     protected: std::shared_ptr<rclcpp::Node> rosnode;
 
     /// \brief ROS publisher for the logical camera image
-    protected: rclcpp::Publisher<hrwros_gazebo::msg::LogicalCameraImage>::SharedPtr imagePub;
+    protected: rclcpp::Publisher<hrwros_gazebo_interface::msg::LogicalCameraImage>::SharedPtr imagePub;
 
     /// \brief Prefix for the model TF frames published
     protected: std::string modelFramePrefix;

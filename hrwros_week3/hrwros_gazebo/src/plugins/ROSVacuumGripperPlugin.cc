@@ -19,10 +19,10 @@ namespace gazebo
     public: std::shared_ptr<rclcpp::Node> rosnode;
 
     /// \brief Publishes the state of the gripper.
-    public: rclcpp::Publisher<hrwros_gazebo::msg::VacuumGripperState>::SharedPtr statePub;
+    public: rclcpp::Publisher<hrwros_gazebo_interface::msg::VacuumGripperState>::SharedPtr statePub;
 
     /// \brief Receives service calls to control the gripper.
-    public: rclcpp::Service<hrwros_gazebo::srv::VacuumGripperControl>::SharedPtr controlService;
+    public: rclcpp::Service<hrwros_gazebo_interface::srv::VacuumGripperControl>::SharedPtr controlService;
   };
 }
 
@@ -73,11 +73,11 @@ void ROSVacuumGripperPlugin::Load(physics::ModelPtr _parent, sdf::ElementPtr _sd
   this->dataPtr->rosnode = std::make_shared<rclcpp::Node>("vacuum_gripper_plugin", robotNamespace);
 
   // Service for controlling the gripper.
-  this->dataPtr->controlService = this->dataPtr->rosnode->create_service<hrwros_gazebo::srv::VacuumGripperControl>(
+  this->dataPtr->controlService = this->dataPtr->rosnode->create_service<hrwros_gazebo_interface::srv::VacuumGripperControl>(
     controlTopic, std::bind(&ROSVacuumGripperPlugin::OnGripperControl, this, std::placeholders::_1, std::placeholders::_2));
 
   // Message used for publishing the state of the gripper.
-  this->dataPtr->statePub = this->dataPtr->rosnode->create_publisher<hrwros_gazebo::msg::VacuumGripperState>(stateTopic, 10);
+  this->dataPtr->statePub = this->dataPtr->rosnode->create_publisher<hrwros_gazebo_interface::msg::VacuumGripperState>(stateTopic, 10);
 }
 
 /////////////////////////////////////////////////
@@ -87,8 +87,8 @@ void ROSVacuumGripperPlugin::Reset()
 }
 
 bool ROSVacuumGripperPlugin::OnGripperControl(
-  const std::shared_ptr<hrwros_gazebo::srv::VacuumGripperControl::Request> request,
-  std::shared_ptr<hrwros_gazebo::srv::VacuumGripperControl::Response> response)
+  const std::shared_ptr<hrwros_gazebo_interface::srv::VacuumGripperControl::Request> request,
+  std::shared_ptr<hrwros_gazebo_interface::srv::VacuumGripperControl::Response> response)
 {
   RCLCPP_DEBUG(this->dataPtr->rosnode->get_logger(), "Gripper control requested: %s", (request->enable ? "Enable" : "Disable"));
   if (request->enable)
@@ -103,7 +103,7 @@ bool ROSVacuumGripperPlugin::OnGripperControl(
 /////////////////////////////////////////////////
 void ROSVacuumGripperPlugin::Publish() const
 {
-  auto msg = hrwros_gazebo::msg::VacuumGripperState();
+  auto msg = hrwros_gazebo_interface::msg::VacuumGripperState();
   msg.attached = this->Attached();
   msg.enabled = this->Enabled();
   this->dataPtr->statePub->publish(msg);

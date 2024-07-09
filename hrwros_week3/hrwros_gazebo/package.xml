@@ -9,21 +9,23 @@
 
   <buildtool_depend>ament_cmake</buildtool_depend>
 
-  <depend>gazebo_msgs</depend>
-  <depend>hrwros_gazebo_interface</depend>
-  <depend>gazebo_dev</depend>
-  <depend>geometry_msgs</depend>
+
   <depend>rclcpp</depend>
   <depend>std_msgs</depend>
+  <depend>geometry_msgs</depend>
+  <depend>sensor_msgs</depend>
+  <depend>hrwros_gazebo_interface</depend>
   <depend>std_srvs</depend>
+
   <depend>tinyxml_vendor</depend>
   <depend>tf2</depend>
   <depend>tf2_ros</depend>
-  <depend>sensor_msgs</depend>
-  <depend>ur_description</depend>
-  <depend>urdf</depend>
-  <depend>urdfdom</depend>
 
+  <depend>urdf</depend>
+
+  <depend>urdfdom</depend>
+  <depend>gazebo_msgs</depend>
+  <depend>gazebo_dev</depend>
 
   <exec_depend>turtlebot3_gazebo</exec_depend>
   <exec_depend>xacro</exec_depend>

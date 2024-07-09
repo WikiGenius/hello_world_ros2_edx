@@ -9,7 +9,7 @@ endif()
 find_package(ament_cmake REQUIRED)
 find_package(rclcpp REQUIRED)
 find_package(ur_description REQUIRED)
-find_package(turtlebot4_description REQUIRED)
+find_package(turtlebot3_gazebo REQUIRED)
 find_package(rviz2 REQUIRED)
 find_package(xacro REQUIRED)
 
