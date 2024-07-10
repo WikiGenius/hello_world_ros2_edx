@@ -409,9 +409,9 @@ void VacuumGripperPlugin::OnUpdate()
   if (this->dataPtr->attached && this->dataPtr->dropPending)
   {
     auto objPose = this->dataPtr->dropAttachedModel->WorldPose();
-    for (const auto dropObject : this->dataPtr->objectsToDrop)
+    for (const auto &dropObject : this->dataPtr->objectsToDrop) // Changed to reference
     {
-      if (dropObject.type == this->dataPtr->attachedObjType && \
+      if (dropObject.type == this->dataPtr->attachedObjType &&
         dropObject.dropRegion.Contains(objPose.Pos()))
       {
         // Drop the object.
@@ -429,12 +429,6 @@ void VacuumGripperPlugin::OnUpdate()
       }
     }
   }
-
-  // else if (this->dataPtr->zeroCount > this->dataPtr->detachSteps &&
-  //          this->dataPtr->attached)
-  // {
-  //   this->HandleDetach();
-  // }
 
   this->dataPtr->prevUpdateTime = common::Time::GetWallTime();
 }
