@@ -2,7 +2,7 @@ import os
 from launch import LaunchDescription
 from launch.actions import DeclareLaunchArgument, GroupAction, IncludeLaunchDescription
 from launch_ros.actions import Node, PushRosNamespace
-from launch.substitutions import LaunchConfiguration
+from launch.substitutions import LaunchConfiguration, PathJoinSubstitution
 from launch_ros.substitutions import FindPackageShare
 from launch.launch_description_sources import PythonLaunchDescriptionSource
 
@@ -23,7 +23,12 @@ def load_xacro_file(robot_type, robot_prefix, vacuum_gripper_prefix, gripper_plu
         package='xacro',
         executable='xacro',
         arguments=[
-            os.path.join(FindPackageShare('hrwros_support'), 'urdf', 'robot_system', 'robot_system.xacro'),
+            PathJoinSubstitution([
+                FindPackageShare('hrwros_support'),
+                'urdf',
+                'robot_system',
+                'robot_system.xacro'
+            ]),
             'robot_type:=', LaunchConfiguration(robot_type),
             'robot_prefix:=', LaunchConfiguration(robot_prefix),
             'vacuum_gripper_prefix:=', LaunchConfiguration(vacuum_gripper_prefix),
@@ -63,14 +68,22 @@ def spawn_controllers(controller_namespace, joint_state_controller, robot_contro
 def include_rosparam_files(controller_namespace):
     return [
         IncludeLaunchDescription(
-            PythonLaunchDescriptionSource([os.path.join(
-                FindPackageShare('hrwros_gazebo'), 'config', f'{controller_namespace}_joint_state_controller.yaml'
-            )])
+            PythonLaunchDescriptionSource([
+                PathJoinSubstitution([
+                    FindPackageShare('hrwros_gazebo'),
+                    'config',
+                    f'{controller_namespace}_joint_state_controller.yaml'
+                ])
+            ])
         ),
         IncludeLaunchDescription(
-            PythonLaunchDescriptionSource([os.path.join(
-                FindPackageShare('hrwros_gazebo'), 'config', f'{controller_namespace}_controller.yaml'
-            )])
+            PythonLaunchDescriptionSource([
+                PathJoinSubstitution([
+                    FindPackageShare('hrwros_gazebo'),
+                    'config',
+                    f'{controller_namespace}_controller.yaml'
+                ])
+            ])
         )
     ]
 
