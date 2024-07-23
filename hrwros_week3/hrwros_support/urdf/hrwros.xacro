@@ -27,7 +27,7 @@
 
   <!-- Bins -->
   <!-- Bin1 -->
-  <xacro:bin_urdf prefix="bin_1" parent="world">
+  <xacro:bin_urdf prefix="bin_1_" parent="world">
     <origin xyz="-7.6 -1.7 0" rpy="0 0 0" />
   </xacro:bin_urdf>
 
