@@ -22,7 +22,8 @@ def turtlebot_state_publisher(urdf_content):
         package='robot_state_publisher',
         executable='robot_state_publisher',
         name='turtlebot_state_publisher',
-        parameters=[{'robot_description': urdf_content}],
+        parameters=[
+            {'robot_description': urdf_content, 'publish_frequency': 50.0}],
         remappings=[('robot_description', 'turtlebot_description')],
         output='screen'
     )

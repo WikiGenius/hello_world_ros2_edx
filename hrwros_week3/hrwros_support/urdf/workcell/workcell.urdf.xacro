@@ -1,6 +1,6 @@
 <?xml version="1.0" ?>
 <robot name="workcell_urdf" xmlns:xacro="http://www.ros.org/wiki/xacro">
-    <xacro:macro name="workcell_urdf" params="parent">
+    <xacro:macro name="workcell_urdf" params="workcell_parent_name">
 
     <!-- Links -->
     <link name="workcell">
@@ -22,8 +22,8 @@
       </inertial>
     </link>
 
-    <joint name="workcell_to_${parent}" type="fixed">
-      <parent link="${parent}" />
+    <joint name="workcell_to_${workcell_parent_name}" type="fixed">
+      <parent link="${workcell_parent_name}" />
       <child link="workcell" />
       <origin xyz="0 0 0" rpy="0 0 ${radians(90)}" />
     </joint>

@@ -1,13 +1,13 @@
 <?xml version="1.0"?>
 <robot name="logical_camera_urdf" xmlns:xacro="http://www.ros.org/wiki/xacro">
-  <xacro:macro name="logical_camera_urdf" params="prefix logical_camera_parent *origin">
+  <xacro:macro name="logical_camera_urdf" params="prefix *origin">
     <xacro:property name="length" value="0.2"/>
     <xacro:property name="width" value="0.050"/>
     <xacro:property name="height" value="0.050"/>
 
     <joint name="${prefix}logical_camera_joint" type="fixed">
 	<xacro:insert_block name="origin" />
-	<parent link="${logical_camera_parent}"/>
+	<parent link="world"/>
 	<child link="${prefix}base_link"/>
     </joint>
 

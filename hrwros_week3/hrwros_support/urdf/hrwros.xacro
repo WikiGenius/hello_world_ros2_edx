@@ -1,49 +1,90 @@
 <?xml version="1.0" ?>
-<robot name="robot" xmlns:xacro="http://www.ros.org/wiki/xacro">
+<robot name="robot"
+  xmlns:xacro="http://www.ros.org/wiki/xacro">
 
   <!-- world -->
   <link name="world" />
 
   <!-- Include necessary URDF files from hrwros_support -->
+  <xacro:include filename="$(find hrwros_support)/urdf/robot_pedestal/robot_pedestal.urdf.xacro"/>
+  <xacro:include filename="$(find hrwros_support)/urdf/arm_robot/ur_description.urdf.xacro"/>
+  <xacro:include filename="$(find hrwros_support)/urdf/vacuum_gripper/vacuum_gripper.urdf.xacro"/>
   <xacro:include filename="$(find hrwros_support)/urdf/workcell/workcell.urdf.xacro"/>
-  <xacro:include filename="$(find hrwros_support)/urdf/container_arm_robot_pedestal/container_arm_robot_pedestal.urdf.xacro"/>
   <xacro:include filename="$(find hrwros_support)/urdf/bin/bin.urdf.xacro"/>
   <xacro:include filename="$(find hrwros_support)/urdf/logical_camera/logical_camera.urdf.xacro"/>
   <xacro:include filename="$(find hrwros_support)/urdf/break_beam/break_beam.urdf.xacro"/>
 
+  <!-- paramaters -->
+  <xacro:arg name="robot1" default="robot1"/>
+  <xacro:arg name="robot2" default="robot2"/>
+  <xacro:arg name="ur_type1" default="ur10"/>
+  <xacro:arg name="ur_type2" default="ur5"/>
+  <xacro:arg name="pedestal1_height" default="0.95"/>
+  <xacro:arg name="pedestal2_height" default="0.5"/>
+  <xacro:arg name="vacuum_gripper1" default="vacuum_gripper1_"/>
+  <xacro:arg name="vacuum_gripper2" default="vacuum_gripper2_"/>
   <!-- Workcell -->
-  <xacro:workcell_urdf parent="world"/>
+  <xacro:workcell_urdf workcell_parent_name="world"/>
 
   <!-- Robots -->
-  <!-- Robot1 -->
-  <xacro:container_arm_robot_pedestal_urdf robot_name="robot1" ur_type="ur10" parent_pedestal="world" height_pedestal="0.95">
-    <origin xyz="0.5 1.8 0.0" rpy="0 0 0"/>
-  </xacro:container_arm_robot_pedestal_urdf>
 
-  <!-- Robot2 -->
-  <xacro:container_arm_robot_pedestal_urdf robot_name="robot2" ur_type="ur10" parent_pedestal="world" height_pedestal="0.5">
+  <!-- Robot1 Pedestal -->
+  <xacro:robot_pedestal_urdf pedestal_prefix="$(arg robot1)_" pedestal_parent="world" pedestal_height="$(arg pedestal1_height)">
+    <origin xyz="0.5 1.8 0.0" rpy="0 0 0"/>
+  </xacro:robot_pedestal_urdf>
+  <!-- Robot1 -->
+  <xacro:ur_description robot_name="$(arg robot1)" ur_type="$(arg ur_type1)">
+    <origin xyz="0.0 0.0 $(arg pedestal1_height)" rpy="0 0 0"/>
+  </xacro:ur_description>
+  <!-- Vacuum Gripper1 -->
+  <xacro:vacuum_gripper_urdf prefix="$(arg vacuum_gripper1)" joint_prefix="$(arg vacuum_gripper1)joint"/>
+
+  <!-- Robot2 Pedestal -->
+  <xacro:robot_pedestal_urdf pedestal_prefix="$(arg robot2)_" pedestal_parent="world" pedestal_height="$(arg pedestal2_height)">
     <origin xyz="-7.6 -0.5 0.0" rpy="0 0 0"/>
-  </xacro:container_arm_robot_pedestal_urdf>
+  </xacro:robot_pedestal_urdf>
+  <!-- Robot2 -->
+  <xacro:ur_description robot_name="$(arg robot2)" ur_type="$(arg ur_type2)">
+    <origin xyz="0.0 0.0 $(arg pedestal2_height)" rpy="0 0 0"/>
+  </xacro:ur_description>
+  <!-- Vacuum Gripper2 -->
+  <xacro:vacuum_gripper_urdf prefix="$(arg vacuum_gripper2)" joint_prefix="$(arg vacuum_gripper2)joint"/>
+
 
   <!-- Bins -->
   <!-- Bin1 -->
-  <xacro:bin_urdf prefix="bin_1_" parent="world">
+  <xacro:bin_urdf prefix="bin_1_">
     <origin xyz="-7.6 -1.7 0" rpy="0 0 0" />
   </xacro:bin_urdf>
 
   <!-- Logical Cameras -->
   <!-- Logical Camera 1 -->
-  <xacro:logical_camera_urdf prefix="logical_camera1_" logical_camera_parent="world">
+  <xacro:logical_camera_urdf prefix="logical_camera1_">
     <origin xyz="1.2 1.8 2.0" rpy="0 1.5708 0"/>
   </xacro:logical_camera_urdf>
 
   <!-- Logical Camera 2 -->
-  <xacro:logical_camera_urdf prefix="logical_camera2_" logical_camera_parent="world">
+  <xacro:logical_camera_urdf prefix="logical_camera2_">
     <origin xyz="-8.3 -1.23 1.8" rpy="0 1.5708 0"/>
   </xacro:logical_camera_urdf>
 
   <!-- Break Beam -->
-  <xacro:break_beam_urdf prefix="break_beam_" parent="world">
+  <xacro:break_beam_urdf prefix="break_beam_">
     <origin xyz="1.6 1.9 0.925" rpy="0 0 ${radians(180)}" />
   </xacro:break_beam_urdf>
+
+  <!-- Joints -->
+
+  <!-- gripper1 to robot1. -->
+  <joint name="gripper1_to_robot1" type="fixed">
+    <parent link="$(arg robot1)_tool0" />
+    <child link="$(arg vacuum_gripper1)base_link" />
+  </joint>
+
+  <!-- gripper2 to robot2. -->
+  <joint name="gripper2_to_robot2" type="fixed">
+    <parent link="$(arg robot2)_tool0" />
+    <child link="$(arg vacuum_gripper2)base_link" />
+  </joint>
+
 </robot>
