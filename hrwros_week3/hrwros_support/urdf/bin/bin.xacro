@@ -1,10 +1,13 @@
 <?xml version="1.0"?>
-<robot name="bin" xmlns:xacro="http://www.ros.org/wiki/xacro">
+<robot name="bin"
+  xmlns:xacro="http://www.ros.org/wiki/xacro">
   <xacro:arg name="prefix" default="bin_1_"/>
 
   <!-- URDF -->
   <xacro:include filename="$(find hrwros_support)/urdf/bin/bin.urdf.xacro"/>
-  <xacro:bin_urdf prefix="$(arg prefix)"/>
+  <xacro:bin_urdf prefix="$(arg prefix)">
+    <origin xyz="-8.0 -2.2 0.0" rpy="0 0 0" />
+  </xacro:bin_urdf>
 
   <!-- Gazebo -->
   <xacro:include filename="$(find hrwros_support)/urdf/bin/bin.gazebo.xacro"/>

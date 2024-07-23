@@ -1,6 +1,7 @@
 <?xml version="1.0"?>
 <robot xmlns:xacro="http://www.ros.org/wiki/xacro">
-  <xacro:macro name="vacuum_gripper_urdf" params="prefix joint_prefix">
+  <xacro:macro name="vacuum_gripper_urdf" params="prefix">
+    <xacro:property name="joint_prefix" value="${prefix}joint"/>
     <!-- link list -->
     <link name="${prefix}base_link">
       <visual>
@@ -50,7 +51,7 @@
     </link>
 
     <!-- joint list -->
-    
+
     <joint name="${joint_prefix}" type="fixed">
       <origin xyz="0 0 0.01" rpy="0 0 0" />
       <parent link="${prefix}base_link" />

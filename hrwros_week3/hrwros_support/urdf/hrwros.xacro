@@ -37,24 +37,25 @@
     <origin xyz="0.0 0.0 $(arg pedestal1_height)" rpy="0 0 0"/>
   </xacro:ur_description>
   <!-- Vacuum Gripper1 -->
-  <xacro:vacuum_gripper_urdf prefix="$(arg vacuum_gripper1)" joint_prefix="$(arg vacuum_gripper1)joint"/>
+  <xacro:vacuum_gripper_urdf prefix="$(arg vacuum_gripper1)" />
 
   <!-- Robot2 Pedestal -->
   <xacro:robot_pedestal_urdf pedestal_prefix="$(arg robot2)_" pedestal_parent="world" pedestal_height="$(arg pedestal2_height)">
-    <origin xyz="-7.6 -0.5 0.0" rpy="0 0 0"/>
+    <origin xyz="-7.8 -1.5 0.0" rpy="0 0 0"/>
+
   </xacro:robot_pedestal_urdf>
   <!-- Robot2 -->
   <xacro:ur_description robot_name="$(arg robot2)" ur_type="$(arg ur_type2)">
     <origin xyz="0.0 0.0 $(arg pedestal2_height)" rpy="0 0 0"/>
   </xacro:ur_description>
   <!-- Vacuum Gripper2 -->
-  <xacro:vacuum_gripper_urdf prefix="$(arg vacuum_gripper2)" joint_prefix="$(arg vacuum_gripper2)joint"/>
+  <xacro:vacuum_gripper_urdf prefix="$(arg vacuum_gripper2)" />
 
 
   <!-- Bins -->
   <!-- Bin1 -->
   <xacro:bin_urdf prefix="bin_1_">
-    <origin xyz="-7.6 -1.7 0" rpy="0 0 0" />
+    <origin xyz="-8.0 -2.2 0.0" rpy="0 0 0" />
   </xacro:bin_urdf>
 
   <!-- Logical Cameras -->
