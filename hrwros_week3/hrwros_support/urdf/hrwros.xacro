@@ -24,12 +24,12 @@
   <xacro:arg name="vacuum_gripper1" default="vacuum_gripper1_"/>
   <xacro:arg name="vacuum_gripper2" default="vacuum_gripper2_"/>
   <!-- Workcell -->
-  <xacro:workcell_urdf workcell_parent_name="world"/>
+  <xacro:workcell_urdf workcell_parent_name="world_interface"/>
 
   <!-- Robots -->
 
   <!-- Robot1 Pedestal -->
-  <xacro:robot_pedestal_urdf pedestal_prefix="$(arg robot1)_" pedestal_parent="world" pedestal_height="$(arg pedestal1_height)">
+  <xacro:robot_pedestal_urdf pedestal_prefix="$(arg robot1)_" pedestal_parent="world_interface" pedestal_height="$(arg pedestal1_height)">
     <origin xyz="0.5 1.8 0.0" rpy="0 0 0"/>
   </xacro:robot_pedestal_urdf>
   <!-- Robot1 -->
@@ -40,7 +40,7 @@
   <xacro:vacuum_gripper_urdf prefix="$(arg vacuum_gripper1)" />
 
   <!-- Robot2 Pedestal -->
-  <xacro:robot_pedestal_urdf pedestal_prefix="$(arg robot2)_" pedestal_parent="world" pedestal_height="$(arg pedestal2_height)">
+  <xacro:robot_pedestal_urdf pedestal_prefix="$(arg robot2)_" pedestal_parent="world_interface" pedestal_height="$(arg pedestal2_height)">
     <origin xyz="-7.8 -1.5 0.0" rpy="0 0 0"/>
 
   </xacro:robot_pedestal_urdf>
@@ -75,7 +75,10 @@
   </xacro:break_beam_urdf>
 
   <!-- Joints -->
-
+ <joint name="world_interface_to_world" type="fixed">
+    <parent link="world" />
+    <child link="world_interface" />
+  </joint>
   <!-- gripper1 to robot1. -->
   <joint name="gripper1_to_robot1" type="fixed">
     <parent link="$(arg robot1)_tool0" />
@@ -88,4 +91,10 @@
     <child link="$(arg vacuum_gripper2)base_link" />
   </joint>
 
+  <!-- break beam to world. -->
+  <joint name="break_beam_joint" type="fixed">
+    <parent link="world_interface" />
+    <child link="break_beam_world_interface" />
+  </joint>
+  
 </robot>
