@@ -1,90 +1,140 @@
-import os
-from launch.substitutions import LaunchConfiguration, PathJoinSubstitution, TextSubstitution
-from launch_ros.actions import Node
-from launch.actions import DeclareLaunchArgument
 from launch import LaunchDescription
-from launch.actions import DeclareLaunchArgument, ExecuteProcess
-from launch.substitutions import LaunchConfiguration, PathJoinSubstitution
+from launch_ros.actions import Node
+from launch.actions import DeclareLaunchArgument, IncludeLaunchDescription, TimerAction
+from launch.substitutions import LaunchConfiguration, Command, PathJoinSubstitution
 from launch_ros.substitutions import FindPackageShare
+from launch.launch_description_sources import PythonLaunchDescriptionSource
 
 
-def declare_launch_arguments():
-    return [
-        # Declare the launch arguments
-        DeclareLaunchArgument('workcell', default_value='workcell_'),
-        DeclareLaunchArgument('workcell_parent_name',
-                              default_value='world_interface'),
-        DeclareLaunchArgument('robot1_prefix', default_value='robot1_'),
-        DeclareLaunchArgument('robot2_prefix', default_value='robot2_'),
-        DeclareLaunchArgument(
-            'robot1_pedestal', default_value='robot1_pedestal_'),
-        DeclareLaunchArgument(
-            'robot2_pedestal', default_value='robot2_pedestal_'),
-        DeclareLaunchArgument('vacuum_gripper1_prefix',
-                              default_value='vacuum_gripper1_'),
-        DeclareLaunchArgument('vacuum_gripper2_prefix',
-                              default_value='vacuum_gripper2_'),
-        DeclareLaunchArgument('break_beam', default_value='break_beam_'),
-        DeclareLaunchArgument('bin_1', default_value='bin_1_'),
-    ]
-
-
-def load_xacro_file(file_path, arguments):
-    return ExecuteProcess(
-        cmd=[
-            'xacro',
-            PathJoinSubstitution([
-                FindPackageShare('hrwros_support'),
-                'urdf', file_path
-            ]),
-            arguments
-        ],
-        output='screen',
-        shell=True
-    ),
-
-
-def generate_launch_description():
-    return LaunchDescription([
-
-        *declare_launch_arguments(),
-        # Execute the xacro command
-        # Load xacro files
-        load_xacro_file(
-            'workcell/workcell.xacro',
-            ['workcell_parent:=', LaunchConfiguration('workcell_parent_name')],
-        ),
-        load_xacro_file(
-            'break_beam/break_beam.xacro',
-            ['prefix:=', LaunchConfiguration('break_beam')],
-        ),
-        load_xacro_file(
-            'bin/bin.xacro',
-            ['prefix:=', LaunchConfiguration('bin_1')],
-        ),
-        # load_xacro_file(
-        #     'robot_pedestal/robot1_pedestal.xacro',
-        #     [
-        #         'pedestal_prefix:=', LaunchConfiguration('robot1_pedestal'),
-        #         'pedestal_parent:=', LaunchConfiguration(
-        #             'workcell_parent_name'),
-        #         'pedestal_height:=0.95'
-        #     ],
-        # ),
-        # load_xacro_file(
-        #     'robot_pedestal/robot2_pedestal.xacro',
-        #     [
-        #         'pedestal_prefix:=', LaunchConfiguration('robot2_pedestal'),
-        #         'pedestal_parent:=', LaunchConfiguration(
-        #             'workcell_parent_name'),
-        #         'pedestal_height:=0.695'
-        #     ],
-        # ),
+def generate_description_command(package, urdf_file, *args):
+    return Command([
+        'xacro ',
+        PathJoinSubstitution([FindPackageShare(package), 'urdf', urdf_file]),
+        ' ',
+        *args
     ])
 
 
+def generate_robot_state_publisher(name, description_command):
+    return Node(
+        package='robot_state_publisher',
+        executable='robot_state_publisher',
+        output='screen',
+        name=name + '_state_publisher',
+        parameters=[{'robot_description': description_command}],
+        remappings=[('/robot_description', '/' + name + '_description')]
+    )
 
 
+def generate_spawner_node(name, entity_name, topic, x=None, y=None):
+    arguments = ['-entity', entity_name, '-topic', topic]
+    if x is not None and y is not None:
+        arguments.extend(['-x', str(x), '-y', str(y)])
+    return Node(
+        package='gazebo_ros',
+        executable='spawn_entity.py',
+        output='screen',
+        arguments=arguments
+    )
 
-if __name__ == '__main__':
-    generate_launch_description()
+
+def generate_launch_description():
+    # Declare the launch arguments
+    args = [
+        DeclareLaunchArgument(name, default_value=default)
+        for name, default in [
+            ('workcell', 'workcell_'),
+            ('workcell_parent_name', 'world_interface'),
+            ('robot1_prefix', 'robot1_'),
+            ('robot2_prefix', 'robot2_'),
+            ('robot1_pedestal', 'robot1_pedestal_'),
+            ('robot2_pedestal', 'robot2_pedestal_'),
+            ('robot1_pedestal_height', '0.95'),
+            ('robot2_pedestal_height', '0.695'),
+            ('vacuum_gripper1_prefix', 'vacuum_gripper1_'),
+            ('vacuum_gripper2_prefix', 'vacuum_gripper2_'),
+            ('break_beam', 'break_beam_'),
+            ('bin_1', 'bin_1_')
+        ]
+    ]
+
+    # Generate descriptions
+    workcell_description = generate_description_command(
+        'hrwros_support', 'workcell/workcell.xacro',
+        'workcell_parent_name:=', LaunchConfiguration('workcell_parent_name')
+    )
+    break_beam_description = generate_description_command(
+        'hrwros_support', 'break_beam/break_beam.xacro',
+        'prefix:=', LaunchConfiguration('break_beam')
+    )
+    bin_1_description = generate_description_command(
+        'hrwros_support', 'bin/bin.xacro',
+        'prefix:=', LaunchConfiguration('bin_1')
+    )
+    robot1_pedestal_description = generate_description_command(
+        'hrwros_support', 'robot_pedestal/robot1_pedestal.xacro',
+        'pedestal_prefix:=', LaunchConfiguration('robot1_pedestal'), ' ',
+        'pedestal_parent:=', LaunchConfiguration('workcell_parent_name'), ' ',
+        'pedestal_height:=', LaunchConfiguration('robot1_pedestal_height')
+    )
+    robot2_pedestal_description = generate_description_command(
+        'hrwros_support', 'robot_pedestal/robot2_pedestal.xacro',
+        'pedestal_prefix:=', LaunchConfiguration('robot2_pedestal'), ' ',
+        'pedestal_parent:=', LaunchConfiguration('workcell_parent_name'), ' ',
+        'pedestal_height:=', LaunchConfiguration('robot2_pedestal_height')
+    )
+
+    # Path to Gazebo launch file
+    gazebo_launch_path = PathJoinSubstitution([
+        FindPackageShare('gazebo_ros'),
+        'launch',
+        'gazebo.launch.py'
+    ])
+
+    # Generate robot state publishers
+    workcell_state_publisher = generate_robot_state_publisher(
+        'workcell', workcell_description)
+    break_beam_state_publisher = generate_robot_state_publisher(
+        'break_beam', break_beam_description)
+    bin_1_state_publisher = generate_robot_state_publisher(
+        'bin_1', bin_1_description)
+    robot1_pedestal_state_publisher = generate_robot_state_publisher(
+        'robot1_pedestal', robot1_pedestal_description)
+    robot2_pedestal_state_publisher = generate_robot_state_publisher(
+        'robot2_pedestal', robot2_pedestal_description)
+
+    # Generate spawner nodes
+    break_beam_spawner = generate_spawner_node(
+        'break_beam', 'break_beam_', '/break_beam_description')
+    bin_1_spawner = generate_spawner_node(
+        'bin_1', 'bin_1_', '/bin_1_description', x=-8.0, y=-2.2)
+    robot1_pedestal_spawner = generate_spawner_node(
+        'robot1_pedestal', 'robot1_pedestal_', '/robot1_pedestal_description')
+    robot2_pedestal_spawner = generate_spawner_node(
+        'robot2_pedestal', 'robot2_pedestal_', '/robot2_pedestal_description')
+    workcell_spawner = generate_spawner_node(
+        'workcell', 'workcell_', '/workcell_description')
+
+    return LaunchDescription(
+        args + [
+            IncludeLaunchDescription(
+                PythonLaunchDescriptionSource(gazebo_launch_path)
+            ),
+            workcell_state_publisher,
+            break_beam_state_publisher,
+            bin_1_state_publisher,
+            robot1_pedestal_state_publisher,
+            robot2_pedestal_state_publisher,
+            TimerAction(
+                period=1.0,  # Wait 1 second to ensure Gazebo is fully started
+                actions=[
+                    break_beam_spawner,
+                    bin_1_spawner,
+                    robot1_pedestal_spawner,
+                    robot2_pedestal_spawner,
+                    workcell_spawner
+                ]
+            )
+
+        ]
+    )
