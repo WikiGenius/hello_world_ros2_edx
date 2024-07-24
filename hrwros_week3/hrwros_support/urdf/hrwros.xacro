@@ -91,10 +91,16 @@
     <child link="$(arg vacuum_gripper2)base_link" />
   </joint>
 
+  <joint name="bin_1_joint" type="fixed">
+    <parent link="world_interface" />
+    <child link="bin_1_base_link" />
+    <origin xyz="-8.0 -2.2 0.0" rpy="0 0 0" />
+  </joint>
+  
   <!-- break beam to world. -->
   <joint name="break_beam_joint" type="fixed">
     <parent link="world_interface" />
     <child link="break_beam_world_interface" />
   </joint>
-  
+
 </robot>

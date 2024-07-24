@@ -35,11 +35,6 @@
       </inertial>
     </link>
     <!-- joint list -->
-    <joint name="${prefix}joint_1" type="fixed">
-      <parent link="world" />
-      <child link="${prefix}base_link" />
-      <xacro:insert_block name="origin" />
-    </joint>
 
     <joint name="${prefix}joint_2" type="fixed">
       <origin xyz="0 0 1.0" rpy="0 0 0" />
