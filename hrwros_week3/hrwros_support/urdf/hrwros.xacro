@@ -61,12 +61,12 @@
 
   <!-- Logical Cameras -->
   <!-- Logical Camera 1 -->
-  <xacro:logical_camera_urdf prefix="logical_camera1_">
+  <xacro:logical_camera_urdf prefix="logical_camera1_" logical_camera_parent="world_interface">
     <origin xyz="1.2 1.8 2.0" rpy="0 1.5708 0"/>
   </xacro:logical_camera_urdf>
 
   <!-- Logical Camera 2 -->
-  <xacro:logical_camera_urdf prefix="logical_camera2_">
+  <xacro:logical_camera_urdf prefix="logical_camera2_" logical_camera_parent="world_interface">
     <origin xyz="-8.3 -1.23 1.8" rpy="0 1.5708 0"/>
   </xacro:logical_camera_urdf>
 
