@@ -121,9 +121,9 @@ def generate_launch_description():
                 PythonLaunchDescriptionSource(gazebo_launch_path)
             ),
             # workcell_state_publisher,
-            # break_beam_state_publisher,
-            bin_1_state_publisher,
-            robot1_pedestal_state_publisher,
+            break_beam_state_publisher,
+            # bin_1_state_publisher,
+            # robot1_pedestal_state_publisher,
             # robot2_pedestal_state_publisher,
             # TimerAction(
             #     period=10.0,  # Wait 10 second to ensure Gazebo is fully started
@@ -143,18 +143,18 @@ def generate_launch_description():
             #         robot2_pedestal_spawner
             #     ]
             # ),
-            TimerAction(
-                period=4.0,  # Wait 40 second to ensure Gazebo is fully started
-                actions=[
-                    bin_1_spawner
-                ]
-            ),
             # TimerAction(
-            #     period=50.0,  # Wait 50 second to ensure Gazebo is fully started
+            #     period=4.0,  # Wait 40 second to ensure Gazebo is fully started
             #     actions=[
-            #         break_beam_spawner
+            #         bin_1_spawner
             #     ]
             # ),
+            TimerAction(
+                period=1.0,  # Wait 50 second to ensure Gazebo is fully started
+                actions=[
+                    break_beam_spawner
+                ]
+            ),
 
         ]
     )

@@ -1,7 +1,7 @@
 <?xml version="1.0" ?>
 <robot name="robot_pedestal" xmlns:xacro="http://www.ros.org/wiki/xacro">
   <xacro:arg name="pedestal_prefix" default="robot1"/>
-  <xacro:arg name="pedestal_parent" default="world"/>
+  <xacro:arg name="pedestal_parent" default="world_interface"/>
   <xacro:arg name="pedestal_height" default="0.95"/>
   
   <link name="world_interface"/>
