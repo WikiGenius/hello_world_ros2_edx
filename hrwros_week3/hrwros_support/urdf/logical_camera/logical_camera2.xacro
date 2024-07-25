@@ -10,4 +10,7 @@
   <xacro:logical_camera_urdf prefix="$(arg prefix)" logical_camera_parent="$(arg logical_camera_parent)">
     <origin xyz="-8.3 -1.23 1.8" rpy="0 1.5708 0"/>
   </xacro:logical_camera_urdf>
+
+  <!-- Gazebo -->
+  <xacro:include filename="$(find hrwros_support)/urdf/logical_camera/logical_camera.gazebo.xacro"/>
 </robot>
