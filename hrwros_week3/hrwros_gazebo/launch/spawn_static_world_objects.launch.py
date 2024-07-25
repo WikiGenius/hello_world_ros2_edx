@@ -107,7 +107,7 @@ def generate_launch_description():
     break_beam_spawner = generate_spawner_node(
         'break_beam', 'break_beam_', '/break_beam_description')
     bin_1_spawner = generate_spawner_node(
-        'bin_1', 'bin_1_', '/bin_1_description', x=-8.0, y=-2.2)
+        'bin_1', 'bin_1_', '/bin_1_description', x=0.0, y=0.0)
     robot1_pedestal_spawner = generate_spawner_node(
         'robot1_pedestal', 'robot1_pedestal_', '/robot1_pedestal_description')
     robot2_pedestal_spawner = generate_spawner_node(
@@ -120,21 +120,41 @@ def generate_launch_description():
             IncludeLaunchDescription(
                 PythonLaunchDescriptionSource(gazebo_launch_path)
             ),
-            workcell_state_publisher,
-            break_beam_state_publisher,
+            # workcell_state_publisher,
+            # break_beam_state_publisher,
             bin_1_state_publisher,
             robot1_pedestal_state_publisher,
-            robot2_pedestal_state_publisher,
+            # robot2_pedestal_state_publisher,
+            # TimerAction(
+            #     period=10.0,  # Wait 10 second to ensure Gazebo is fully started
+            #     actions=[
+            #         workcell_spawner
+            #     ]
+            # ),
+            # TimerAction(
+            #     period=1.0,  # Wait 20 second to ensure Gazebo is fully started
+            #     actions=[
+            #         robot1_pedestal_spawner
+            #     ]
+            # ),
+            # TimerAction(
+            #     period=30.0,  # Wait 30 second to ensure Gazebo is fully started
+            #     actions=[
+            #         robot2_pedestal_spawner
+            #     ]
+            # ),
             TimerAction(
-                period=1.0,  # Wait 1 second to ensure Gazebo is fully started
+                period=4.0,  # Wait 40 second to ensure Gazebo is fully started
                 actions=[
-                    break_beam_spawner,
-                    bin_1_spawner,
-                    robot1_pedestal_spawner,
-                    robot2_pedestal_spawner,
-                    workcell_spawner
+                    bin_1_spawner
                 ]
-            )
+            ),
+            # TimerAction(
+            #     period=50.0,  # Wait 50 second to ensure Gazebo is fully started
+            #     actions=[
+            #         break_beam_spawner
+            #     ]
+            # ),
 
         ]
     )
