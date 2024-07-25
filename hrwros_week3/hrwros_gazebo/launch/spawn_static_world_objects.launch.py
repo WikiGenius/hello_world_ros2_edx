@@ -60,10 +60,10 @@ def generate_launch_description():
     ]
 
     # Generate descriptions
-    # workcell_description = generate_description_command(
-    #     'hrwros_support', 'workcell/workcell.xacro',
-    #     'workcell_parent_name:=', LaunchConfiguration('workcell_parent_name')
-    # )
+    workcell_description = generate_description_command(
+        'hrwros_support', 'workcell/workcell.xacro',
+        'workcell_parent_name:=', LaunchConfiguration('workcell_parent_name')
+    )
     # break_beam_description = generate_description_command(
     #     'hrwros_support', 'break_beam/break_beam.xacro',
     #     'prefix:=', LaunchConfiguration('break_beam')
@@ -72,11 +72,11 @@ def generate_launch_description():
     #     'hrwros_support', 'bin/bin.xacro',
     #     'prefix:=', LaunchConfiguration('bin_1')
     # )
-    logical_camera1_description = generate_description_command(
-        'hrwros_support', 'logical_camera/logical_camera1.xacro',
-        'prefix:=', LaunchConfiguration('logical_camera1'),' ',
-        'logical_camera_parent:=', LaunchConfiguration('workcell_parent_name')
-    )
+    # logical_camera1_description = generate_description_command(
+    #     'hrwros_support', 'logical_camera/logical_camera1.xacro',
+    #     'prefix:=', LaunchConfiguration('logical_camera1'),' ',
+    #     'logical_camera_parent:=', LaunchConfiguration('workcell_parent_name')
+    # )
     # robot1_pedestal_description = generate_description_command(
     #     'hrwros_support', 'robot_pedestal/robot1_pedestal.xacro',
     #     'pedestal_prefix:=', LaunchConfiguration('robot1_pedestal'), ' ',
@@ -137,7 +137,7 @@ def generate_launch_description():
             # robot1_pedestal_state_publisher,
             # robot2_pedestal_state_publisher,
             TimerAction(
-                period=10.0,  # Wait 10 second to ensure Gazebo is fully started
+                period=1.0,  # Wait 10 second to ensure Gazebo is fully started
                 actions=[
                     workcell_spawner
                 ]
@@ -166,12 +166,12 @@ def generate_launch_description():
             #         break_beam_spawner
             #     ]
             # ),
-                    TimerAction(
-                period=1.0,  # Wait 50 second to ensure Gazebo is fully started
-                actions=[
-                    logical_camera1_spawner
-                ]
-            ),
+            #         TimerAction(
+            #     period=1.0,  # Wait 50 second to ensure Gazebo is fully started
+            #     actions=[
+            #         logical_camera1_spawner
+            #     ]
+            # ),
 
         ]
     )
