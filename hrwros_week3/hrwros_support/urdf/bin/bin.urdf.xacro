@@ -6,19 +6,22 @@
       <visual>
         <origin xyz="0 0 0" rpy="0 0 0" />
         <geometry>
-          <mesh filename="package://hrwros_support/meshes/bin/visual/bin.dae" />
+          <mesh filename="file://$(find hrwros_support)/meshes/bin/visual/bin.dae"/>
+
         </geometry>
       </visual>
       <collision>
         <origin xyz="0 0 0" rpy="0 0 0"/>
         <geometry>
-          <mesh filename="package://hrwros_support/meshes/bin/collision/bin_bottom.dae"/>
+          <mesh filename="file://$(find hrwros_support)/meshes/bin/collision/bin_bottom.dae"/>
+
         </geometry>
       </collision>
       <collision>
         <origin xyz="0 0 0" rpy="0 0 0"/>
         <geometry>
-          <mesh filename="package://hrwros_support/meshes/bin/collision/bin_sides.dae"/>
+          <mesh filename="file://$(find hrwros_support)/meshes/bin/collision/bin_sides.dae"/>
+
         </geometry>
       </collision>
       <inertial>

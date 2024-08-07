@@ -8,7 +8,8 @@
       <visual>
         <origin xyz="0 0 0" rpy="0 0 0" />
         <geometry>
-          <mesh filename="package://hrwros_support/meshes/break_beam/visual/hokuyo.dae" />
+          <mesh filename="file://$(find hrwros_support)/meshes/break_beam/visual/hokuyo.dae"/>
+
         </geometry>
         <material name="dark_grey">
           <color rgba="0.1 0.1 0.1 1.0"/>
@@ -17,7 +18,8 @@
       <collision>
         <origin xyz="0 0 0" rpy="0 0 0" />
         <geometry>
-          <mesh filename="package://hrwros_support/meshes/break_beam/collision/hokuyo.dae" />
+          <mesh filename="file://$(find hrwros_support)/meshes/break_beam/collision/hokuyo.dae"/>
+
         </geometry>
         <material name="dark_grey"/>
       </collision>

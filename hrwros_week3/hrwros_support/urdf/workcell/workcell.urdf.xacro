@@ -7,12 +7,14 @@
     <link name="workcell">
       <visual>
         <geometry>
-          <mesh filename="package://hrwros_support/meshes/workcell/visual/workcell.dae"/>
+          <mesh filename="file://$(find hrwros_support)/meshes/workcell/visual/workcell.dae"/>
+
         </geometry>
       </visual>
       <collision>
         <geometry>
-          <mesh filename="package://hrwros_support/meshes/workcell/collision/workcell.dae"/>
+          <mesh filename="file://$(find hrwros_support)/meshes/workcell/collision/workcell.dae"/>
+
         </geometry>
       </collision>
       <inertial>
