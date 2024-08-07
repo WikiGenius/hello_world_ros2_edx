@@ -64,31 +64,31 @@ def generate_launch_description():
         'hrwros_support', 'workcell/workcell.xacro',
         'workcell_parent_name:=', LaunchConfiguration('workcell_parent_name')
     )
-    # break_beam_description = generate_description_command(
-    #     'hrwros_support', 'break_beam/break_beam.xacro',
-    #     'prefix:=', LaunchConfiguration('break_beam')
-    # )
-    # bin_1_description = generate_description_command(
-    #     'hrwros_support', 'bin/bin.xacro',
-    #     'prefix:=', LaunchConfiguration('bin_1')
-    # )
-    # logical_camera1_description = generate_description_command(
-    #     'hrwros_support', 'logical_camera/logical_camera1.xacro',
-    #     'prefix:=', LaunchConfiguration('logical_camera1'),' ',
-    #     'logical_camera_parent:=', LaunchConfiguration('workcell_parent_name')
-    # )
-    # robot1_pedestal_description = generate_description_command(
-    #     'hrwros_support', 'robot_pedestal/robot1_pedestal.xacro',
-    #     'pedestal_prefix:=', LaunchConfiguration('robot1_pedestal'), ' ',
-    #     'pedestal_parent:=', LaunchConfiguration('workcell_parent_name'), ' ',
-    #     'pedestal_height:=', LaunchConfiguration('robot1_pedestal_height')
-    # )
-    # robot2_pedestal_description = generate_description_command(
-    #     'hrwros_support', 'robot_pedestal/robot2_pedestal.xacro',
-    #     'pedestal_prefix:=', LaunchConfiguration('robot2_pedestal'), ' ',
-    #     'pedestal_parent:=', LaunchConfiguration('workcell_parent_name'), ' ',
-    #     'pedestal_height:=', LaunchConfiguration('robot2_pedestal_height')
-    # )
+    break_beam_description = generate_description_command(
+        'hrwros_support', 'break_beam/break_beam.xacro',
+        'prefix:=', LaunchConfiguration('break_beam')
+    )
+    bin_1_description = generate_description_command(
+        'hrwros_support', 'bin/bin.xacro',
+        'prefix:=', LaunchConfiguration('bin_1')
+    )
+    logical_camera1_description = generate_description_command(
+        'hrwros_support', 'logical_camera/logical_camera1.xacro',
+        'prefix:=', LaunchConfiguration('logical_camera1'), ' ',
+        'logical_camera_parent:=', LaunchConfiguration('workcell_parent_name')
+    )
+    robot1_pedestal_description = generate_description_command(
+        'hrwros_support', 'robot_pedestal/robot1_pedestal.xacro',
+        'pedestal_prefix:=', LaunchConfiguration('robot1_pedestal'), ' ',
+        'pedestal_parent:=', LaunchConfiguration('workcell_parent_name'), ' ',
+        'pedestal_height:=', LaunchConfiguration('robot1_pedestal_height')
+    )
+    robot2_pedestal_description = generate_description_command(
+        'hrwros_support', 'robot_pedestal/robot2_pedestal.xacro',
+        'pedestal_prefix:=', LaunchConfiguration('robot2_pedestal'), ' ',
+        'pedestal_parent:=', LaunchConfiguration('workcell_parent_name'), ' ',
+        'pedestal_height:=', LaunchConfiguration('robot2_pedestal_height')
+    )
 
     # Path to Gazebo launch file
     gazebo_launch_path = PathJoinSubstitution([
@@ -100,28 +100,28 @@ def generate_launch_description():
     # Generate robot state publishers
     workcell_state_publisher = generate_robot_state_publisher(
         'workcell', workcell_description)
-    # break_beam_state_publisher = generate_robot_state_publisher(
-    #     'break_beam', break_beam_description)
-    # bin_1_state_publisher = generate_robot_state_publisher(
-    #     'bin_1', bin_1_description)
-    # logical_camera1_state_publisher = generate_robot_state_publisher(
-    #     'logical_camera1', logical_camera1_description)
-    # robot1_pedestal_state_publisher = generate_robot_state_publisher(
-    #     'robot1_pedestal', robot1_pedestal_description)
-    # robot2_pedestal_state_publisher = generate_robot_state_publisher(
-    #     'robot2_pedestal', robot2_pedestal_description)
+    break_beam_state_publisher = generate_robot_state_publisher(
+        'break_beam', break_beam_description)
+    bin_1_state_publisher = generate_robot_state_publisher(
+        'bin_1', bin_1_description)
+    logical_camera1_state_publisher = generate_robot_state_publisher(
+        'logical_camera1', logical_camera1_description)
+    robot1_pedestal_state_publisher = generate_robot_state_publisher(
+        'robot1_pedestal', robot1_pedestal_description)
+    robot2_pedestal_state_publisher = generate_robot_state_publisher(
+        'robot2_pedestal', robot2_pedestal_description)
 
     # Generate spawner nodes
-    # break_beam_spawner = generate_spawner_node(
-    #     'break_beam', 'break_beam_', '/break_beam_description')
-    # bin_1_spawner = generate_spawner_node(
-    #     'bin_1', 'bin_1_', '/bin_1_description', x=0.0, y=0.0)
-    # logical_camera1_spawner = generate_spawner_node(
-    #     'logical_camera1', 'logical_camera1_', '/logical_camera1_description')
-    # robot1_pedestal_spawner = generate_spawner_node(
-    #     'robot1_pedestal', 'robot1_pedestal_', '/robot1_pedestal_description')
-    # robot2_pedestal_spawner = generate_spawner_node(
-    #     'robot2_pedestal', 'robot2_pedestal_', '/robot2_pedestal_description')
+    break_beam_spawner = generate_spawner_node(
+        'break_beam', 'break_beam_', '/break_beam_description')
+    bin_1_spawner = generate_spawner_node(
+        'bin_1', 'bin_1_', '/bin_1_description', x=0.0, y=0.0)
+    logical_camera1_spawner = generate_spawner_node(
+        'logical_camera1', 'logical_camera1_', '/logical_camera1_description')
+    robot1_pedestal_spawner = generate_spawner_node(
+        'robot1_pedestal', 'robot1_pedestal_', '/robot1_pedestal_description')
+    robot2_pedestal_spawner = generate_spawner_node(
+        'robot2_pedestal', 'robot2_pedestal_', '/robot2_pedestal_description')
     workcell_spawner = generate_spawner_node(
         'workcell', 'workcell_', '/workcell_description')
 
@@ -131,47 +131,48 @@ def generate_launch_description():
                 PythonLaunchDescriptionSource(gazebo_launch_path)
             ),
             workcell_state_publisher,
-            # break_beam_state_publisher,
-            # logical_camera1_state_publisher,
-            # bin_1_state_publisher,
-            # robot1_pedestal_state_publisher,
-            # robot2_pedestal_state_publisher,
+            robot1_pedestal_state_publisher,
+            robot2_pedestal_state_publisher,
+            bin_1_state_publisher,
+            break_beam_state_publisher,
+            logical_camera1_state_publisher,
+
             TimerAction(
                 period=1.0,  # Wait 10 second to ensure Gazebo is fully started
                 actions=[
                     workcell_spawner
                 ]
             ),
-            # TimerAction(
-            #     period=1.0,  # Wait 20 second to ensure Gazebo is fully started
-            #     actions=[
-            #         robot1_pedestal_spawner
-            #     ]
-            # ),
-            # TimerAction(
-            #     period=30.0,  # Wait 30 second to ensure Gazebo is fully started
-            #     actions=[
-            #         robot2_pedestal_spawner
-            #     ]
-            # ),
-            # TimerAction(
-            #     period=4.0,  # Wait 40 second to ensure Gazebo is fully started
-            #     actions=[
-            #         bin_1_spawner
-            #     ]
-            # ),
-            # TimerAction(
-            #     period=1.0,  # Wait 50 second to ensure Gazebo is fully started
-            #     actions=[
-            #         break_beam_spawner
-            #     ]
-            # ),
-            #         TimerAction(
-            #     period=1.0,  # Wait 50 second to ensure Gazebo is fully started
-            #     actions=[
-            #         logical_camera1_spawner
-            #     ]
-            # ),
+            TimerAction(
+                period=1.0,  # Wait 20 second to ensure Gazebo is fully started
+                actions=[
+                    robot1_pedestal_spawner
+                ]
+            ),
+            TimerAction(
+                period=1.0,  # Wait 30 second to ensure Gazebo is fully started
+                actions=[
+                    robot2_pedestal_spawner
+                ]
+            ),
+            TimerAction(
+                period=1.0,  # Wait 40 second to ensure Gazebo is fully started
+                actions=[
+                    bin_1_spawner
+                ]
+            ),
+            TimerAction(
+                period=1.0,  # Wait 50 second to ensure Gazebo is fully started
+                actions=[
+                    break_beam_spawner
+                ]
+            ),
+            TimerAction(
+                period=1.0,  # Wait 50 second to ensure Gazebo is fully started
+                actions=[
+                    logical_camera1_spawner
+                ]
+            ),
 
         ]
     )
