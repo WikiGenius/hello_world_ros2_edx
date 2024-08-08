@@ -20,9 +20,9 @@ def generate_robot_state_publisher(robot_prefix, description_command):
         package='robot_state_publisher',
         executable='robot_state_publisher',
         output='screen',
-        name=f'{robot_prefix}_state_publisher',
+        name=f'{robot_prefix}state_publisher',
         parameters=[{'robot_description': description_command, 'tf_prefix': robot_prefix}],
-        remappings=[('/robot_description', f'/{robot_prefix}_description')]
+        remappings=[('/robot_description', f'/{robot_prefix}description')]
     )
 
 
@@ -51,9 +51,9 @@ def generate_controller_spawner_node(robot_prefix):
     return Node(
         package='controller_manager',
         executable='spawner',
-        name=f'{robot_prefix}_controller_spawner',
-        arguments=[f'{robot_prefix}_joint_state_controller',
-                   f'{robot_prefix}_controller']
+        name=f'{robot_prefix}controller_spawner',
+        arguments=[f'{robot_prefix}joint_state_controller',
+                   f'{robot_prefix}controller']
     )
 
 
@@ -62,10 +62,10 @@ def generate_robot_group(robot_prefix, robot_type, urdf_file, vacuum_gripper_pre
     description_command = generate_description_command(
         'hrwros_support',
         urdf_file,
-        f'robot_type:={robot_type}',
-        f'robot_prefix:={robot_prefix}_',
-        f'vacuum_gripper_prefix:={vacuum_gripper_prefix}',
-        f'robot_param:=/{robot_prefix}_description',
+        f'robot_type:={robot_type} ',
+        f'robot_prefix:={robot_prefix} ',
+        f'vacuum_gripper_prefix:={vacuum_gripper_prefix} ',
+        f'robot_param:=/{robot_prefix}description ',
         f'gripper_plugin_name:={gripper_plugin_name}'
     )
 
@@ -75,7 +75,7 @@ def generate_robot_group(robot_prefix, robot_type, urdf_file, vacuum_gripper_pre
         generate_spawner_node(
             name=robot_prefix,
             entity_name=robot_prefix,
-            topic=f'/{robot_prefix}_description',
+            topic=f'/{robot_prefix}description',
             x=x, y=y, z=z, yaw=yaw,
             joints=joints
         ),
@@ -102,12 +102,11 @@ def generate_launch_description():
 
         # Group for Robot 1
         generate_robot_group(
-            robot_prefix=LaunchConfiguration('robot1_prefix'),
-            robot_type=LaunchConfiguration('robot1_type'),
+            robot_prefix='robot1',
+            robot_type='ur10',
             urdf_file='robot_system/robot_system.xacro',
-            vacuum_gripper_prefix=LaunchConfiguration(
-                'vacuum_gripper1_prefix'),
-            gripper_plugin_name=LaunchConfiguration('gripper1_plugin_name'),
+            vacuum_gripper_prefix='vacuum_gripper1_',
+            gripper_plugin_name='gripper1',
             x=0.5, y=1.8, z=0.95,
             joints={
                 'robot1_elbow_joint': 1.57,
@@ -120,12 +119,11 @@ def generate_launch_description():
 
         # Group for Robot 2
         generate_robot_group(
-            robot_prefix=LaunchConfiguration('robot2_prefix'),
-            robot_type=LaunchConfiguration('robot2_type'),
+            robot_prefix='robot2',
+            robot_type='ur5',
             urdf_file='robot_system/robot_system.xacro',
-            vacuum_gripper_prefix=LaunchConfiguration(
-                'vacuum_gripper2_prefix'),
-            gripper_plugin_name=LaunchConfiguration('gripper2_plugin_name'),
+            vacuum_gripper_prefix='vacuum_gripper2_',
+            gripper_plugin_name='gripper2',
             x=-7.8, y=-1.5, z=0.7, yaw=1.57,
             joints={
                 'robot2_elbow_joint': 1.57,

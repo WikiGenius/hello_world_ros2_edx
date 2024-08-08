@@ -13,6 +13,7 @@
     <!-- Robot1 -->
     <xacro:ur_description robot_name="${robot_prefix}" ur_type="${robot_type}">
       <!-- <origin xyz="0.0 0.0 ${pedestal1_height}" rpy="0 0 0"/> -->
+      <origin xyz="0.0 0.0 0.0" rpy="0 0 0"/>
     </xacro:ur_description>
     <!-- Vacuum Gripper1 -->
     <xacro:vacuum_gripper_urdf prefix="${vacuum_gripper_prefix}" />
