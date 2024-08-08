@@ -1,0 +1,28 @@
+<?xml version="1.0"?>
+<robot name="robot_system"
+  xmlns:xacro="http://www.ros.org/wiki/xacro">
+  <xacro:macro name="robot_system_urdf" params="robot_prefix vacuum_gripper_prefix robot_type">
+    <xacro:arg name="transmission_hw_interface" default="hardware_interface/EffortJointInterface" />
+    
+    <xacro:include filename="$(find hrwros_support)/urdf/arm_robot/ur_description.urdf.xacro"/>
+    <xacro:include filename="$(find hrwros_support)/urdf/vacuum_gripper/vacuum_gripper.urdf.xacro"/>
+    
+    <!-- Used for fixing robot to Gazebo 'base_link' -->
+    <link name="world"/>
+
+    <!-- Robot1 -->
+    <xacro:ur_description robot_name="${robot_prefix}" ur_type="${robot_type}">
+      <!-- <origin xyz="0.0 0.0 ${pedestal1_height}" rpy="0 0 0"/> -->
+    </xacro:ur_description>
+    <!-- Vacuum Gripper1 -->
+    <xacro:vacuum_gripper_urdf prefix="${vacuum_gripper_prefix}" />
+
+    <!-- gripper1 to robot1. -->
+    <joint name="gripper_to_robot" type="fixed">
+      <parent link="${robot_prefix}_tool0" />
+      <child link="${vacuum_gripper_prefix}base_link" />
+    </joint>
+
+  </xacro:macro>
+
+</robot>
