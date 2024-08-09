@@ -35,7 +35,7 @@
   </xacro:robot_pedestal_urdf>
   <!-- Robot1 -->
   <xacro:ur_description robot_name="${robot1}" ur_type="${ur_type1}">
-    <origin xyz="0.0 0.0 ${pedestal1_height}" rpy="0 0 0"/>
+    <origin xyz="0.5 1.8 ${pedestal1_height}" rpy="0 0 0"/>
   </xacro:ur_description>
   <!-- Vacuum Gripper1 -->
   <xacro:vacuum_gripper_urdf prefix="${vacuum_gripper1}" />
@@ -47,7 +47,7 @@
   </xacro:robot_pedestal_urdf>
   <!-- Robot2 -->
   <xacro:ur_description robot_name="${robot2}" ur_type="${ur_type2}">
-    <origin xyz="0.0 0.0 ${pedestal2_height}" rpy="0 0 0"/>
+    <origin xyz="-7.8 -1.5 ${pedestal2_height}" rpy="0 0 0"/>
   </xacro:ur_description>
   <!-- Vacuum Gripper2 -->
   <xacro:vacuum_gripper_urdf prefix="${vacuum_gripper2}" />

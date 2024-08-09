@@ -20,9 +20,9 @@ def generate_robot_state_publisher(robot_prefix, description_command):
         package='robot_state_publisher',
         executable='robot_state_publisher',
         output='screen',
-        name=f'{robot_prefix}state_publisher',
-        parameters=[{'robot_description': description_command, 'tf_prefix': robot_prefix}],
-        remappings=[('/robot_description', f'/{robot_prefix}description')]
+        name=f'{robot_prefix}_state_publisher',
+        parameters=[{'robot_description': description_command, 'tf_prefix': f'{robot_prefix}_'}],
+        remappings=[('/robot_description', f'/{robot_prefix}_description')]
     )
 
 
@@ -51,9 +51,9 @@ def generate_controller_spawner_node(robot_prefix):
     return Node(
         package='controller_manager',
         executable='spawner',
-        name=f'{robot_prefix}controller_spawner',
-        arguments=[f'{robot_prefix}joint_state_controller',
-                   f'{robot_prefix}controller']
+        name=f'{robot_prefix}_controller_spawner',
+        arguments=[f'{robot_prefix}_joint_state_controller',
+                   f'{robot_prefix}_controller']
     )
 
 
@@ -65,7 +65,7 @@ def generate_robot_group(robot_prefix, robot_type, urdf_file, vacuum_gripper_pre
         f'robot_type:={robot_type} ',
         f'robot_prefix:={robot_prefix} ',
         f'vacuum_gripper_prefix:={vacuum_gripper_prefix} ',
-        f'robot_param:=/{robot_prefix}description ',
+        f'robot_param:=/{robot_prefix}/{robot_prefix}_description ',
         f'gripper_plugin_name:={gripper_plugin_name}'
     )
 
@@ -75,7 +75,7 @@ def generate_robot_group(robot_prefix, robot_type, urdf_file, vacuum_gripper_pre
         generate_spawner_node(
             name=robot_prefix,
             entity_name=robot_prefix,
-            topic=f'/{robot_prefix}description',
+            topic=f'/{robot_prefix}_description',
             x=x, y=y, z=z, yaw=yaw,
             joints=joints
         ),
