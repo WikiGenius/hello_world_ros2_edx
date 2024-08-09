@@ -8,7 +8,7 @@
     <xacro:include filename="$(find hrwros_support)/urdf/vacuum_gripper/vacuum_gripper.urdf.xacro"/>
     
     <!-- Used for fixing robot to Gazebo 'base_link' -->
-    <link name="world"/>
+    <link name="world_interface"/>
 
     <!-- Robot1 -->
     <xacro:ur_description robot_name="${robot_prefix}" ur_type="${robot_type}">

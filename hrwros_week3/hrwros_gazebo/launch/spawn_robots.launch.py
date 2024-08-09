@@ -1,8 +1,9 @@
 from launch import LaunchDescription
-from launch.actions import DeclareLaunchArgument, GroupAction
+from launch.actions import DeclareLaunchArgument, GroupAction, IncludeLaunchDescription, TimerAction
 from launch_ros.actions import Node, PushRosNamespace
 from launch.substitutions import Command, PathJoinSubstitution, LaunchConfiguration
 from launch_ros.substitutions import FindPackageShare
+from launch.launch_description_sources import PythonLaunchDescriptionSource
 
 
 def generate_description_command(package, urdf_file, *args):
@@ -14,6 +15,7 @@ def generate_description_command(package, urdf_file, *args):
         *args
     ])
 
+
 def generate_robot_state_publisher(robot_prefix, description_command):
     """Create a robot_state_publisher node."""
     return Node(
@@ -21,7 +23,8 @@ def generate_robot_state_publisher(robot_prefix, description_command):
         executable='robot_state_publisher',
         output='screen',
         name=f'{robot_prefix}_state_publisher',
-        parameters=[{'robot_description': description_command, 'tf_prefix': f'{robot_prefix}_'}],
+        parameters=[{'robot_description': description_command,
+                     'tf_prefix': f'{robot_prefix}_'}],
         remappings=[('/robot_description', f'/{robot_prefix}_description')]
     )
 
@@ -35,9 +38,9 @@ def generate_spawner_node(name, entity_name, topic, x=None, y=None, z=None, yaw=
         arguments.extend(['-z', str(z)])
     if yaw is not None:
         arguments.extend(['-Y', str(yaw)])
-    if joints:
-        for joint, position in joints.items():
-            arguments.extend(['-J', joint, str(position)])
+    # if joints:
+    #     for joint, position in joints.items():
+    #         arguments.extend(['-J', joint, str(position)])
     return Node(
         package='gazebo_ros',
         executable='spawn_entity.py',
@@ -70,7 +73,7 @@ def generate_robot_group(robot_prefix, robot_type, urdf_file, vacuum_gripper_pre
     )
 
     return GroupAction([
-        PushRosNamespace(robot_prefix),
+        # PushRosNamespace(robot_prefix),
         generate_robot_state_publisher(robot_prefix, description_command),
         generate_spawner_node(
             name=robot_prefix,
@@ -79,12 +82,19 @@ def generate_robot_group(robot_prefix, robot_type, urdf_file, vacuum_gripper_pre
             x=x, y=y, z=z, yaw=yaw,
             joints=joints
         ),
-        generate_controller_spawner_node(robot_prefix)
+        # generate_controller_spawner_node(robot_prefix)
     ])
 
 
 def generate_launch_description():
     """Generate the launch description for the robots."""
+
+    # Path to Gazebo launch file
+    gazebo_launch_path = PathJoinSubstitution([
+        FindPackageShare('gazebo_ros'),
+        'launch',
+        'gazebo.launch.py'
+    ])
     return LaunchDescription([
         # Declare arguments
         DeclareLaunchArgument('robot1_prefix', default_value='robot1_'),
@@ -99,7 +109,9 @@ def generate_launch_description():
                               default_value='gripper1'),
         DeclareLaunchArgument('gripper2_plugin_name',
                               default_value='gripper2'),
-
+        IncludeLaunchDescription(
+            PythonLaunchDescriptionSource(gazebo_launch_path)
+        ),
         # Group for Robot 1
         generate_robot_group(
             robot_prefix='robot1',
