@@ -51,13 +51,80 @@ def generate_spawner_node(name, entity_name, topic, x=None, y=None, z=None, yaw=
 
 def generate_controller_spawner_node(robot_prefix):
     """Spawn the controller for the robot."""
-    return Node(
+    # return Node(
+    #     package='controller_manager',
+    #     executable='spawner',
+    #     name=f'{robot_prefix}_controller_spawner',
+    #     arguments=[f'{robot_prefix}_joint_state_controller',
+    #                f'{robot_prefix}_controller']
+    # )
+    arm_controller_name = f'{robot_prefix}_controller'
+    joint_controller_name = f'{robot_prefix}_joint_state_controller'
+    robot_yaml_file = PathJoinSubstitution([
+        FindPackageShare('hrwros_gazebo'),
+        'config',
+        f'{arm_controller_name}.yaml'
+    ])
+    joint_state_yaml_file = PathJoinSubstitution([
+        FindPackageShare('hrwros_gazebo'),
+        'config',
+        f'{joint_controller_name}.yaml'
+    ])
+
+
+    # return Node(
+    #     package='controller_manager',
+    #     executable='spawner',
+    #     name=f'{robot_prefix}_controller_spawner',
+    #     parameters=[
+    #             PathJoinSubstitution([
+    #                 FindPackageShare('hrwros_gazebo'),
+    #                 'config',
+    #                 f'{robot_prefix}_joint_state_controller.yaml'
+    #             ]),
+    #         PathJoinSubstitution([
+    #             FindPackageShare('hrwros_gazebo'),
+    #             'config',
+    #             f'{robot_prefix}_controller.yaml'
+    #         ])
+    #     ]
+    # )
+    # return Node(
+    #     package='controller_manager',
+    #     executable='spawner',
+    #     name=f'{robot_prefix}_controller_spawner',
+    #     arguments=[joint_controller_name, arm_controller_name,
+    #                '-p', robot_yaml_file, '-p', joint_state_yaml_file]
+    # )
+
+    arm_node = Node(
         package='controller_manager',
         executable='spawner',
-        name=f'{robot_prefix}_controller_spawner',
-        arguments=[f'{robot_prefix}_joint_state_controller',
-                   f'{robot_prefix}_controller']
+        name=f'{robot_prefix}_arm_controller_spawner',
+        arguments=[arm_controller_name,
+                   '-p', robot_yaml_file]
     )
+    joint_node = Node(
+        package='controller_manager',
+        executable='spawner',
+        name=f'{robot_prefix}_joint_controller_spawner',
+        arguments=[joint_controller_name,
+                   '-p', joint_state_yaml_file]
+    )
+    return [
+        TimerAction(
+            period=1.0,  # Wait 10 second to ensure Gazebo is fully started
+            actions=[
+                arm_node
+            ]
+        ),
+        TimerAction(
+            period=1.0,  # Wait 10 second to ensure Gazebo is fully started
+            actions=[
+                joint_node
+            ]
+        )
+    ]
 
 
 def generate_robot_group(robot_prefix, robot_type, urdf_file, vacuum_gripper_prefix, gripper_plugin_name, x, y, z, yaw=None, joints=None):
@@ -82,7 +149,7 @@ def generate_robot_group(robot_prefix, robot_type, urdf_file, vacuum_gripper_pre
             x=x, y=y, z=z, yaw=yaw,
             joints=joints
         ),
-        # generate_controller_spawner_node(robot_prefix)
+        *generate_controller_spawner_node(robot_prefix)
     ])
 
 
