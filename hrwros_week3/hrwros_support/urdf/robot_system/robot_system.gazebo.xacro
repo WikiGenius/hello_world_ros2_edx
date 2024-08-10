@@ -45,9 +45,15 @@
       <turnGravityOff>true</turnGravityOff>
     </gazebo>
 -->
-    <gazebo>
+    <!-- <gazebo>
       <plugin name="gazebo_ros_control" filename="libgazebo_ros_control.so">
         <robotParam>${robot_parameter_name}</robotParam>
+      </plugin>
+    </gazebo> -->
+
+    <gazebo>
+      <plugin name="gazebo_ros2_control" filename="libgazebo_ros2_control.so">
+        <parameters>$(find hrwros_gazebo)/config/gazebo_controllers.yaml</parameters>
       </plugin>
     </gazebo>
   </xacro:macro>
