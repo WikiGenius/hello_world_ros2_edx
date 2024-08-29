@@ -48,7 +48,6 @@ def generate_spawner_node(name, entity_name, topic, x=None, y=None, z=None, yaw=
     #     for joint, position in joints.items():
     #         arguments.extend(['-J', joint, str(position)])
 
-    # Return the node
     return Node(
         package='gazebo_ros',
         executable='spawn_entity.py',
@@ -57,78 +56,80 @@ def generate_spawner_node(name, entity_name, topic, x=None, y=None, z=None, yaw=
     )
 
 
-def generate_controller_spawner_node(robot_prefix):
+def generate_controller_spawner_node(robot_prefix, description_command):
     """Spawn the controller for the robot."""
 
     arm_controller_name = f'{robot_prefix}_gazebo_controllers'
+    robot_description = {'robot_description': description_command}
 
-    robot_yaml_file = PathJoinSubstitution([
+    robot_controllers = PathJoinSubstitution([
         FindPackageShare('hrwros_gazebo'),
         'config',
         f'{arm_controller_name}.yaml'
     ])
 
-    arm_node = Node(
-        package='controller_manager',
-        executable='spawner',
-        name=f'{robot_prefix}_arm_controller_spawner',
-        arguments=[arm_controller_name,
-                   '-p', robot_yaml_file]
-    )
 
-    joint_state_broadcaster_spawner = Node(
+    controller_manager = Node(
         package="controller_manager",
-        executable="spawner",
-        arguments=["joint_state_broadcaster",
-                   "--controller-manager", "/controller_manager"],
+        executable="ros2_control_node",
+        parameters=[
+                robot_description, robot_controllers],
         output="both",
     )
+    # joint_state_broadcaster_spawner = Node(
+    #     package="controller_manager",
+    #     executable="spawner",
+    #     arguments=["joint_state_broadcaster",
+    #                "--controller-manager", "/controller_manager"],
+    #     output="both",
+    # )
 
-    robot_position_controller_spawner = Node(
-        package="controller_manager",
-        executable="spawner",
-        arguments=["forward_position_controller",
-                   "-c", "/controller_manager", "--stopped"],
-    )
+    # robot_position_controller_spawner = Node(
+    #     package="controller_manager",
+    #     executable="spawner",
+    #     arguments=["forward_position_controller",
+    #                "-c", "/controller_manager", "--stopped"],
+    # )
 
-    robot_velocity_controller_spawner = Node(
-        package="controller_manager",
-        executable="spawner",
-        arguments=["forward_velocity_controller",
-                   "-c", "/controller_manager", "--stopped"],
-    )
+    # robot_velocity_controller_spawner = Node(
+    #     package="controller_manager",
+    #     executable="spawner",
+    #     arguments=["forward_velocity_controller",
+    #                "-c", "/controller_manager", "--stopped"],
+    # )
 
-    robot_effort_controller_spawner = Node(
-        package="controller_manager",
-        executable="spawner",
-        arguments=["forward_effort_controller", "-c", "/controller_manager"],
-    )
+    # robot_effort_controller_spawner = Node(
+    #     package="controller_manager",
+    #     executable="spawner",
+    #     arguments=["forward_effort_controller", "-c", "/controller_manager"],
+    # )
 
-    delay_robot_position_controller_spawner_after_joint_state_broadcaster_spawner = RegisterEventHandler(
-        event_handler=OnProcessExit(
-            target_action=joint_state_broadcaster_spawner,
-            on_exit=[robot_position_controller_spawner],
-        )
-    )
+    # delay_robot_position_controller_spawner_after_joint_state_broadcaster_spawner = RegisterEventHandler(
+    #     event_handler=OnProcessExit(
+    #         target_action=joint_state_broadcaster_spawner,
+    #         on_exit=[robot_position_controller_spawner],
+    #     )
+    # )
 
-    delay_robot_velocity_controller_spawner_after_robot_position_controller_spawner = RegisterEventHandler(
-        event_handler=OnProcessExit(
-            target_action=robot_position_controller_spawner,
-            on_exit=[robot_velocity_controller_spawner],
-        )
-    )
+    # delay_robot_velocity_controller_spawner_after_robot_position_controller_spawner = RegisterEventHandler(
+    #     event_handler=OnProcessExit(
+    #         target_action=robot_position_controller_spawner,
+    #         on_exit=[robot_velocity_controller_spawner],
+    #     )
+    # )
 
-    delay_robot_effort_controller_spawner_after_robot_velocity_controller_spawner = RegisterEventHandler(
-        event_handler=OnProcessExit(
-            target_action=robot_velocity_controller_spawner,
-            on_exit=[robot_effort_controller_spawner],
-        )
-    )
+    # delay_robot_effort_controller_spawner_after_robot_velocity_controller_spawner = RegisterEventHandler(
+    #     event_handler=OnProcessExit(
+    #         target_action=robot_velocity_controller_spawner,
+    #         on_exit=[robot_effort_controller_spawner],
+    #     )
+    # )
     return [
-        joint_state_broadcaster_spawner,
-        delay_robot_position_controller_spawner_after_joint_state_broadcaster_spawner,
-        delay_robot_velocity_controller_spawner_after_robot_position_controller_spawner,
-        delay_robot_effort_controller_spawner_after_robot_velocity_controller_spawner
+        controller_manager,
+        # joint_state_broadcaster_spawner,
+        # delay_robot_position_controller_spawner_after_joint_state_broadcaster_spawner,
+        # delay_robot_velocity_controller_spawner_after_robot_position_controller_spawner,
+        # delay_robot_effort_controller_spawner_after_robot_velocity_controller_spawner
 
     ]
 
@@ -143,7 +144,6 @@ def generate_robot_group(robot_prefix, robot_type, urdf_file, vacuum_gripper_pre
         f'vacuum_gripper_prefix:={vacuum_gripper_prefix} ',
         f'gripper_plugin_name:={gripper_plugin_name}'
     )
-
     return GroupAction([
         # PushRosNamespace(robot_prefix),
         generate_robot_state_publisher(robot_prefix, description_command),
@@ -154,7 +154,7 @@ def generate_robot_group(robot_prefix, robot_type, urdf_file, vacuum_gripper_pre
             x=x, y=y, z=z, yaw=yaw,
             joints=joints
         ),
-        *generate_controller_spawner_node(robot_prefix)
+        *generate_controller_spawner_node(robot_prefix, description_command)
     ])
 
 
@@ -202,19 +202,19 @@ def generate_launch_description():
         ),
 
         # Group for Robot 2
-        generate_robot_group(
-            robot_prefix='robot2',
-            robot_type='ur5',
-            urdf_file='robot_system/robot_system.xacro',
-            vacuum_gripper_prefix='vacuum_gripper2_',
-            gripper_plugin_name='gripper2',
-            x=-7.8, y=-1.5, z=0.7, yaw=1.57,
-            joints={
-                'robot2_elbow_joint': 1.57,
-                'robot2_shoulder_lift_joint': -1.57,
-                'robot2_shoulder_pan_joint': 1.24,
-                'robot2_wrist_1_joint': -1.57,
-                'robot2_wrist_2_joint': -1.57,
-            }
-        ),
+        # generate_robot_group(
+        #     robot_prefix='robot2',
+        #     robot_type='ur5',
+        #     urdf_file='robot_system/robot_system.xacro',
+        #     vacuum_gripper_prefix='vacuum_gripper2_',
+        #     gripper_plugin_name='gripper2',
+        #     x=-7.8, y=-1.5, z=0.7, yaw=1.57,
+        #     joints={
+        #         'robot2_elbow_joint': 1.57,
+        #         'robot2_shoulder_lift_joint': -1.57,
+        #         'robot2_shoulder_pan_joint': 1.24,
+        #         'robot2_wrist_1_joint': -1.57,
+        #         'robot2_wrist_2_joint': -1.57,
+        #     }
+        # ),
     ])
