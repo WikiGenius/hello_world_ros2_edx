@@ -1,7 +1,7 @@
 #include "hrwros_gazebo/plugins/ROSLogicalCameraPlugin.hh"
 
 #include "hrwros_gazebo/plugins/ARIAC.hh"
-#include "hrwros_gazebo_interface/msg/logical_camera_image.hpp"
+#include "hrwros_interface/msg/logical_camera_image.hpp"
 
 #include <gazebo/physics/Link.hh>
 #include <gazebo/physics/Model.hh>
@@ -157,7 +157,7 @@ void ROSLogicalCameraPlugin::Load(physics::ModelPtr _parent, sdf::ElementPtr _sd
                                          &ROSLogicalCameraPlugin::OnImage, this);
   gzdbg << "Subscribing to gazebo topic: " << this->sensor->Topic() << "\n";
 
-  this->imagePub = this->rosnode->create_publisher<hrwros_gazebo_interface::msg::LogicalCameraImage>(
+  this->imagePub = this->rosnode->create_publisher<hrwros_interface::msg::LogicalCameraImage>(
                      imageTopic_ros, 10);
   gzdbg << "Publishing to ROS topic: " << this->imagePub->get_topic_name() << "\n";
 
@@ -201,7 +201,7 @@ void ROSLogicalCameraPlugin::OnImage(ConstLogicalCameraImagePtr &_msg)
     {
       return;
     }
-    hrwros_gazebo_interface::msg::LogicalCameraImage imageMsg;
+    hrwros_interface::msg::LogicalCameraImage imageMsg;
     ignition::math::Vector3d cameraPosition = ignition::math::Vector3d(msgs::ConvertIgn(_msg->pose().position()));
     ignition::math::Quaterniond cameraOrientation = ignition::math::Quaterniond(
       msgs::ConvertIgn(_msg->pose().orientation()));
@@ -349,9 +349,9 @@ void ROSLogicalCameraPlugin::AddNoise(ignition::math::Pose3d & pose)
 
 void ROSLogicalCameraPlugin::AddModelToMsg(
   const std::string & modelType, const ignition::math::Pose3d & modelPose,
-  hrwros_gazebo_interface::msg::LogicalCameraImage & imageMsg)
+  hrwros_interface::msg::LogicalCameraImage & imageMsg)
 {
-  hrwros_gazebo_interface::msg::Model modelMsg;
+  hrwros_interface::msg::Model modelMsg;
   modelMsg.pose.position.x = modelPose.Pos().X();
   modelMsg.pose.position.y = modelPose.Pos().Y();
   modelMsg.pose.position.z = modelPose.Pos().Z();

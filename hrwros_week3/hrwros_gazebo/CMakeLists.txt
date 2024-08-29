@@ -13,7 +13,7 @@ find_package(std_msgs REQUIRED)
 find_package(std_srvs REQUIRED)
 find_package(geometry_msgs REQUIRED)
 find_package(sensor_msgs REQUIRED)
-find_package(hrwros_gazebo_interface REQUIRED)
+find_package(hrwros_interface REQUIRED)
 find_package(tinyxml_vendor REQUIRED)
 find_package(tf2 REQUIRED)
 find_package(tf2_ros REQUIRED)
@@ -68,23 +68,23 @@ link_hrwros_target(urdf_creator_test_node urdf_creator)
 # Plugin libraries
 add_hrwros_library(SideContactPlugin src/plugins/SideContactPlugin.cc)
 add_hrwros_library(VacuumGripperPlugin src/plugins/VacuumGripperPlugin.cc)
-add_hrwros_library(ROSVacuumGripperPlugin src/plugins/ROSVacuumGripperPlugin.cc rclcpp hrwros_gazebo_interface)
+add_hrwros_library(ROSVacuumGripperPlugin src/plugins/ROSVacuumGripperPlugin.cc rclcpp hrwros_interface)
 link_hrwros_target(ROSVacuumGripperPlugin VacuumGripperPlugin)
 
 add_hrwros_library(ProximityRayPlugin src/plugins/ProximityRayPlugin.cc)
-add_hrwros_library(ROSProximityRayPlugin src/plugins/ROSProximityRayPlugin.cc rclcpp hrwros_gazebo_interface)
+add_hrwros_library(ROSProximityRayPlugin src/plugins/ROSProximityRayPlugin.cc rclcpp hrwros_interface)
 link_hrwros_target(ROSProximityRayPlugin ProximityRayPlugin)
 
 add_hrwros_library(ConveyorBeltPlugin src/plugins/ConveyorBeltPlugin.cc)
 link_hrwros_target(ConveyorBeltPlugin SideContactPlugin)
 
-add_hrwros_library(ROSConveyorBeltPlugin src/plugins/ROSConveyorBeltPlugin.cc rclcpp hrwros_gazebo_interface)
+add_hrwros_library(ROSConveyorBeltPlugin src/plugins/ROSConveyorBeltPlugin.cc rclcpp hrwros_interface)
 link_hrwros_target(ROSConveyorBeltPlugin ConveyorBeltPlugin)
 
 add_hrwros_library(ObjectDisposalPlugin src/plugins/ObjectDisposalPlugin.cc)
 link_hrwros_target(ObjectDisposalPlugin SideContactPlugin)
 
-add_hrwros_library(ROSLogicalCameraPlugin src/plugins/ROSLogicalCameraPlugin.cc rclcpp hrwros_gazebo_interface tf2_ros)
+add_hrwros_library(ROSLogicalCameraPlugin src/plugins/ROSLogicalCameraPlugin.cc rclcpp hrwros_interface tf2_ros)
 
 # Install targets
 install(TARGETS

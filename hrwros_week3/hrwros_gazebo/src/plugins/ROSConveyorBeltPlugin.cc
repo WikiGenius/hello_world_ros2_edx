@@ -48,14 +48,14 @@ void ROSConveyorBeltPlugin::Load(physics::ModelPtr _parent, sdf::ElementPtr _sdf
 
   this->rosnode_ = rclcpp::Node::make_shared(this->robotNamespace_);
 
-  this->controlService_ = this->rosnode_->create_service<hrwros_gazebo_interface::srv::ConveyorBeltControl>(
+  this->controlService_ = this->rosnode_->create_service<hrwros_interface::srv::ConveyorBeltControl>(
     topic, std::bind(&ROSConveyorBeltPlugin::OnControlCommand, this, std::placeholders::_1, std::placeholders::_2));
 }
 
 /////////////////////////////////////////////////
 bool ROSConveyorBeltPlugin::OnControlCommand(
-  const std::shared_ptr<hrwros_gazebo_interface::srv::ConveyorBeltControl::Request> req,
-  std::shared_ptr<hrwros_gazebo_interface::srv::ConveyorBeltControl::Response> res)
+  const std::shared_ptr<hrwros_interface::srv::ConveyorBeltControl::Request> req,
+  std::shared_ptr<hrwros_interface::srv::ConveyorBeltControl::Response> res)
 {
   RCLCPP_INFO(this->rosnode_->get_logger(), "Conveyor control service called with: %f", req->state.power);
 

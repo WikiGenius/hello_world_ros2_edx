@@ -19,7 +19,7 @@
 
 // ROS 2
 #include <rclcpp/rclcpp.hpp>
-#include "hrwros_gazebo_interface/msg/logical_camera_image.hpp"
+#include "hrwros_interface/msg/logical_camera_image.hpp"
 
 #include <tf2_ros/transform_broadcaster.h>
 
@@ -70,7 +70,7 @@ namespace gazebo
     /// \brief Add model info to the message to be published
     protected: void AddModelToMsg(
       const std::string & modelType, const ignition::math::Pose3d & modelPose,
-      hrwros_gazebo_interface::msg::LogicalCameraImage & imageMsg);
+      hrwros_interface::msg::LogicalCameraImage & imageMsg);
 
     /// \brief Publish the TF frame of a model
     protected: void PublishTF(
@@ -98,7 +98,7 @@ namespace gazebo
     protected: std::shared_ptr<rclcpp::Node> rosnode;
 
     /// \brief ROS publisher for the logical camera image
-    protected: rclcpp::Publisher<hrwros_gazebo_interface::msg::LogicalCameraImage>::SharedPtr imagePub;
+    protected: rclcpp::Publisher<hrwros_interface::msg::LogicalCameraImage>::SharedPtr imagePub;
 
     /// \brief Prefix for the model TF frames published
     protected: std::string modelFramePrefix;

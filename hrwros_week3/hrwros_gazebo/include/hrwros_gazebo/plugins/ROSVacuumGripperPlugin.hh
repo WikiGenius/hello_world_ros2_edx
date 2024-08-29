@@ -21,7 +21,7 @@
 #include <memory>
 #include <gazebo/physics/PhysicsTypes.hh>
 #include <sdf/sdf.hh>
-#include "hrwros_gazebo_interface/srv/vacuum_gripper_control.hpp"
+#include "hrwros_interface/srv/vacuum_gripper_control.hpp"
 #include "VacuumGripperPlugin.hh"
 
 namespace gazebo
@@ -51,8 +51,8 @@ public:
   /// \brief Receives messages on the gripper's topic.
   /// \param[in] _req The message to control the gripper.
   /// \param[out] _rep If the service succeed or not.
-  bool OnGripperControl(const std::shared_ptr<hrwros_gazebo_interface::srv::VacuumGripperControl::Request> request,
-                        std::shared_ptr<hrwros_gazebo_interface::srv::VacuumGripperControl::Response> response);
+  bool OnGripperControl(const std::shared_ptr<hrwros_interface::srv::VacuumGripperControl::Request> request,
+                        std::shared_ptr<hrwros_interface::srv::VacuumGripperControl::Response> response);
 
   // Documentation inherited.
 private:

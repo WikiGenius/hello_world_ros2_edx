@@ -14,7 +14,7 @@
   <depend>std_msgs</depend>
   <depend>geometry_msgs</depend>
   <depend>sensor_msgs</depend>
-  <depend>hrwros_gazebo_interface</depend>
+  <depend>hrwros_interface</depend>
   <depend>std_srvs</depend>
 
   <depend>tinyxml_vendor</depend>

@@ -3,7 +3,7 @@
 #include <gazebo_ros/node.hpp>
 #include <rclcpp/rclcpp.hpp>
 #include <std_msgs/msg/header.hpp>
-#include "hrwros_gazebo_interface/msg/proximity.hpp"
+#include "hrwros_interface/msg/proximity.hpp"
 
 using namespace gazebo;
 GZ_REGISTER_SENSOR_PLUGIN(ROSProximityRayPlugin)
@@ -64,9 +64,9 @@ void ROSProximityRayPlugin::Load(sensors::SensorPtr _parent, sdf::ElementPtr _sd
   this->rosnode = gazebo_ros::Node::Get(_sdf);
 
   // Initialize the publishers
-  this->statePub = this->rosnode->create_publisher<hrwros_gazebo_interface::msg::Proximity>(
+  this->statePub = this->rosnode->create_publisher<hrwros_interface::msg::Proximity>(
     this->stateTopic, 10);
-  this->stateChangePub = this->rosnode->create_publisher<hrwros_gazebo_interface::msg::Proximity>(
+  this->stateChangePub = this->rosnode->create_publisher<hrwros_interface::msg::Proximity>(
     this->stateChangeTopic, 10);
 
   // Callback for laser scans

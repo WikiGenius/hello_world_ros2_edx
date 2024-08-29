@@ -53,7 +53,7 @@
 
     <gazebo>
       <plugin name="gazebo_ros2_control" filename="libgazebo_ros2_control.so">
-        <parameters>$(find hrwros_gazebo)/config/gazebo_controllers.yaml</parameters>
+        <parameters>$(find hrwros_gazebo)/config/${robot_prefix}gazebo_controllers.yaml</parameters>
       </plugin>
     </gazebo>
   </xacro:macro>
