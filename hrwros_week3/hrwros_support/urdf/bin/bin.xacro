@@ -9,7 +9,8 @@
   <!-- URDF -->
   <xacro:include filename="$(find hrwros_support)/urdf/bin/bin.urdf.xacro"/>
   <xacro:bin_urdf prefix="$(arg prefix)" bin_parent="$(arg bin_parent)">
-    <origin xyz="-8.0 -2.2 0.0" rpy="0 0 0" />
+    <!-- <origin xyz="-8.0 -2.2 0.0" rpy="0 0 0" /> -->
+    <origin xyz="0.0 0.0 0.0" rpy="0 0 0" />
   </xacro:bin_urdf>
 
   <!-- Gazebo -->

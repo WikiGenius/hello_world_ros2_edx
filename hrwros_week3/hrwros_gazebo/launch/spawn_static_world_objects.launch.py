@@ -90,7 +90,7 @@ def generate_launch_description():
     break_beam_spawner = some_utility.generate_spawner_node(
         'break_beam', '/break_beam_description')
     bin_1_spawner = some_utility.generate_spawner_node(
-        'bin_1', '/bin_1_description', x=0.0, y=0.0)
+        'bin_1', '/bin_1_description', x=-8.0, y=-2.2)
     logical_camera1_spawner = some_utility.generate_spawner_node(
         'logical_camera1', '/logical_camera1_description')
     logical_camera2_spawner = some_utility.generate_spawner_node(
