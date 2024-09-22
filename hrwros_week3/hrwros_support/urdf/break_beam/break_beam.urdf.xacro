@@ -1,9 +1,8 @@
 <?xml version="1.0"?>
 <robot name="break_beam_urdf"
   xmlns:xacro="http://www.ros.org/wiki/xacro">
-  <xacro:macro name="break_beam_urdf" params="prefix *origin">
+  <xacro:macro name="break_beam_urdf" params="prefix break_beam_parent *origin">
     <!-- link list -->
-    <link name="${prefix}world_interface"/>
     <link name="${prefix}base_link">
       <visual>
         <origin xyz="0 0 0" rpy="0 0 0" />
@@ -36,7 +35,7 @@
     <!-- joint list -->
 
     <joint name="${prefix}world_joint" type="fixed">
-      <parent link="${prefix}world_interface" />
+      <parent link="${break_beam_parent}" />
       <child link="${prefix}base_link" />
       <xacro:insert_block name="origin" />
     </joint>

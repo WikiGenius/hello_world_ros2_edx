@@ -2,10 +2,13 @@
 <robot name="break_beam"
   xmlns:xacro="http://www.ros.org/wiki/xacro">
   <xacro:arg name="prefix" default="break_beam_"/>
-
+  <xacro:arg name="break_beam_parent" default="world_interface"/>
   <!-- URDF -->
+
+  <link name="$(arg break_beam_parent)"/>
+  
   <xacro:include filename="$(find hrwros_support)/urdf/break_beam/break_beam.urdf.xacro"/>
-  <xacro:break_beam_urdf prefix="$(arg prefix)">
+  <xacro:break_beam_urdf prefix="$(arg prefix)" break_beam_parent="$(arg break_beam_parent)">
     <origin xyz="1.6 1.9 0.925" rpy="0 0 ${radians(180)}" />
   </xacro:break_beam_urdf>
   <!-- Gazebo -->

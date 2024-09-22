@@ -3,7 +3,6 @@
     <xacro:macro name="workcell_urdf" params="workcell_parent_name">
 
     <!-- Links -->
-    <link name="world_interface"/>
     <link name="workcell">
       <visual>
         <geometry>

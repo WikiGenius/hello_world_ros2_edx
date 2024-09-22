@@ -17,6 +17,7 @@ def generate_description_command(package, urdf_file, *args):
     ])
 
 
+
 def generate_robot_state_publisher(robot_prefix, description_command):
     """Create a robot_state_publisher node."""
     return Node(
@@ -29,7 +30,31 @@ def generate_robot_state_publisher(robot_prefix, description_command):
         remappings=[('/robot_description', f'/{robot_prefix}_description')]
     )
 
+def run_control_manager(robot_prefix, description_command):
+    arm_controller_name = f'{robot_prefix}_gazebo_controllers'
+    robot_description = {'robot_description': description_command}
 
+    robot_controllers = PathJoinSubstitution([
+        FindPackageShare('hrwros_gazebo'),
+        'config',
+        f'{arm_controller_name}.yaml'
+    ])
+    # Controller Manager Node
+
+    controller_manager = Node(
+        package='controller_manager',
+        executable='ros2_control_node',
+        output='both',
+        parameters=[
+            # Pass the robot description to the controller manager
+            robot_description,
+            robot_controllers
+        ],
+        remappings=[
+            ('/robot_description', f'/{robot_prefix}_description')
+        ]
+    )
+    return controller_manager
 def generate_spawner_node(name, entity_name, topic, x=None, y=None, z=None, yaw=None, joints=None):
     """Spawn the robot model in Gazebo."""
     arguments = ['-entity', entity_name, '-topic', topic]
@@ -68,14 +93,13 @@ def generate_controller_spawner_node(robot_prefix, description_command):
         f'{arm_controller_name}.yaml'
     ])
 
-
-    controller_manager = Node(
-        package="controller_manager",
-        executable="ros2_control_node",
-        parameters=[
-                robot_description, robot_controllers],
-        output="both",
-    )
+    # controller_manager = Node(
+    #     package="controller_manager",
+    #     executable="ros2_control_node",
+    #     parameters=[
+    #             robot_description, robot_controllers],
+    #     output="both",
+    # )
     # joint_state_broadcaster_spawner = Node(
     #     package="controller_manager",
     #     executable="spawner",
@@ -125,7 +149,7 @@ def generate_controller_spawner_node(robot_prefix, description_command):
     #     )
     # )
     return [
-        controller_manager,
+        # controller_manager,
         # joint_state_broadcaster_spawner,
         # delay_robot_position_controller_spawner_after_joint_state_broadcaster_spawner,
         # delay_robot_velocity_controller_spawner_after_robot_position_controller_spawner,
@@ -147,6 +171,7 @@ def generate_robot_group(robot_prefix, robot_type, urdf_file, vacuum_gripper_pre
     return GroupAction([
         # PushRosNamespace(robot_prefix),
         generate_robot_state_publisher(robot_prefix, description_command),
+        run_control_manager(robot_prefix, description_command),
         generate_spawner_node(
             name=robot_prefix,
             entity_name=robot_prefix,
@@ -154,7 +179,7 @@ def generate_robot_group(robot_prefix, robot_type, urdf_file, vacuum_gripper_pre
             x=x, y=y, z=z, yaw=yaw,
             joints=joints
         ),
-        *generate_controller_spawner_node(robot_prefix, description_command)
+        # *generate_controller_spawner_node(robot_prefix, description_command)
     ])
 
 

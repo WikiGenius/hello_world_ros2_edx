@@ -4,8 +4,9 @@
   <xacro:arg name="prefix" default="logical_camera2_"/>
   <xacro:arg name="logical_camera_parent" default="world_interface"/>
 
-  <link name="world_interface"/>
   <!-- URDF -->
+  <link name="$(arg logical_camera_parent)"/>
+
   <xacro:include filename="$(find hrwros_support)/urdf/logical_camera/logical_camera.urdf.xacro"/>
   <xacro:logical_camera_urdf prefix="$(arg prefix)" logical_camera_parent="$(arg logical_camera_parent)">
     <origin xyz="-8.3 -1.23 1.8" rpy="0 1.5708 0"/>

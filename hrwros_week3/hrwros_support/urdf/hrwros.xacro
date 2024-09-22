@@ -25,28 +25,28 @@
   <xacro:property name="vacuum_gripper2" value="vacuum_gripper2_"/>
 
   <!-- Workcell -->
-  <xacro:workcell_urdf workcell_parent_name="world_interface"/>
+  <xacro:workcell_urdf workcell_parent_name="world"/>
 
   <!-- Robots -->
 
   <!-- Robot1 Pedestal -->
-  <xacro:robot_pedestal_urdf pedestal_prefix="${robot1}_" pedestal_parent="world_interface" pedestal_height="${pedestal1_height}">
+  <xacro:robot_pedestal_urdf pedestal_prefix="${robot1}_" pedestal_parent="world" pedestal_height="${pedestal1_height}">
     <origin xyz="0.5 1.8 0.0" rpy="0 0 0"/>
   </xacro:robot_pedestal_urdf>
   <!-- Robot1 -->
-  <xacro:ur_description robot_name="${robot1}" ur_type="${ur_type1}">
+  <xacro:ur_description robot_name="${robot1}" ur_type="${ur_type1}" robot_parent="world">
     <origin xyz="0.5 1.8 ${pedestal1_height}" rpy="0 0 0"/>
   </xacro:ur_description>
   <!-- Vacuum Gripper1 -->
   <xacro:vacuum_gripper_urdf prefix="${vacuum_gripper1}" />
 
   <!-- Robot2 Pedestal -->
-  <xacro:robot_pedestal_urdf pedestal_prefix="${robot2}_" pedestal_parent="world_interface" pedestal_height="${pedestal2_height}">
+  <xacro:robot_pedestal_urdf pedestal_prefix="${robot2}_" pedestal_parent="world" pedestal_height="${pedestal2_height}">
     <origin xyz="-7.8 -1.5 0.0" rpy="0 0 0"/>
 
   </xacro:robot_pedestal_urdf>
   <!-- Robot2 -->
-  <xacro:ur_description robot_name="${robot2}" ur_type="${ur_type2}">
+  <xacro:ur_description robot_name="${robot2}" ur_type="${ur_type2}" robot_parent="world">
     <origin xyz="-7.8 -1.5 ${pedestal2_height}" rpy="0 0 0"/>
   </xacro:ur_description>
   <!-- Vacuum Gripper2 -->
@@ -55,31 +55,26 @@
 
   <!-- Bins -->
   <!-- Bin1 -->
-  <xacro:bin_urdf prefix="bin_1_">
+  <xacro:bin_urdf prefix="bin_1_" bin_parent="world">
     <origin xyz="-8.0 -2.2 0.0" rpy="0 0 0" />
   </xacro:bin_urdf>
 
   <!-- Logical Cameras -->
   <!-- Logical Camera 1 -->
-  <xacro:logical_camera_urdf prefix="logical_camera1_" logical_camera_parent="world_interface">
+  <xacro:logical_camera_urdf prefix="logical_camera1_" logical_camera_parent="world">
     <origin xyz="1.2 1.8 2.0" rpy="0 1.5708 0"/>
   </xacro:logical_camera_urdf>
 
   <!-- Logical Camera 2 -->
-  <xacro:logical_camera_urdf prefix="logical_camera2_" logical_camera_parent="world_interface">
+  <xacro:logical_camera_urdf prefix="logical_camera2_" logical_camera_parent="world">
     <origin xyz="-8.3 -1.23 1.8" rpy="0 1.5708 0"/>
   </xacro:logical_camera_urdf>
 
   <!-- Break Beam -->
-  <xacro:break_beam_urdf prefix="break_beam_">
+  <xacro:break_beam_urdf prefix="break_beam_" break_beam_parent="world">
     <origin xyz="1.6 1.9 0.925" rpy="0 0 ${radians(180)}" />
   </xacro:break_beam_urdf>
 
-  <!-- Joints -->
-  <joint name="world_interface_to_world" type="fixed">
-    <parent link="world" />
-    <child link="world_interface" />
-  </joint>
   <!-- gripper1 to robot1. -->
   <joint name="gripper1_to_robot1" type="fixed">
     <parent link="${robot1}_tool0" />
@@ -90,18 +85,6 @@
   <joint name="gripper2_to_robot2" type="fixed">
     <parent link="${robot2}_tool0" />
     <child link="${vacuum_gripper2}base_link" />
-  </joint>
-
-  <joint name="bin_1_joint" type="fixed">
-    <parent link="world_interface" />
-    <child link="bin_1_base_link" />
-    <origin xyz="-8.0 -2.2 0.0" rpy="0 0 0" />
-  </joint>
-
-  <!-- break beam to world. -->
-  <joint name="break_beam_joint" type="fixed">
-    <parent link="world_interface" />
-    <child link="break_beam_world_interface" />
   </joint>
 
 </robot>

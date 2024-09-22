@@ -8,6 +8,7 @@ from launch_ros.parameter_descriptions import ParameterValue
 from launch.launch_description_sources import PythonLaunchDescriptionSource
 from launch.actions import IncludeLaunchDescription
 from launch_ros.substitutions import FindPackageShare
+from my_python_utils import some_utility
 
 
 def get_declare_arguments():
@@ -38,60 +39,27 @@ def include_robot_description_launch():
     )
 
 
-def get_robot_state_publisher_node():
-    return Node(
-        package='robot_state_publisher',
-        executable='robot_state_publisher',
-        name='robot_state_publisher',
-        output='screen',
-        parameters=[
-            {'robot_description': ParameterValue(
-                LaunchConfiguration('robot_description'), value_type=str)},
-        ]
-    )
-
-
-def get_joint_state_publisher_nodes():
-    # https://index.ros.org/p/joint_state_publisher/
-    joint_state_publisher_params = PathJoinSubstitution([
-        FindPackageShare('hrwros_support'),
-        'config',
-        'joint_states.yaml'
-    ])
-    gui_node = Node(
-        package='joint_state_publisher_gui',
-        executable='joint_state_publisher_gui',
-        name='joint_state_publisher',
-        parameters=[joint_state_publisher_params],
-        condition=IfCondition(LaunchConfiguration('gui')),
-    )
-    non_gui_node = Node(
-        package='joint_state_publisher',
-        executable='joint_state_publisher',
-        name='joint_state_publisher',
-        parameters=[joint_state_publisher_params],
-        condition=UnlessCondition(LaunchConfiguration('gui')),
-    )
-    return [gui_node, non_gui_node]
-
-
-def get_rviz_node():
-    return Node(
-        package='rviz2',
-        executable='rviz2',
-        name='rviz',
-        arguments=['-d', LaunchConfiguration('rviz_config_file')],
-        output='screen',
-    )
-
-
 def generate_launch_description():
+
     declare_arguments = get_declare_arguments()
+
+    description_command = ParameterValue(
+        LaunchConfiguration('robot_description'),
+        value_type=str
+    )
+    robot_name = 'hrwros'
     # Include the reusable robot description launch file
     robot_description_launch = include_robot_description_launch()
-    robot_state_publisher_node = get_robot_state_publisher_node()
-    joint_state_publisher_nodes = get_joint_state_publisher_nodes()
-    rviz_node = get_rviz_node()
+    robot_state_publisher_node = \
+        some_utility.generate_robot_state_publisher(robot_name,
+                                                    description_command)
+    joint_state_publisher_nodes = \
+        some_utility.get_joint_state_publisher_nodes(robot_name,
+                                                     'hrwros_support',
+                                                     'joint_states.yaml',
+                                                     LaunchConfiguration('gui'))
+    rviz_node = some_utility.get_rviz_node(
+        LaunchConfiguration('rviz_config_file'))
 
     launch_description_elements = declare_arguments + [
         robot_description_launch,

@@ -29,7 +29,7 @@
     </inertial>
   </link>
   
-  <joint name="${pedestal_prefix}pedestal_joint" type="fixed">
+  <joint name="${pedestal_prefix}world_joint" type="fixed">
     <xacro:insert_block name="origin" />
     <parent link="${pedestal_parent}"/>
     <child link="${pedestal_prefix}pedestal_link"/>

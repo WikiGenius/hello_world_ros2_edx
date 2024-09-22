@@ -61,7 +61,7 @@ Visualization Manager:
         Durability Policy: Volatile
         History Policy: Keep Last
         Reliability Policy: Reliable
-        Value: /robot_description
+        Value: /hrwros_description
       Enabled: true
       Links:
         All Links Enabled: true
@@ -84,10 +84,6 @@ Visualization Manager:
           Show Trail: false
           Value: true
         break_beam_optical_link:
-          Alpha: 1
-          Show Axes: false
-          Show Trail: false
-        break_beam_world:
           Alpha: 1
           Show Axes: false
           Show Trail: false
@@ -142,16 +138,6 @@ Visualization Manager:
           Show Axes: false
           Show Trail: false
         robot1_upper_arm_link:
-          Alpha: 1
-          Show Axes: false
-          Show Trail: false
-          Value: true
-        robot1_vacuum_gripper_base_link:
-          Alpha: 1
-          Show Axes: false
-          Show Trail: false
-          Value: true
-        robot1_vacuum_gripper_suction_cup:
           Alpha: 1
           Show Axes: false
           Show Trail: false
@@ -216,16 +202,6 @@ Visualization Manager:
           Show Axes: false
           Show Trail: false
           Value: true
-        robot2_vacuum_gripper_base_link:
-          Alpha: 1
-          Show Axes: false
-          Show Trail: false
-          Value: true
-        robot2_vacuum_gripper_suction_cup:
-          Alpha: 1
-          Show Axes: false
-          Show Trail: false
-          Value: true
         robot2_wrist_1_link:
           Alpha: 1
           Show Axes: false
@@ -237,6 +213,26 @@ Visualization Manager:
           Show Trail: false
           Value: true
         robot2_wrist_3_link:
+          Alpha: 1
+          Show Axes: false
+          Show Trail: false
+          Value: true
+        vacuum_gripper1_base_link:
+          Alpha: 1
+          Show Axes: false
+          Show Trail: false
+          Value: true
+        vacuum_gripper1_suction_cup:
+          Alpha: 1
+          Show Axes: false
+          Show Trail: false
+          Value: true
+        vacuum_gripper2_base_link:
+          Alpha: 1
+          Show Axes: false
+          Show Trail: false
+          Value: true
+        vacuum_gripper2_suction_cup:
           Alpha: 1
           Show Axes: false
           Show Trail: false
@@ -304,16 +300,16 @@ Visualization Manager:
   Views:
     Current:
       Class: rviz_default_plugins/Orbit
-      Distance: 23.1217041015625
+      Distance: 3.0571184158325195
       Enable Stereo Rendering:
         Stereo Eye Separation: 0.05999999865889549
         Stereo Focal Distance: 1
         Swap Stereo Eyes: false
         Value: false
       Focal Point:
-        X: -4.042990207672119
-        Y: -0.598181962966919
-        Z: -0.035880040377378464
+        X: -0.9322282671928406
+        Y: 1.891058325767517
+        Z: 3.5995543003082275
       Focal Shape Fixed Size: true
       Focal Shape Size: 0.05000000074505806
       Invert Z Axis: false
