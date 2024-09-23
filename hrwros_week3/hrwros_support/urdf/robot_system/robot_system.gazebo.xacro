@@ -51,11 +51,11 @@
       </plugin>
     </gazebo> -->
 
-    <gazebo>
+    <!-- <gazebo>
       <plugin name="gazebo_ros2_control" filename="libgazebo_ros2_control.so">
         <parameters>$(find hrwros_gazebo)/config/${robot_prefix}_gazebo_controllers.yaml</parameters>
       </plugin>
-    </gazebo>
+    </gazebo> -->
   </xacro:macro>
 
 </robot>

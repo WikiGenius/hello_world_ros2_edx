@@ -1,12 +1,12 @@
 <?xml version="1.0"?>
-<robot name="robot_system"
-  xmlns:xacro="http://www.ros.org/wiki/xacro">
+<robot name="robot_system" xmlns:xacro="http://www.ros.org/wiki/xacro">
+
+  <xacro:include filename="$(find hrwros_support)/urdf/arm_robot/ur_description.urdf.xacro"/>
+  <xacro:include filename="$(find hrwros_support)/urdf/vacuum_gripper/vacuum_gripper.urdf.xacro"/>
+
   <xacro:macro name="robot_system_urdf" params="robot_prefix vacuum_gripper_prefix robot_type robot_parent">
     <xacro:arg name="transmission_hw_interface" default="hardware_interface/EffortJointInterface" />
-    
-    <xacro:include filename="$(find hrwros_support)/urdf/arm_robot/ur_description.urdf.xacro"/>
-    <xacro:include filename="$(find hrwros_support)/urdf/vacuum_gripper/vacuum_gripper.urdf.xacro"/>
-    
+
     <!-- Used for fixing robot to Gazebo 'base_link' -->
     <link name="${robot_parent}"/>
 

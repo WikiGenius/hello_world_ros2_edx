@@ -5,197 +5,15 @@ from launch.substitutions import Command, PathJoinSubstitution, LaunchConfigurat
 from launch_ros.substitutions import FindPackageShare
 from launch.launch_description_sources import PythonLaunchDescriptionSource
 from launch.event_handlers import OnProcessExit
+from my_python_utils import some_utility
 
 
-def generate_description_command(package, urdf_file, *args):
-    """Generate a command to process the robot's xacro file."""
-    return Command([
-        'xacro ',
-        PathJoinSubstitution([FindPackageShare(package), 'urdf', urdf_file]),
-        ' ',
-        *args
-    ])
+def generate_args():
+    args = [
 
-
-
-def generate_robot_state_publisher(robot_prefix, description_command):
-    """Create a robot_state_publisher node."""
-    return Node(
-        package='robot_state_publisher',
-        executable='robot_state_publisher',
-        output='screen',
-        name=f'{robot_prefix}_state_publisher',
-        parameters=[{'robot_description': description_command,
-                     'tf_prefix': f'{robot_prefix}_'}],
-        remappings=[('/robot_description', f'/{robot_prefix}_description')]
-    )
-
-def run_control_manager(robot_prefix, description_command):
-    arm_controller_name = f'{robot_prefix}_gazebo_controllers'
-    robot_description = {'robot_description': description_command}
-
-    robot_controllers = PathJoinSubstitution([
-        FindPackageShare('hrwros_gazebo'),
-        'config',
-        f'{arm_controller_name}.yaml'
-    ])
-    # Controller Manager Node
-
-    controller_manager = Node(
-        package='controller_manager',
-        executable='ros2_control_node',
-        output='both',
-        parameters=[
-            # Pass the robot description to the controller manager
-            robot_description,
-            robot_controllers
-        ],
-        remappings=[
-            ('/robot_description', f'/{robot_prefix}_description')
-        ]
-    )
-    return controller_manager
-def generate_spawner_node(name, entity_name, topic, x=None, y=None, z=None, yaw=None, joints=None):
-    """Spawn the robot model in Gazebo."""
-    arguments = ['-entity', entity_name, '-topic', topic]
-
-    # Add positional arguments
-    if x is not None:
-        arguments.extend(['-x', str(x)])
-    if y is not None:
-        arguments.extend(['-y', str(y)])
-    if z is not None:
-        arguments.extend(['-z', str(z)])
-    if yaw is not None:
-        arguments.extend(['-Y', str(yaw)])
-
-    # if joints:
-    #     for joint, position in joints.items():
-    #         arguments.extend(['-J', joint, str(position)])
-
-    return Node(
-        package='gazebo_ros',
-        executable='spawn_entity.py',
-        output='screen',
-        arguments=arguments
-    )
-
-
-def generate_controller_spawner_node(robot_prefix, description_command):
-    """Spawn the controller for the robot."""
-
-    arm_controller_name = f'{robot_prefix}_gazebo_controllers'
-    robot_description = {'robot_description': description_command}
-
-    robot_controllers = PathJoinSubstitution([
-        FindPackageShare('hrwros_gazebo'),
-        'config',
-        f'{arm_controller_name}.yaml'
-    ])
-
-    # controller_manager = Node(
-    #     package="controller_manager",
-    #     executable="ros2_control_node",
-    #     parameters=[
-    #             robot_description, robot_controllers],
-    #     output="both",
-    # )
-    # joint_state_broadcaster_spawner = Node(
-    #     package="controller_manager",
-    #     executable="spawner",
-    #     arguments=["joint_state_broadcaster",
-    #                "--controller-manager", "/controller_manager"],
-    #     output="both",
-    # )
-
-    # robot_position_controller_spawner = Node(
-    #     package="controller_manager",
-    #     executable="spawner",
-    #     arguments=["forward_position_controller",
-    #                "-c", "/controller_manager", "--stopped"],
-    # )
-
-    # robot_velocity_controller_spawner = Node(
-    #     package="controller_manager",
-    #     executable="spawner",
-    #     arguments=["forward_velocity_controller",
-    #                "-c", "/controller_manager", "--stopped"],
-    # )
-
-    # robot_effort_controller_spawner = Node(
-    #     package="controller_manager",
-    #     executable="spawner",
-    #     arguments=["forward_effort_controller", "-c", "/controller_manager"],
-    # )
-
-    # delay_robot_position_controller_spawner_after_joint_state_broadcaster_spawner = RegisterEventHandler(
-    #     event_handler=OnProcessExit(
-    #         target_action=joint_state_broadcaster_spawner,
-    #         on_exit=[robot_position_controller_spawner],
-    #     )
-    # )
-
-    # delay_robot_velocity_controller_spawner_after_robot_position_controller_spawner = RegisterEventHandler(
-    #     event_handler=OnProcessExit(
-    #         target_action=robot_position_controller_spawner,
-    #         on_exit=[robot_velocity_controller_spawner],
-    #     )
-    # )
-
-    # delay_robot_effort_controller_spawner_after_robot_velocity_controller_spawner = RegisterEventHandler(
-    #     event_handler=OnProcessExit(
-    #         target_action=robot_velocity_controller_spawner,
-    #         on_exit=[robot_effort_controller_spawner],
-    #     )
-    # )
-    return [
-        # controller_manager,
-        # joint_state_broadcaster_spawner,
-        # delay_robot_position_controller_spawner_after_joint_state_broadcaster_spawner,
-        # delay_robot_velocity_controller_spawner_after_robot_position_controller_spawner,
-        # delay_robot_effort_controller_spawner_after_robot_velocity_controller_spawner
-
-    ]
-
-
-def generate_robot_group(robot_prefix, robot_type, urdf_file, vacuum_gripper_prefix, gripper_plugin_name, x, y, z, yaw=None, joints=None):
-    """Generate a group of nodes for a single robot."""
-    description_command = generate_description_command(
-        'hrwros_support',
-        urdf_file,
-        f'robot_type:={robot_type} ',
-        f'robot_prefix:={robot_prefix} ',
-        f'vacuum_gripper_prefix:={vacuum_gripper_prefix} ',
-        f'gripper_plugin_name:={gripper_plugin_name}'
-    )
-    return GroupAction([
-        # PushRosNamespace(robot_prefix),
-        generate_robot_state_publisher(robot_prefix, description_command),
-        run_control_manager(robot_prefix, description_command),
-        generate_spawner_node(
-            name=robot_prefix,
-            entity_name=robot_prefix,
-            topic=f'/{robot_prefix}_description',
-            x=x, y=y, z=z, yaw=yaw,
-            joints=joints
-        ),
-        # *generate_controller_spawner_node(robot_prefix, description_command)
-    ])
-
-
-def generate_launch_description():
-    """Generate the launch description for the robots."""
-
-    # Path to Gazebo launch file
-    gazebo_launch_path = PathJoinSubstitution([
-        FindPackageShare('gazebo_ros'),
-        'launch',
-        'gazebo.launch.py'
-    ])
-    return LaunchDescription([
-        # Declare arguments
-        DeclareLaunchArgument('robot1_prefix', default_value='robot1_'),
-        DeclareLaunchArgument('robot2_prefix', default_value='robot2_'),
+        DeclareLaunchArgument('robot_parent', default_value='world'),
+        DeclareLaunchArgument('robot1_name', default_value='robot1'),
+        DeclareLaunchArgument('robot2_name', default_value='robot2'),
         DeclareLaunchArgument('robot1_type', default_value='ur10'),
         DeclareLaunchArgument('robot2_type', default_value='ur5'),
         DeclareLaunchArgument('vacuum_gripper1_prefix',
@@ -206,13 +24,51 @@ def generate_launch_description():
                               default_value='gripper1'),
         DeclareLaunchArgument('gripper2_plugin_name',
                               default_value='gripper2'),
-        IncludeLaunchDescription(
-            PythonLaunchDescriptionSource(gazebo_launch_path)
-        ),
+    ]
+    return args
+
+
+def generate_robot_group(robot_name, robot_type, robot_parent, urdf_file,
+                         vacuum_gripper_prefix, gripper_plugin_name,
+                         x, y, z, yaw=None, joints=None):
+    """Generate a group of nodes for a single robot."""
+    robot_prefix = robot_name
+    description_command = some_utility.generate_description_command(
+        'hrwros_support',
+        urdf_file,
+        f'robot_type:={robot_type} ',
+        f'robot_prefix:={robot_prefix} ',
+        f'vacuum_gripper_prefix:={vacuum_gripper_prefix} ',
+        f'gripper_plugin_name:={gripper_plugin_name} ',
+        f'robot_parent:={robot_parent} '
+    )
+
+    return GroupAction(
+        actions=[
+            PushRosNamespace(robot_name),
+            some_utility.generate_robot_state_publisher(
+                robot_name, description_command, ns_robot=robot_name),
+            some_utility.generate_spawner_node(
+                entity_name=robot_name,
+                topic=f'/{robot_name}/robot_description',
+                x=x, y=y, z=z, yaw=yaw,
+            ),
+            # *generate_controller_spawner_node(robot_prefix, description_command)
+        ])
+
+
+def generate_launch_description():
+    """Generate the launch description for the robots."""
+
+    return LaunchDescription([
+        # Declare arguments
+
+        *generate_args(),
         # Group for Robot 1
         generate_robot_group(
-            robot_prefix='robot1',
+            robot_name='robot1',
             robot_type='ur10',
+            robot_parent='world',
             urdf_file='robot_system/robot_system.xacro',
             vacuum_gripper_prefix='vacuum_gripper1_',
             gripper_plugin_name='gripper1',
@@ -227,19 +83,20 @@ def generate_launch_description():
         ),
 
         # Group for Robot 2
-        # generate_robot_group(
-        #     robot_prefix='robot2',
-        #     robot_type='ur5',
-        #     urdf_file='robot_system/robot_system.xacro',
-        #     vacuum_gripper_prefix='vacuum_gripper2_',
-        #     gripper_plugin_name='gripper2',
-        #     x=-7.8, y=-1.5, z=0.7, yaw=1.57,
-        #     joints={
-        #         'robot2_elbow_joint': 1.57,
-        #         'robot2_shoulder_lift_joint': -1.57,
-        #         'robot2_shoulder_pan_joint': 1.24,
-        #         'robot2_wrist_1_joint': -1.57,
-        #         'robot2_wrist_2_joint': -1.57,
-        #     }
-        # ),
+        generate_robot_group(
+            robot_name='robot2',
+            robot_type='ur5',
+            robot_parent='world',
+            urdf_file='robot_system/robot_system.xacro',
+            vacuum_gripper_prefix='vacuum_gripper2_',
+            gripper_plugin_name='gripper2',
+            x=-7.8, y=-1.5, z=0.7, yaw=1.57,
+            joints={
+                'robot2_elbow_joint': 1.57,
+                'robot2_shoulder_lift_joint': -1.57,
+                'robot2_shoulder_pan_joint': 1.24,
+                'robot2_wrist_1_joint': -1.57,
+                'robot2_wrist_2_joint': -1.57,
+            }
+        ),
     ])

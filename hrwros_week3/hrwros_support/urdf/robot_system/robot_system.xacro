@@ -10,7 +10,7 @@
 
   <!-- URDF -->
   <xacro:include filename="$(find hrwros_support)/urdf/robot_system/robot_system.urdf.xacro"/>
-  <xacro:robot_system_urdf robot_type= "$(arg robot_type)" robot_prefix="$(arg robot_prefix)" vacuum_gripper_prefix="$(arg vacuum_gripper_prefix)" robot_parent="$(robot_parent)"/>
+  <xacro:robot_system_urdf robot_type= "$(arg robot_type)" robot_prefix="$(arg robot_prefix)" vacuum_gripper_prefix="$(arg vacuum_gripper_prefix)" robot_parent="$(arg robot_parent)"/>
 
   <!-- Gazebo -->
   <xacro:include filename="$(find hrwros_support)/urdf/robot_system/robot_system.gazebo.xacro"/>
