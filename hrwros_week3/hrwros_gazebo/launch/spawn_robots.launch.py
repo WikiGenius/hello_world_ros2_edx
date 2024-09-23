@@ -8,26 +8,6 @@ from launch.event_handlers import OnProcessExit
 from my_python_utils import some_utility
 
 
-def generate_args():
-    args = [
-
-        DeclareLaunchArgument('robot_parent', default_value='world'),
-        DeclareLaunchArgument('robot1_name', default_value='robot1'),
-        DeclareLaunchArgument('robot2_name', default_value='robot2'),
-        DeclareLaunchArgument('robot1_type', default_value='ur10'),
-        DeclareLaunchArgument('robot2_type', default_value='ur5'),
-        DeclareLaunchArgument('vacuum_gripper1_prefix',
-                              default_value='vacuum_gripper1_'),
-        DeclareLaunchArgument('vacuum_gripper2_prefix',
-                              default_value='vacuum_gripper2_'),
-        DeclareLaunchArgument('gripper1_plugin_name',
-                              default_value='gripper1'),
-        DeclareLaunchArgument('gripper2_plugin_name',
-                              default_value='gripper2'),
-    ]
-    return args
-
-
 def generate_robot_group(robot_name, robot_type, robot_parent, urdf_file,
                          vacuum_gripper_prefix, gripper_plugin_name,
                          x, y, z, yaw=None, joints=None):
@@ -59,44 +39,34 @@ def generate_robot_group(robot_name, robot_type, robot_parent, urdf_file,
 
 def generate_launch_description():
     """Generate the launch description for the robots."""
-
+    robot_config = some_utility.load_config_file(
+        "hrwros_gazebo", "robot_config.yaml")
+    robot1 = robot_config['robot_groups']['robot1']
+    robot2 = robot_config['robot_groups']['robot2']
     return LaunchDescription([
-        # Declare arguments
 
-        *generate_args(),
         # Group for Robot 1
         generate_robot_group(
-            robot_name='robot1',
-            robot_type='ur10',
-            robot_parent='world',
-            urdf_file='robot_system/robot_system.xacro',
-            vacuum_gripper_prefix='vacuum_gripper1_',
-            gripper_plugin_name='gripper1',
-            x=0.5, y=1.8, z=0.95,
-            joints={
-                'robot1_elbow_joint': 1.57,
-                'robot1_shoulder_lift_joint': -1.57,
-                'robot1_shoulder_pan_joint': 1.24,
-                'robot1_wrist_1_joint': -1.57,
-                'robot1_wrist_2_joint': -1.57,
-            }
+            robot_name=robot1['robot_name'],
+            robot_type=robot1['robot_type'],
+            robot_parent=robot_config['robot_parent'],
+            urdf_file=robot1['urdf_file'],
+            vacuum_gripper_prefix=robot1['vacuum_gripper_prefix'],
+            gripper_plugin_name=robot1['gripper_plugin_name'],
+            x=robot1['x'], y=robot1['y'], z=robot1['z'],
+            joints=robot1['joints'],
         ),
 
         # Group for Robot 2
         generate_robot_group(
-            robot_name='robot2',
-            robot_type='ur5',
-            robot_parent='world',
-            urdf_file='robot_system/robot_system.xacro',
-            vacuum_gripper_prefix='vacuum_gripper2_',
-            gripper_plugin_name='gripper2',
-            x=-7.8, y=-1.5, z=0.7, yaw=1.57,
-            joints={
-                'robot2_elbow_joint': 1.57,
-                'robot2_shoulder_lift_joint': -1.57,
-                'robot2_shoulder_pan_joint': 1.24,
-                'robot2_wrist_1_joint': -1.57,
-                'robot2_wrist_2_joint': -1.57,
-            }
+            robot_name=robot2['robot_name'],
+            robot_type=robot2['robot_type'],
+            robot_parent=robot_config['robot_parent'],
+            urdf_file=robot2['urdf_file'],
+            vacuum_gripper_prefix=robot2['vacuum_gripper_prefix'],
+            gripper_plugin_name=robot2['gripper_plugin_name'],
+            x=robot2['x'], y=robot2['y'], z=robot2['z'], yaw=robot2['yaw'],
+            joints=robot2['joints'],
         ),
+
     ])

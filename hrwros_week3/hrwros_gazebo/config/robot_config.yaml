@@ -1,0 +1,35 @@
+robot_config:
+  ros__parameters:
+    robot_parent: "world"
+    robot_groups:
+      robot1:
+        robot_name: "robot1"
+        robot_type: "ur10"
+        urdf_file: "robot_system/robot_system.xacro"
+        vacuum_gripper_prefix: "vacuum_gripper1_"
+        gripper_plugin_name: "gripper1"
+        x: 0.5
+        y: 1.8
+        z: 0.95
+        joints:
+          robot_elbow_joint: 1.57
+          robot_shoulder_lift_joint: -1.57
+          robot_shoulder_pan_joint: 1.24
+          robot_wrist_1_joint: -1.57
+          robot_wrist_2_joint: -1.57
+      robot2:
+        robot_name: "robot2"
+        robot_type: "ur5"
+        urdf_file: "robot_system/robot_system.xacro"
+        vacuum_gripper_prefix: "vacuum_gripper2_"
+        gripper_plugin_name: "gripper2"
+        x: -7.8
+        y: -1.5
+        z: 0.7
+        yaw: 1.57
+        joints:
+          robot_elbow_joint: 1.57
+          robot_shoulder_lift_joint: -1.57
+          robot_shoulder_pan_joint: 1.24
+          robot_wrist_1_joint: -1.57
+          robot_wrist_2_joint: -1.57
