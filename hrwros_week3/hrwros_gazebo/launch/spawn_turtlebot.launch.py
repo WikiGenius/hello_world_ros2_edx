@@ -14,7 +14,7 @@ def generate_launch_description():
             "TURTLEBOT3_MODEL environment variable is not set. Please export TURTLEBOT3_MODEL in your bashrc.")
 
     robot_name = 'turtlebot'
-    
+
     x = -4.0
     y = -0.2
     z = 0.0
@@ -24,7 +24,7 @@ def generate_launch_description():
     turtlebot_state_publisher = some_utility.generate_robot_state_publisher(
         robot_name, turtlebot_description)
     turtlebot_spawner = some_utility.generate_spawner_node(
-        robot_name, f'/{robot_name}_description', x, y, z)
+        robot_name, x=x, y=y, z=z)
 
     ld = LaunchDescription()
     ld.add_action(turtlebot_state_publisher)

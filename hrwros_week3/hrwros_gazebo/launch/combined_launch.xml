@@ -1,0 +1,13 @@
+<launch>
+    <!-- Include gazebo.launch.py -->
+    <include file="$(find-pkg-share gazebo_ros)/launch/gazebo.launch.py" />
+
+    <!-- Include spawn_static_world_objects.launch.py -->
+    <include file="$(find-pkg-share hrwros_gazebo)/launch/spawn_static_world_objects.launch.py" />
+
+    <!-- Include spawn_robots.launch.py -->
+    <include file="$(find-pkg-share hrwros_gazebo)/launch/spawn_robots.launch.py" />
+
+    <!-- Include spawn_turtlebot.launch.py -->
+    <include file="$(find-pkg-share hrwros_gazebo)/launch/spawn_turtlebot.launch.py" />
+</launch>

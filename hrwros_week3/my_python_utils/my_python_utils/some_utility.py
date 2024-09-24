@@ -18,7 +18,8 @@ def generate_description_command(package: str, urdf_file: str, *args: str) -> Co
     Returns:
         Command: The command to execute the xacro process.
     """
-    urdf_path = PathJoinSubstitution([FindPackageShare(package), 'urdf', urdf_file])
+    urdf_path = PathJoinSubstitution(
+        [FindPackageShare(package), 'urdf', urdf_file])
     return Command(['xacro ', urdf_path, ' ', *args])
 
 
@@ -35,23 +36,24 @@ def generate_robot_state_publisher(name: str, description_command: Command, ns_r
     """
     topic = '/robot_description'
     new_topic = topic if ns_robot else f'/{name}_description'
+    node_name = 'robot_state_publisher' if ns_robot else f'{name}_state_publisher'
 
     return Node(
         package='robot_state_publisher',
         executable='robot_state_publisher',
-        name=f'{name}_state_publisher',
+        name=node_name,
         output='screen',
         parameters=[{'robot_description': description_command}],
         remappings=[(topic, new_topic)]
     )
 
 
-def generate_spawner_node(entity_name: str, topic: str, x: float = None, y: float = None, z: float = None, yaw: float = None) -> Node:
+def generate_spawner_node(entity_name: str, ns_robot: str = None, x: float = None, y: float = None, z: float = None, yaw: float = None) -> Node:
     """Create a Node that spawns an entity in Gazebo.
 
     Args:
         entity_name (str): The name of the entity to spawn.
-        topic (str): The topic name for the robot description.
+        ns_robot (str): The name space for the robot description.
         x (float, optional): X-coordinate for the entity.
         y (float, optional): Y-coordinate for the entity.
         z (float, optional): Z-coordinate for the entity.
@@ -60,16 +62,28 @@ def generate_spawner_node(entity_name: str, topic: str, x: float = None, y: floa
     Returns:
         Node: The spawn_entity node.
     """
-    arguments = ['-entity', entity_name, '-topic', topic, '-unpause']
-    if x is not None: arguments += ['-x', str(x)]
-    if y is not None: arguments += ['-y', str(y)]
-    if z is not None: arguments += ['-z', str(z)]
-    if yaw is not None: arguments += ['-Y', str(yaw)]
+    topic = '/robot_description'
+    # new_topic = topic if ns_robot else f'/{entity_name}_description'
+    new_topic = f'/{ns_robot}{topic}' if ns_robot else f'/{entity_name}_description'
+
+    node_name = 'spawn_entity' if ns_robot else f'spawn_{entity_name}'
+
+    arguments = ['-entity', entity_name, '-topic', new_topic, '-unpause']
+    if ns_robot is not None:
+        arguments += ['-robot_namespace', str(ns_robot)]
+    if x is not None:
+        arguments += ['-x', str(x)]
+    if y is not None:
+        arguments += ['-y', str(y)]
+    if z is not None:
+        arguments += ['-z', str(z)]
+    if yaw is not None:
+        arguments += ['-Y', str(yaw)]
 
     return Node(
         package='gazebo_ros',
         executable='spawn_entity.py',
-        name=f'spawn_{entity_name}',
+        name=node_name,
         output='screen',
         arguments=arguments
     )
@@ -142,8 +156,8 @@ def load_config_file(package: str, config_base_name: str) -> dict:
     config_file_path = os.path.join(
         get_package_share_directory(package), 'config', config_base_name
     )
-    
+
     with open(config_file_path, 'r') as config_file:
         config_params = yaml.safe_load(config_file)
-    
+
     return config_params.get('robot_config', {}).get('ros__parameters', {})

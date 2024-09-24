@@ -1,27 +1,29 @@
-controller_manager:
-  ros__parameters:
-    update_rate: 50 # Hz
-
-    forward_position_controller:
-      type: forward_command_controller/ForwardCommandController
-
-    joint_state_broadcaster:
-      type: joint_state_broadcaster/JointStateBroadcaster
-
-forward_position_controller:
-  ros__parameters:
-    joints:
-      - robot2_shoulder_pan_joint
-      - robot2_shoulder_lift_joint
-      - robot2_elbow_joint
-      - robot2_wrist_1_joint
-      - robot2_wrist_2_joint
-      - robot2_wrist_3_joint      
-    interface_name: position
-    command_interfaces:
-      - position
-    state_interfaces:
-      - position
-      - velocity
-      - effort
-
+robot2:
+  controller_manager:
+    ros__parameters:
+      update_rate: 50 # Hz
+  
+      forward_position_controller:
+        type: forward_command_controller/ForwardCommandController
+  
+      joint_state_broadcaster:
+        type: joint_state_broadcaster/JointStateBroadcaster
+  
+  forward_position_controller:
+    ros__parameters:
+      joints:
+        - robot2_shoulder_pan_joint
+        - robot2_shoulder_lift_joint
+        - robot2_elbow_joint
+        - robot2_wrist_1_joint
+        - robot2_wrist_2_joint
+        - robot2_wrist_3_joint      
+      interface_name: position
+      command_interfaces:
+        - position
+      state_interfaces:
+        - position
+        - velocity
+        - effort
+  
+  

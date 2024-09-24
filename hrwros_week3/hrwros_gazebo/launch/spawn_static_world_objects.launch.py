@@ -88,19 +88,19 @@ def generate_launch_description():
 
     # Generate spawner nodes
     break_beam_spawner = some_utility.generate_spawner_node(
-        'break_beam', '/break_beam_description')
+        'break_beam')
     bin_1_spawner = some_utility.generate_spawner_node(
-        'bin_1', '/bin_1_description', x=-8.0, y=-2.2)
+        'bin_1', x=-8.0, y=-2.2)
     logical_camera1_spawner = some_utility.generate_spawner_node(
-        'logical_camera1', '/logical_camera1_description')
+        'logical_camera1')
     logical_camera2_spawner = some_utility.generate_spawner_node(
-        'logical_camera2', '/logical_camera2_description')
+        'logical_camera2')
     robot1_pedestal_spawner = some_utility.generate_spawner_node(
-        'robot1_pedestal', '/robot1_pedestal_description')
+        'robot1_pedestal')
     robot2_pedestal_spawner = some_utility.generate_spawner_node(
-        'robot2_pedestal', '/robot2_pedestal_description')
+        'robot2_pedestal')
     workcell_spawner = some_utility.generate_spawner_node(
-        'workcell', '/workcell_description')
+        'workcell')
     state_publisher_list = [
         workcell_state_publisher,
         robot1_pedestal_state_publisher,
