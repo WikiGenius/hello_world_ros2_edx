@@ -32,6 +32,7 @@
       </gazebo>
       <gazebo>
         <plugin filename="libgazebo_ros2_control.so" name="gazebo_ros2_control">
+          <namespace>${robot_name}</namespace>
           <parameters>$(arg simulation_controllers)</parameters>
         </plugin>
       </gazebo>
