@@ -2,13 +2,14 @@ robot1:
   controller_manager:
     ros__parameters:
       update_rate: 50 # Hz
-      forward_position_controller:
+  
+      robot1_forward_position_controller:
         type: forward_command_controller/ForwardCommandController
   
-      joint_state_broadcaster:
+      robot1_joint_state_broadcaster:
         type: joint_state_broadcaster/JointStateBroadcaster
   
-  forward_position_controller:
+  robot1_forward_position_controller:
     ros__parameters:
       joints:
         - robot1_shoulder_pan_joint

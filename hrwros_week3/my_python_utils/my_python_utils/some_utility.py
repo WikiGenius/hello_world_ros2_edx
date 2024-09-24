@@ -1,10 +1,13 @@
-import os
 import yaml
+import os
 from ament_index_python.packages import get_package_share_directory
-from launch_ros.actions import Node
-from launch.substitutions import Command, PathJoinSubstitution
-from launch_ros.substitutions import FindPackageShare
 from launch.conditions import IfCondition, UnlessCondition
+from launch.actions import DeclareLaunchArgument, GroupAction, IncludeLaunchDescription, TimerAction, RegisterEventHandler
+from launch_ros.actions import Node, PushRosNamespace
+from launch.substitutions import Command, PathJoinSubstitution, LaunchConfiguration
+from launch_ros.substitutions import FindPackageShare
+from launch.launch_description_sources import PythonLaunchDescriptionSource
+from launch.event_handlers import OnProcessExit
 
 
 def generate_description_command(package: str, urdf_file: str, *args: str) -> Command:
@@ -159,3 +162,117 @@ def load_config_file(package: str, config_base_name: str) -> dict:
         config_params = yaml.safe_load(config_file)
 
     return config_params.get('robot_config', {}).get('ros__parameters', {})
+
+
+def load_controllers(controller_names: list, ns_controller_manager: str = None) -> list:
+    """Generate a list of Node actions to load the specified controllers using the controller_manager.
+
+    Args:
+        controller_names (list): List of controller names to be loaded.
+        ns_controller_manager (str, optional): Namespace for the controller manager. Defaults to None.
+
+    Returns:
+        list: List of Node actions for spawning controllers.
+    """
+    # Define controller manager namespace, handle if it's nested in another namespace
+    controller_manager = f'/{ns_controller_manager}/controller_manager' if ns_controller_manager else '/controller_manager'
+
+    # Generate and return a list of Node actions for each controller
+    return [
+        Node(
+            package='controller_manager',
+            executable='spawner',
+            arguments=[controller_name, '-c', controller_manager]
+        )
+        for controller_name in controller_names
+    ]
+
+
+def generate_robot_group(
+    robot_name: str,
+    robot_type: str,
+    robot_parent: str,
+    urdf_file: str,
+    vacuum_gripper_prefix: str,
+    gripper_plugin_name: str,
+    x: float,
+    y: float,
+    z: float,
+    yaw: float = None,
+    use_namespace: bool = True,
+    sim_gazebo: bool = True,
+    simulation_controllers: str = "",
+    initial_positions_file: str = os.path.join(
+        get_package_share_directory(
+            'ur_description'), 'config', 'initial_positions.yaml'
+    ),
+    controller_names: list = []
+) -> GroupAction:
+    """Generate a group of nodes for a single robot.
+
+    Args:
+        robot_name (str): Name of the robot.
+        robot_type (str): Type of the robot (e.g., 'ur10', 'ur5').
+        robot_parent (str): Parent frame for the robot.
+        urdf_file (str): Path to the URDF file.
+        vacuum_gripper_prefix (str): Prefix for the vacuum gripper.
+        gripper_plugin_name (str): Name of the gripper plugin.
+        x (float): X-coordinate of the robot.
+        y (float): Y-coordinate of the robot.
+        z (float): Z-coordinate of the robot.
+        yaw (float, optional): Yaw angle of the robot. Defaults to None.
+        sim_gazebo (bool, optional): Flag to simulate in Gazebo. Defaults to True.
+        simulation_controllers (str, optional): Path to simulation controllers. Defaults to "".
+        initial_positions_file (str, optional): Path to initial positions file. Defaults to UR description file.
+        controller_names (list, optional): List of controller names to be loaded. Defaults to [].
+
+    Returns:
+        GroupAction: A group of launch actions for the robot.
+    """
+    # Resolve simulation controllers path if provided
+    if simulation_controllers:
+        simulation_controllers = os.path.join(
+            get_package_share_directory(
+                'hrwros_gazebo'), 'config', simulation_controllers
+        )
+
+    # Prepare the robot description command
+    description_command = generate_description_command(
+        'hrwros_support',
+        urdf_file,
+        f'robot_type:={robot_type} ',
+        f'robot_prefix:={robot_name} ',
+        f'vacuum_gripper_prefix:={vacuum_gripper_prefix} ',
+        f'gripper_plugin_name:={gripper_plugin_name} ',
+        f'robot_parent:={robot_parent} ',
+        f'sim_gazebo:={sim_gazebo} ',
+        f'simulation_controllers:={simulation_controllers} ',
+        f'initial_positions_file:={initial_positions_file}',
+    )
+
+    # Namespace handling
+    namespace = robot_name if use_namespace else None
+
+    # Define actions: robot state publisher, spawner node, and controllers
+    actions = [
+        PushRosNamespace(namespace) if use_namespace else None,
+        generate_robot_state_publisher(
+            name=robot_name,
+            description_command=description_command,
+            ns_robot=namespace
+        ),
+        generate_spawner_node(
+            entity_name=robot_name,
+            ns_robot=namespace,
+            x=x, y=y, z=z, yaw=yaw
+        ),
+        *load_controllers(
+            controller_names,
+            ns_controller_manager=namespace
+        )
+    ]
+
+    # Filter out any None actions (e.g., if no namespace is used)
+    actions = [action for action in actions if action is not None]
+
+    return GroupAction(actions=actions)

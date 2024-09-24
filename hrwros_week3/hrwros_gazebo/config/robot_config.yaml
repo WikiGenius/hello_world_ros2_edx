@@ -9,6 +9,11 @@ robot_config:
         urdf_file: "robot_system/robot_system.xacro"
         vacuum_gripper_prefix: "vacuum_gripper1_"
         gripper_plugin_name: "gripper1"
+        controller_names:
+          [
+            "robot1_joint_state_broadcaster",
+            "robot1_forward_position_controller",
+          ]
         x: 0.5
         y: 1.8
         z: 0.95
@@ -25,6 +30,11 @@ robot_config:
         urdf_file: "robot_system/robot_system.xacro"
         vacuum_gripper_prefix: "vacuum_gripper2_"
         gripper_plugin_name: "gripper2"
+        controller_names:
+          [
+            "robot2_joint_state_broadcaster",
+            "robot2_forward_position_controller",
+          ]
         x: -7.8
         y: -1.5
         z: 0.7
