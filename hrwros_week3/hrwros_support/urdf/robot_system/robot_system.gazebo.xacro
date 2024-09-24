@@ -16,46 +16,6 @@
         <drops_info/>
       </xacro:vacuum_gripper_gazebo>
     </xacro:if>
-    <!--
-    <gazebo reference="${robot_prefix}base_link">
-      <turnGravityOff>true</turnGravityOff>
-    </gazebo>
-    <gazebo reference="${robot_prefix}shoulder_link">
-      <turnGravityOff>true</turnGravityOff>
-    </gazebo>
-    <gazebo reference="${robot_prefix}upper_arm_link">
-      <turnGravityOff>true</turnGravityOff>
-    </gazebo>
-    <gazebo reference="${robot_prefix}forearm_link">
-      <turnGravityOff>true</turnGravityOff>
-    </gazebo>
-    <gazebo reference="${robot_prefix}wrist_1_link">
-      <turnGravityOff>true</turnGravityOff>
-    </gazebo>
-    <gazebo reference="${robot_prefix}wrist_2_link">
-      <turnGravityOff>true</turnGravityOff>
-    </gazebo>
-    <gazebo reference="${robot_prefix}wrist_3_link">
-      <turnGravityOff>true</turnGravityOff>
-    </gazebo>
-    <gazebo reference="${robot_prefix}ee_link">
-      <turnGravityOff>true</turnGravityOff>
-    </gazebo>
-    <gazebo reference="${vacuum_gripper_prefix}suction_cup">
-      <turnGravityOff>true</turnGravityOff>
-    </gazebo>
--->
-    <!-- <gazebo>
-      <plugin name="gazebo_ros_control" filename="libgazebo_ros_control.so">
-        <robotParam>${robot_parameter_name}</robotParam>
-      </plugin>
-    </gazebo> -->
-
-    <!-- <gazebo>
-      <plugin name="gazebo_ros2_control" filename="libgazebo_ros2_control.so">
-        <parameters>$(find hrwros_gazebo)/config/${robot_prefix}_gazebo_controllers.yaml</parameters>
-      </plugin>
-    </gazebo> -->
   </xacro:macro>
 
 </robot>

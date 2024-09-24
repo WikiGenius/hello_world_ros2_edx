@@ -7,7 +7,7 @@
 
   <!-- Include necessary URDF files from hrwros_support -->
   <xacro:include filename="$(find hrwros_support)/urdf/robot_pedestal/robot_pedestal.urdf.xacro"/>
-  <xacro:include filename="$(find hrwros_support)/urdf/arm_robot/ur_description.urdf.xacro"/>
+  <xacro:include filename="$(find hrwros_support)/urdf/arm_robot/arm_description.urdf.xacro"/>
   <xacro:include filename="$(find hrwros_support)/urdf/vacuum_gripper/vacuum_gripper.urdf.xacro"/>
   <xacro:include filename="$(find hrwros_support)/urdf/workcell/workcell.urdf.xacro"/>
   <xacro:include filename="$(find hrwros_support)/urdf/bin/bin.urdf.xacro"/>

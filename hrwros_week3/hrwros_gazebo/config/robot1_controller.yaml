@@ -1,29 +1,27 @@
-robot1_controller:
+controller_manager:
   ros__parameters:
-    type: effort_controllers/JointTrajectoryController
+    update_rate: 50 # Hz
+
+    forward_position_controller:
+      type: forward_command_controller/ForwardCommandController
+
+    joint_state_broadcaster:
+      type: joint_state_broadcaster/JointStateBroadcaster
+
+forward_position_controller:
+  ros__parameters:
     joints:
-      - robot1_elbow_joint
-      - robot1_shoulder_lift_joint
       - robot1_shoulder_pan_joint
+      - robot1_shoulder_lift_joint
+      - robot1_elbow_joint
       - robot1_wrist_1_joint
       - robot1_wrist_2_joint
-      - robot1_wrist_3_joint
-    gains:
-      robot1_elbow_joint: {p: 50000, d: 150, i: 1, i_clamp: 25}
-      robot1_shoulder_lift_joint: {p: 80000, d: 100, i: 1, i_clamp: 50}
-      robot1_shoulder_pan_joint: {p: 17000, d: 30, i: 0, i_clamp: 1}
-      robot1_wrist_1_joint: {p: 150, d: 5, i: 0, i_clamp: 1}
-      robot1_wrist_2_joint: {p: 75, d: 2, i: 0, i_clamp: 1}
-      robot1_wrist_3_joint: {p: 50, d: 5, i: 0, i_clamp: 1}
-    constraints:
-      goal_time: 5.0
-      stopped_velocity_tolerance: 3.0
-      robot1_shoulder_pan_joint: {trajectory: 0.2, goal: 0.1}
-      robot1_shoulder_lift_joint: {trajectory: 0.2, goal: 0.1}
-      robot1_elbow_joint: {trajectory: 0.2, goal: 0.1}
-      robot1_wrist_1_joint: {trajectory: 0.2, goal: 0.1}
-      robot1_wrist_2_joint: {trajectory: 0.2, goal: 0.1}
-      robot1_wrist_3_joint: {trajectory: 0.2, goal: 0.1}
-    stop_trajectory_duration: 0.5
-    state_publish_rate: 50
-    action_monitor_rate: 10
+      - robot1_wrist_3_joint      
+    interface_name: position
+    command_interfaces:
+      - position
+    state_interfaces:
+      - position
+      - velocity
+      - effort
+

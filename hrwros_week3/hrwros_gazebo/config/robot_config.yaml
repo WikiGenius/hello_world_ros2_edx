@@ -3,6 +3,7 @@ robot_config:
     robot_parent: "world"
     robot_groups:
       robot1:
+        simulation_controllers: robot1_controller.yaml
         robot_name: "robot1"
         robot_type: "ur10"
         urdf_file: "robot_system/robot_system.xacro"
@@ -18,6 +19,7 @@ robot_config:
           robot_wrist_1_joint: -1.57
           robot_wrist_2_joint: -1.57
       robot2:
+        simulation_controllers: robot2_controller.yaml
         robot_name: "robot2"
         robot_type: "ur5"
         urdf_file: "robot_system/robot_system.xacro"

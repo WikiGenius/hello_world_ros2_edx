@@ -3,7 +3,7 @@
 
   <!-- /opt/ros/humble/share/ur_description/urdf/ -->
   <xacro:include filename="$(find ur_description)/urdf/ur_macro.xacro"/>
-  <xacro:include filename="$(find hrwros_support)/urdf/arm_robot/ur_params.urdf.xacro"/>
+  <xacro:include filename="$(find hrwros_support)/urdf/arm_robot/arm_params.urdf.xacro"/>
 
   <!-- Custom Arm Robot Macro Definition -->
   <xacro:macro name="ur_description" params="robot_name robot_parent ur_type *origin">
@@ -19,24 +19,8 @@
     <xacro:property name="initial_positions_file" value="$(arg initial_positions_file)"/>
 
     <!-- Main robot arm setup -->
-    <xacro:ur_robot name="${robot_name}" tf_prefix="${tf_prefix}" 
-      parent="${robot_parent}" joint_limits_parameters_file="${joint_limit_params}" 
-      kinematics_parameters_file="${kinematics_params}" physical_parameters_file="${physical_params}" 
-      visual_parameters_file="${visual_params}" transmission_hw_interface="$(arg transmission_hw_interface)" 
-      safety_limits="$(arg safety_limits)" safety_pos_margin="$(arg safety_pos_margin)" 
-      safety_k_position="$(arg safety_k_position)" use_fake_hardware="$(arg use_fake_hardware)" 
-      fake_sensor_commands="$(arg fake_sensor_commands)" sim_gazebo="$(arg sim_gazebo)" 
-      sim_ignition="$(arg sim_ignition)" headless_mode="$(arg headless_mode)" 
-      initial_positions="${xacro.load_yaml(initial_positions_file)}" 
-      use_tool_communication="$(arg use_tool_communication)" 
-      tool_voltage="$(arg tool_voltage)" tool_parity="$(arg tool_parity)" tool_baud_rate="$(arg tool_baud_rate)" 
-      tool_stop_bits="$(arg tool_stop_bits)" tool_rx_idle_chars="$(arg tool_rx_idle_chars)"
-      tool_tx_idle_chars="$(arg tool_tx_idle_chars)" tool_device_name="$(arg tool_device_name)" 
-      tool_tcp_port="$(arg tool_tcp_port)" robot_ip="$(arg robot_ip)" script_filename="$(arg script_filename)" 
-      output_recipe_filename="$(arg output_recipe_filename)" input_recipe_filename="$(arg input_recipe_filename)" 
-      reverse_ip="$(arg reverse_ip)" script_command_port="$(arg script_command_port)" reverse_port="$(arg reverse_port)" 
-      script_sender_port="$(arg script_sender_port)" trajectory_port="$(arg trajectory_port)">
-     
+    <xacro:ur_robot name="${robot_name}" tf_prefix="${tf_prefix}" parent="${robot_parent}" joint_limits_parameters_file="${joint_limit_params}" kinematics_parameters_file="${kinematics_params}" physical_parameters_file="${physical_params}" visual_parameters_file="${visual_params}" transmission_hw_interface="$(arg transmission_hw_interface)" safety_limits="$(arg safety_limits)" safety_pos_margin="$(arg safety_pos_margin)" safety_k_position="$(arg safety_k_position)" use_fake_hardware="$(arg use_fake_hardware)" fake_sensor_commands="$(arg fake_sensor_commands)" sim_gazebo="$(arg sim_gazebo)" sim_ignition="$(arg sim_ignition)" headless_mode="$(arg headless_mode)" initial_positions="${xacro.load_yaml(initial_positions_file)}" use_tool_communication="$(arg use_tool_communication)" tool_voltage="$(arg tool_voltage)" tool_parity="$(arg tool_parity)" tool_baud_rate="$(arg tool_baud_rate)" tool_stop_bits="$(arg tool_stop_bits)" tool_rx_idle_chars="$(arg tool_rx_idle_chars)" tool_tx_idle_chars="$(arg tool_tx_idle_chars)" tool_device_name="$(arg tool_device_name)" tool_tcp_port="$(arg tool_tcp_port)" robot_ip="$(arg robot_ip)" script_filename="$(arg script_filename)" output_recipe_filename="$(arg output_recipe_filename)" input_recipe_filename="$(arg input_recipe_filename)" reverse_ip="$(arg reverse_ip)" script_command_port="$(arg script_command_port)" reverse_port="$(arg reverse_port)" script_sender_port="$(arg script_sender_port)" trajectory_port="$(arg trajectory_port)">
+
       <xacro:insert_block name="origin" />
 
     </xacro:ur_robot>
@@ -44,7 +28,7 @@
     <!-- Conditional inclusion for Gazebo simulation setup -->
     <xacro:if value="$(arg sim_gazebo)">
       <!-- Gazebo plugins -->
-      <gazebo reference="world">
+      <gazebo reference="${robot_parent}">
       </gazebo>
       <gazebo>
         <plugin filename="libgazebo_ros2_control.so" name="gazebo_ros2_control">
@@ -55,7 +39,7 @@
 
     <xacro:if value="$(arg sim_ignition)">
       <!-- Gazebo plugins -->
-      <gazebo reference="world">
+      <gazebo reference="${robot_parent}">
       </gazebo>
       <gazebo>
         <plugin filename="libign_ros2_control-system.so" name="ign_ros2_control::IgnitionROS2ControlPlugin">
