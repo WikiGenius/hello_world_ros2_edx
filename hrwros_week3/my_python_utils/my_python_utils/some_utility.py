@@ -90,7 +90,8 @@ def generate_spawner_node(entity_name: str, ns_robot: str = None, x: float = Non
 
     node_name = 'spawn_entity' if ns_robot else f'spawn_{entity_name}'
 
-    arguments = ['-entity', entity_name, '-topic', new_topic, '-unpause']
+    # arguments = ['-entity', entity_name, '-topic', new_topic, '-unpause']
+    arguments = ['-entity', entity_name, '-topic', new_topic]
     if x is not None:
         arguments += ['-x', str(x)]
     if y is not None:
