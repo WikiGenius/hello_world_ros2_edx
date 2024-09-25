@@ -13,18 +13,20 @@ def generate_launch_description():
         raise EnvironmentError(
             "TURTLEBOT3_MODEL environment variable is not set. Please export TURTLEBOT3_MODEL in your bashrc.")
 
-    robot_name = 'turtlebot'
-
-    x = -4.0
-    y = -0.2
-    z = 0.0
+    robot_config = some_utility.load_config_file(
+        "hrwros_gazebo", "robot_config.yaml")
+    mobile_robot = robot_config['robot_groups']['mobile_robot']
 
     turtlebot_description = some_utility.generate_description_command(
-        'turtlebot3_description', f'turtlebot3_{turtlebot_model}.urdf')
+        'hrwros_support', "mobile_robot/mobile_robot.xacro",
+        f"turtlebot_model:={turtlebot_model} ",
+        f"robot_parent:={robot_config['robot_parent']}",
+
+    )
     turtlebot_state_publisher = some_utility.generate_robot_state_publisher(
-        robot_name, turtlebot_description)
+        mobile_robot["robot_name"], turtlebot_description)
     turtlebot_spawner = some_utility.generate_spawner_node(
-        robot_name, x=x, y=y, z=z)
+        mobile_robot["robot_name"], x=mobile_robot["x"], y=mobile_robot["y"], z=mobile_robot["z"])
 
     ld = LaunchDescription()
     ld.add_action(turtlebot_state_publisher)

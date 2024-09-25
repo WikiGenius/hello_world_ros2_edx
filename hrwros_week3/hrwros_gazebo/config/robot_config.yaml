@@ -10,10 +10,7 @@ robot_config:
         vacuum_gripper_prefix: "vacuum_gripper1_"
         gripper_plugin_name: "gripper1"
         controller_names:
-          [
-            "robot1_joint_state_broadcaster",
-            "robot1_controller",
-          ]
+          ["robot1_joint_state_broadcaster", "robot1_controller"]
         x: 0.5
         y: 1.8
         z: 0.95
@@ -26,12 +23,14 @@ robot_config:
         vacuum_gripper_prefix: "vacuum_gripper2_"
         gripper_plugin_name: "gripper2"
         controller_names:
-          [
-            "robot2_joint_state_broadcaster",
-            "robot2_controller",
-          ]
+          ["robot2_joint_state_broadcaster", "robot2_controller"]
         x: -7.8
         y: -1.5
         z: 0.7
         yaw: 1.57
         initial_positions_file: "robot2_zeros.yaml"
+      mobile_robot:
+        robot_name: "turtlebot"
+        x: -4.0
+        y: -0.2
+        z: 0.0

@@ -1,0 +1,21 @@
+<?xml version="1.0"?>
+<robot name="turtlebot" xmlns:xacro="http://www.ros.org/wiki/xacro">
+
+  <xacro:macro name="robot_system_urdf" params="robot_parent turtlebot_model *origin">
+    <!-- URDF -->
+    <xacro:include filename="$(find turtlebot3_description)/urdf/turtlebot3_${turtlebot_model}.urdf"/>
+
+    <!-- Used for fixing robot to Gazebo 'base_footprint' -->
+    <link name="${robot_parent}"/>
+
+
+    <!-- turtlebotto to world. -->
+    <joint name="${turtlebot_model}_turtlebot_world_joint" type="fixed">
+      <xacro:insert_block name="origin" />
+      <parent link="${robot_parent}" />
+      <child link="base_footprint" />
+    </joint>
+
+  </xacro:macro>
+
+</robot>
