@@ -12,7 +12,9 @@ from my_python_utils import some_utility
 def generate_launch_description():
     launch_file_dir = os.path.join(
         get_package_share_directory('turtlebot3_gazebo'), 'launch')
-
+    launch_file_dir_hrwros = os.path.join(
+        get_package_share_directory('hrwros_gazebo'), 'launch')
+    
     robot_config = some_utility.load_config_file(
         "hrwros_gazebo", "robot_config.yaml")
     mobile_robot = robot_config['robot_groups']['mobile_robot']
@@ -23,8 +25,8 @@ def generate_launch_description():
 
     robot_state_publisher_cmd = IncludeLaunchDescription(
         PythonLaunchDescriptionSource(
-            os.path.join(launch_file_dir,
-                         'robot_state_publisher.launch.py')
+            os.path.join(launch_file_dir_hrwros,
+                         'turtlebot_state_publisher.launch.py')
         ),
         launch_arguments={'use_sim_time': use_sim_time}.items()
     )
