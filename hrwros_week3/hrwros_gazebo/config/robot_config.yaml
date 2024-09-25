@@ -17,12 +17,7 @@ robot_config:
         x: 0.5
         y: 1.8
         z: 0.95
-        joints:
-          robot_elbow_joint: 1.57
-          robot_shoulder_lift_joint: -1.57
-          robot_shoulder_pan_joint: 1.24
-          robot_wrist_1_joint: -1.57
-          robot_wrist_2_joint: -1.57
+        initial_positions_file: "robot1_zeros.yaml"
       robot2:
         simulation_controllers: robot2_controller.yaml
         robot_name: "robot2"
@@ -39,9 +34,4 @@ robot_config:
         y: -1.5
         z: 0.7
         yaw: 1.57
-        joints:
-          robot_elbow_joint: 1.57
-          robot_shoulder_lift_joint: -1.57
-          robot_shoulder_pan_joint: 1.24
-          robot_wrist_1_joint: -1.57
-          robot_wrist_2_joint: -1.57
+        initial_positions_file: "robot2_zeros.yaml"

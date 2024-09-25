@@ -202,10 +202,7 @@ def generate_robot_group(
     use_namespace: bool = True,
     sim_gazebo: bool = True,
     simulation_controllers: str = "",
-    initial_positions_file: str = os.path.join(
-        get_package_share_directory(
-            'ur_description'), 'config', 'initial_positions.yaml'
-    ),
+    initial_positions_file: str = "",
     controller_names: list = []
 ) -> GroupAction:
     """Generate a group of nodes for a single robot.
@@ -222,8 +219,8 @@ def generate_robot_group(
         z (float): Z-coordinate of the robot.
         yaw (float, optional): Yaw angle of the robot. Defaults to None.
         sim_gazebo (bool, optional): Flag to simulate in Gazebo. Defaults to True.
-        simulation_controllers (str, optional): Path to simulation controllers. Defaults to "".
-        initial_positions_file (str, optional): Path to initial positions file. Defaults to UR description file.
+        simulation_controllers (str, optional): Path to simulation controllers (YAML file). Defaults to "".
+        initial_positions_file (str, optional): Path to initial positions file (YAML file). Defaults to UR description file.
         controller_names (list, optional): List of controller names to be loaded. Defaults to [].
 
     Returns:
@@ -235,7 +232,11 @@ def generate_robot_group(
             get_package_share_directory(
                 'hrwros_gazebo'), 'config', simulation_controllers
         )
-
+    if initial_positions_file:
+        initial_positions_file = os.path.join(
+            get_package_share_directory(
+                'hrwros_gazebo'), 'config', initial_positions_file
+        )
     # Prepare the robot description command
     description_command = generate_description_command(
         'hrwros_support',

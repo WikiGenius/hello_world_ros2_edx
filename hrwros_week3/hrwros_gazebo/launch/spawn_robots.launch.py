@@ -19,6 +19,7 @@ def generate_launch_description():
         gripper_plugin_name=robot1['gripper_plugin_name'],
         x=robot1['x'], y=robot1['y'], z=robot1['z'],
         simulation_controllers=robot1['simulation_controllers'],
+        initial_positions_file=robot1['initial_positions_file'],
         controller_names=robot1['controller_names']
     )
 
@@ -32,9 +33,10 @@ def generate_launch_description():
         gripper_plugin_name=robot2['gripper_plugin_name'],
         x=robot2['x'], y=robot2['y'], z=robot2['z'], yaw=robot2['yaw'],
         simulation_controllers=robot2['simulation_controllers'],
+        initial_positions_file=robot2['initial_positions_file'],
         controller_names=robot2['controller_names']
-
     )
+
     ld = LaunchDescription()
 
     ld.add_action(robot_group1)
