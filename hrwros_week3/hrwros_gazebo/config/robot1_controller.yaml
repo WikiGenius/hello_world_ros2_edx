@@ -1,29 +1,37 @@
 robot1:
   controller_manager:
     ros__parameters:
-      update_rate: 50 # Hz
-  
-      robot1_forward_position_controller:
-        type: forward_command_controller/ForwardCommandController
-  
+      update_rate: 100 # Hz
+
+      robot1_controller:
+        type: joint_trajectory_controller/JointTrajectoryController
+
       robot1_joint_state_broadcaster:
         type: joint_state_broadcaster/JointStateBroadcaster
-  
-  robot1_forward_position_controller:
+
+  robot1_controller:
     ros__parameters:
+      command_interfaces:
+        - position
+      state_interfaces:
+        - position
+        - velocity
       joints:
         - robot1_shoulder_pan_joint
         - robot1_shoulder_lift_joint
         - robot1_elbow_joint
         - robot1_wrist_1_joint
         - robot1_wrist_2_joint
-        - robot1_wrist_3_joint      
-      interface_name: position
-      command_interfaces:
-        - position
-      state_interfaces:
-        - position
-        - velocity
-        - effort
-  
-  
+        - robot1_wrist_3_joint
+
+
+      state_publish_rate: 50.0 # Defaults to 50
+      action_monitor_rate: 20.0 # Defaults to 20
+
+      allow_partial_joints_goal: false # Defaults to false
+      hardware_state_has_offset: true
+      deduce_states_from_derivatives: true
+
+      constraints:
+        stopped_velocity_tolerance: 0.01 # Defaults to 0.01
+        goal_time: 0.0 # Defaults to 0.0 (start immediately)
