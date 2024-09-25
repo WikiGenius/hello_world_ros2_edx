@@ -12,7 +12,8 @@
       </visual>
       <collision>
         <geometry>
-          <mesh filename="file://$(find hrwros_support)/meshes/workcell/collision/workcell.dae"/>
+          <!-- <mesh filename="file://$(find hrwros_support)/meshes/workcell/collision/workcell.dae"/> -->
+          <mesh filename="file://$(find hrwros_support)/meshes/workcell/visual/workcell.dae"/>"/>
 
         </geometry>
       </collision>
