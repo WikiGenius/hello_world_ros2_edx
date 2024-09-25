@@ -26,28 +26,47 @@ def generate_description_command(package: str, urdf_file: str, *args: str) -> Co
     return Command(['xacro ', urdf_path, ' ', *args])
 
 
-def generate_robot_state_publisher(name: str, description_command: Command, ns_robot: str = None) -> Node:
-    """Create a Node for robot_state_publisher.
+def generate_robot_state_publisher(
+    robot_name: str,
+    robot_description: str,
+    use_sim_time: bool = False,
+    ns_robot: str = None
+) -> Node:
+    """
+    Create a Node for robot_state_publisher.
 
     Args:
-        name (str): The name of the robot.
-        description_command (Command): The command that generates the robot description.
-        ns_robot (str, optional): Namespace for the robot.
+        robot_name (str): Name of the robot.
+        robot_description (str): URDF or xacro content as a string.
+        use_sim_time (bool, optional): If True, uses simulated time. Defaults to False.
+        ns_robot (str, optional): Namespace for the robot. Defaults to None.
 
     Returns:
         Node: The robot_state_publisher node.
     """
-    topic = '/robot_description'
-    new_topic = topic if ns_robot else f'/{name}_description'
-    node_name = 'robot_state_publisher' if ns_robot else f'{name}_state_publisher'
+    # Set the topic for robot description
+    description_topic = f'/{robot_name}_description' if not ns_robot else '/robot_description'
+
+    # Define the node name, prefixed with the robot name if no namespace
+    node_name = f'{robot_name}_state_publisher' if not ns_robot else 'robot_state_publisher'
+
+    # Define the parameters for the Node
+    parameters = {
+        'robot_description': robot_description
+    }
+
+    if use_sim_time:
+        parameters['use_sim_time'] = use_sim_time
 
     return Node(
         package='robot_state_publisher',
         executable='robot_state_publisher',
         name=node_name,
         output='screen',
-        parameters=[{'robot_description': description_command}],
-        remappings=[(topic, new_topic)]
+        # Parameters are passed as a list of dictionaries
+        parameters=[parameters],
+        # Remap robot description topic
+        remappings=[('/robot_description', description_topic)]
     )
 
 
@@ -258,9 +277,10 @@ def generate_robot_group(
     actions = [
         PushRosNamespace(namespace) if use_namespace else None,
         generate_robot_state_publisher(
-            name=robot_name,
-            description_command=description_command,
-            ns_robot=namespace
+            robot_name=robot_name,
+            robot_description=description_command,
+            ns_robot=namespace,
+            use_sim_time=sim_gazebo
         ),
         generate_spawner_node(
             entity_name=robot_name,

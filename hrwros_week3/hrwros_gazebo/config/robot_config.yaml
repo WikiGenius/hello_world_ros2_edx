@@ -30,7 +30,6 @@ robot_config:
         yaw: 1.57
         initial_positions_file: "robot2_zeros.yaml"
       mobile_robot:
-        robot_name: "turtlebot"
         x: -4.0
         y: -0.2
         z: 0.0

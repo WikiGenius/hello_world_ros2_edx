@@ -1,35 +1,50 @@
+
 import os
+
+from ament_index_python.packages import get_package_share_directory
 from launch import LaunchDescription
+from launch.actions import IncludeLaunchDescription
+from launch.launch_description_sources import PythonLaunchDescriptionSource
+from launch.substitutions import LaunchConfiguration
 from my_python_utils import some_utility
 
 
 def generate_launch_description():
-    """
-    Generate the launch description for launching the TurtleBot3.
-    """
-    # Ensure the environment variable is set
-    turtlebot_model = os.getenv('TURTLEBOT3_MODEL')
-    if not turtlebot_model:
-        raise EnvironmentError(
-            "TURTLEBOT3_MODEL environment variable is not set. Please export TURTLEBOT3_MODEL in your bashrc.")
+    launch_file_dir = os.path.join(
+        get_package_share_directory('turtlebot3_gazebo'), 'launch')
+    launch_file_dir_hrwros = os.path.join(
+        get_package_share_directory('hrwros_gazebo'), 'launch')
 
     robot_config = some_utility.load_config_file(
         "hrwros_gazebo", "robot_config.yaml")
     mobile_robot = robot_config['robot_groups']['mobile_robot']
 
-    turtlebot_description = some_utility.generate_description_command(
-        'hrwros_support', "mobile_robot/mobile_robot.xacro",
-        f"turtlebot_model:={turtlebot_model} ",
-        f"robot_parent:={robot_config['robot_parent']}",
+    use_sim_time = LaunchConfiguration('use_sim_time', default='true')
+    x_pose = LaunchConfiguration('x_pose', default=f"{mobile_robot['x']}")
+    y_pose = LaunchConfiguration('y_pose', default=f"{mobile_robot['y']}")
 
+    robot_state_publisher_cmd = IncludeLaunchDescription(
+        PythonLaunchDescriptionSource(
+            os.path.join(launch_file_dir_hrwros,
+                         'turtlebot_state_publisher.launch.py')
+        ),
+        launch_arguments={'use_sim_time': use_sim_time}.items()
     )
-    turtlebot_state_publisher = some_utility.generate_robot_state_publisher(
-        mobile_robot["robot_name"], turtlebot_description)
-    turtlebot_spawner = some_utility.generate_spawner_node(
-        mobile_robot["robot_name"], x=mobile_robot["x"], y=mobile_robot["y"], z=mobile_robot["z"])
+
+    spawn_turtlebot_cmd = IncludeLaunchDescription(
+        PythonLaunchDescriptionSource(
+            os.path.join(launch_file_dir, 'spawn_turtlebot3.launch.py')
+        ),
+        launch_arguments={
+            'x_pose': x_pose,
+            'y_pose': y_pose
+        }.items()
+    )
 
     ld = LaunchDescription()
-    ld.add_action(turtlebot_state_publisher)
-    ld.add_action(turtlebot_spawner)
+
+    # Add the commands to the launch description
+    ld.add_action(robot_state_publisher_cmd)
+    ld.add_action(spawn_turtlebot_cmd)
 
     return ld
