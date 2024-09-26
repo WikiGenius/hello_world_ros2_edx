@@ -6,7 +6,9 @@ from launch.actions import DeclareLaunchArgument
 from launch.substitutions import LaunchConfiguration, PathJoinSubstitution
 from my_python_utils import some_utility
 
-
+# Steps to navigate
+#1: ros2 launch nav2_bringup bringup_launch.py
+#2: ros2 launch nav2_bringup rviz_launch.py
 def generate_launch_description():
 
     cartographer_config_dir = os.path.join(
