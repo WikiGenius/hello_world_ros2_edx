@@ -103,6 +103,8 @@ install(TARGETS
   ROSLogicalCameraPlugin
   DESTINATION lib/${PROJECT_NAME}
 )
+install(PROGRAMS scripts/env_setup.bash DESTINATION lib/${PROJECT_NAME})
+install(PROGRAMS scripts/timed_ros2_launch.sh DESTINATION lib/${PROJECT_NAME})
 
 # Install directories
 install(DIRECTORY config DESTINATION share/${PROJECT_NAME})
@@ -110,7 +112,6 @@ install(DIRECTORY launch DESTINATION share/${PROJECT_NAME})
 install(DIRECTORY meshes DESTINATION share/${PROJECT_NAME})
 install(DIRECTORY models DESTINATION share/${PROJECT_NAME})
 install(DIRECTORY param DESTINATION share/${PROJECT_NAME})
-install(DIRECTORY scripts DESTINATION share/${PROJECT_NAME})
 install(DIRECTORY worlds DESTINATION share/${PROJECT_NAME})
 
 if(BUILD_TESTING)

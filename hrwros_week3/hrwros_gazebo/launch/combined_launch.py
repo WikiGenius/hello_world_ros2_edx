@@ -4,7 +4,11 @@ from launch.substitutions import LaunchConfiguration
 from launch_ros.actions import Node
 from launch.launch_description_sources import PythonLaunchDescriptionSource
 from launch_ros.substitutions import FindPackageShare
+from launch.actions import ExecuteProcess
 import os
+
+DELAY_SPAWN_TURTLEBOT = 7
+
 
 def generate_launch_description():
     # Declare the launch arguments
@@ -41,15 +45,21 @@ def generate_launch_description():
 
     # Find package directories
     gazebo_ros_share = FindPackageShare('gazebo_ros').find('gazebo_ros')
-    hrwros_gazebo_share = FindPackageShare('hrwros_gazebo').find('hrwros_gazebo')
+    hrwros_gazebo_share = FindPackageShare(
+        'hrwros_gazebo').find('hrwros_gazebo')
 
     # Paths to Gazebo world and launch files
     world_path = os.path.join(hrwros_gazebo_share, 'worlds', 'hrwros.world')
-    gzserver_launch_path = os.path.join(gazebo_ros_share, 'launch', 'gzserver.launch.py')
-    gzclient_launch_path = os.path.join(gazebo_ros_share, 'launch', 'gzclient.launch.py')
-    spawn_static_objects_launch_path = os.path.join(hrwros_gazebo_share, 'launch', 'spawn_static_world_objects.launch.py')
-    spawn_robots_launch_path = os.path.join(hrwros_gazebo_share, 'launch', 'spawn_robots.launch.py')
-    spawn_turtlebot_launch_path = os.path.join(hrwros_gazebo_share, 'launch', 'spawn_turtlebot.launch.py')
+    gzserver_launch_path = os.path.join(
+        gazebo_ros_share, 'launch', 'gzserver.launch.py')
+    gzclient_launch_path = os.path.join(
+        gazebo_ros_share, 'launch', 'gzclient.launch.py')
+    spawn_static_objects_launch_path = os.path.join(
+        hrwros_gazebo_share, 'launch', 'spawn_static_world_objects.launch.py')
+    spawn_robots_launch_path = os.path.join(
+        hrwros_gazebo_share, 'launch', 'spawn_robots.launch.py')
+    spawn_turtlebot_launch_path = os.path.join(
+        hrwros_gazebo_share, 'launch', 'spawn_turtlebot.launch.py')
 
     # Include the Gazebo server (gzserver)
     gzserver_launch = IncludeLaunchDescription(
@@ -79,10 +89,11 @@ def generate_launch_description():
         PythonLaunchDescriptionSource(spawn_robots_launch_path)
     )
 
-    spawn_turtlebot = IncludeLaunchDescription(
-        PythonLaunchDescriptionSource(spawn_turtlebot_launch_path)
+    spawn_turtlebot = ExecuteProcess(
+        cmd=["ros2", "run", "hrwros_gazebo", "timed_ros2_launch.sh", str(
+            DELAY_SPAWN_TURTLEBOT), "hrwros_gazebo", "spawn_turtlebot.launch.py"],
+        output="screen"
     )
-
     # Define static_transform_publisher nodes for TF2
     odom_world_transform = Node(
         package='tf2_ros',
@@ -95,14 +106,16 @@ def generate_launch_description():
         package='tf2_ros',
         executable='static_transform_publisher',
         name='map_to_target1',
-        arguments=['3.75', '2.0', '0', '0', '0', '0', '1', 'map', 'turtlebot_target1']
+        arguments=['3.75', '2.0', '0', '0', '0',
+                   '0', '1', 'map', 'turtlebot_target1']
     )
 
     map_to_target2_transform = Node(
         package='tf2_ros',
         executable='static_transform_publisher',
         name='map_to_target2',
-        arguments=['-4.168', '-1.112', '0', '0', '0', '0', '1', 'map', 'turtlebot_target2']
+        arguments=['-4.168', '-1.112', '0', '0', '0',
+                   '0', '1', 'map', 'turtlebot_target2']
     )
 
     # Return the LaunchDescription containing all the actions
