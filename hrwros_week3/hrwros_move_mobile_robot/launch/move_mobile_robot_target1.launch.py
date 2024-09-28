@@ -14,7 +14,7 @@ def generate_launch_description():
     return LaunchDescription([
         *args,
         Node(
-            package='hrwros_week3_assignment',
+            package='hrwros_move_mobile_robot',
             executable='move_mobile_robot',
             name='move_mobile_robot_target1',
             output='screen',

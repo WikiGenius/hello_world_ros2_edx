@@ -1,13 +1,13 @@
 from launch import LaunchDescription
-from launch.actions import DeclareLaunchArgument, IncludeLaunchDescription
+from launch.actions import DeclareLaunchArgument, IncludeLaunchDescription, ExecuteProcess
 from launch.substitutions import LaunchConfiguration
 from launch_ros.actions import Node
 from launch.launch_description_sources import PythonLaunchDescriptionSource
 from launch_ros.substitutions import FindPackageShare
-from launch.actions import ExecuteProcess
 import os
 
 DELAY_SPAWN_TURTLEBOT = 7
+DELAY_SPAWN_NAVIGATION = 10
 
 
 def generate_launch_description():
@@ -117,7 +117,11 @@ def generate_launch_description():
         arguments=['-4.168', '-1.112', '0', '0', '0',
                    '0', '1', 'map', 'turtlebot_target2']
     )
-
+    bringup_launch = ExecuteProcess(
+        cmd=["ros2", "run", "hrwros_gazebo", "timed_ros2_launch.sh", str(
+            DELAY_SPAWN_NAVIGATION), "hrwros_nav", "bringup_launch.py"],
+        output="screen"
+    )
     # Return the LaunchDescription containing all the actions
     return LaunchDescription([
         declare_paused,
@@ -134,5 +138,6 @@ def generate_launch_description():
         spawn_turtlebot,
         odom_world_transform,
         map_to_target1_transform,
-        map_to_target2_transform
+        map_to_target2_transform,
+        bringup_launch
     ])

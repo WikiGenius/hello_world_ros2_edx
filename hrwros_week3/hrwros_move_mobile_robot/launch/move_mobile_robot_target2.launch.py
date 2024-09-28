@@ -14,7 +14,7 @@ def generate_launch_description():
     return LaunchDescription([
         *args,
         Node(
-            package='hrwros_week3_assignment',
+            package='hrwros_move_mobile_robot',
             executable='move_mobile_robot',
             name='move_mobile_robot_target2',
             output='screen',
@@ -22,7 +22,7 @@ def generate_launch_description():
         ),
         # Add Unknown obstacles
         Node(
-            package='hrwros_week3_assignment',
+            package='hrwros_move_mobile_robot',
             executable='create_unknown_obstacles',
             name='spawn_unknown_obstacles',
             output='screen'

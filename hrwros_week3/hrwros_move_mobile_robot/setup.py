@@ -2,7 +2,7 @@ import os
 from glob import glob
 from setuptools import find_packages, setup
 
-package_name = 'move_mobile_robot'
+package_name = 'hrwros_move_mobile_robot'
 
 setup(
     name=package_name,
@@ -24,8 +24,8 @@ setup(
     tests_require=['pytest'],
     entry_points={
         'console_scripts': [
-            'move_mobile_robot=move_mobile_robot.move_mobile_robot:main',
-            'create_unknown_obstacles=move_mobile_robot.create_unknown_obstacles:main'
+            'move_mobile_robot=hrwros_move_mobile_robot.move_mobile_robot:main',
+            'create_unknown_obstacles=hrwros_move_mobile_robot.create_unknown_obstacles:main'
         ],
     },
 )
