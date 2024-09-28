@@ -10,4 +10,9 @@
 
     <!-- Include spawn_turtlebot.launch.py -->
     <include file="$(find-pkg-share hrwros_gazebo)/launch/spawn_turtlebot.launch.py" />
+
+    <node pkg="tf2_ros" exec="static_transform_publisher" name="odom_world" args="0 0 0 0 0 0 1  odom world"/>
+    <!-- Add Target frames for the navigation-->
+    <node pkg="tf2_ros" exec="static_transform_publisher" name="map_to_target1" args="3.75 2.0 0 0 0 0 1  map turtlebot_target1"/>
+    <node pkg="tf2_ros" exec="static_transform_publisher" name="map_to_target2" args="-4.168 -1.112 0 0 0 0 1  map turtlebot_target2"/>
 </launch>

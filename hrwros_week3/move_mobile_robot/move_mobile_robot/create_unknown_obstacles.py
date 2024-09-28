@@ -6,7 +6,6 @@ from gazebo_msgs.srv import SpawnEntity, GetEntityState
 from geometry_msgs.msg import Pose
 from ament_index_python.packages import get_package_share_directory
 
-
 class ObstacleSpawner(Node):
     def __init__(self):
         super().__init__('spawn_unknown_obstacle')
@@ -25,10 +24,11 @@ class ObstacleSpawner(Node):
         with open(urdf_file_path, 'r') as box_file:
             self.box_xml = box_file.read()
 
+        self.get_logger().info(self.box_xml )
         # Wait for a couple of seconds to prevent the unknown obstacle from
         # being considered as a part of the map.
-        self.create_timer(4.0, self.spawn_obstacles)
-
+        self.tmr = self.create_timer(4.0, self.spawn_obstacles)
+        
     def spawn_unknown_obstacle(self, obstacle_name, obstacle_model_xml, obstacle_pose):
         spawn_obstacle_request = SpawnEntity.Request()
         spawn_obstacle_request.name = obstacle_name
@@ -36,6 +36,7 @@ class ObstacleSpawner(Node):
         spawn_obstacle_request.robot_namespace = ''
         spawn_obstacle_request.initial_pose = obstacle_pose
         spawn_obstacle_request.reference_frame = 'map'
+        # self.get_logger().info(spawn_obstacle_request )
 
         future = self.spawn_obstacle_client.call_async(spawn_obstacle_request)
         rclpy.spin_until_future_complete(self, future)
@@ -50,13 +51,21 @@ class ObstacleSpawner(Node):
     def check_obstacle_existence(self, obstacle_name):
         check_obstacle_request = GetEntityState.Request()
         check_obstacle_request.name = obstacle_name
+        self.get_logger().info(f"{obstacle_name}:")
+        self.get_logger().info(f"{check_obstacle_request}:")
 
         future = self.check_obstacle_client.call_async(check_obstacle_request)
+        self.get_logger().info(f"{future}:")
         rclpy.spin_until_future_complete(self, future)
+        self.get_logger().info(f"After spin_until_future_complete")
+
         check_obstacle_response = future.result()
+        self.get_logger().info(f"{obstacle_name}: {check_obstacle_response}")
         return check_obstacle_response.success
 
     def spawn_obstacles(self):
+        self.get_logger().info("timer called" )
+        # self.get_logger().info(self.check_obstacle_existence('unknown_obstacle1'))
         if not self.check_obstacle_existence('unknown_obstacle1'):
             obstacle1_pose = Pose()
             obstacle1_pose.position.x = -2.2

@@ -4,7 +4,7 @@
   <xacro:arg name="pedestal_prefix" default="robot2"/>
   <xacro:arg name="pedestal_parent" default="world_interface"/>
   <xacro:arg name="pedestal_height" default="0.5"/>
-  
+
   <link name="$(arg pedestal_parent)"/>
   <!-- URDF -->
   <xacro:include filename="$(find hrwros_support)/urdf/robot_pedestal/robot_pedestal.urdf.xacro"/>

@@ -43,7 +43,7 @@
       </spot>
     </light>
 
-    <include>
+    <!-- <include>
       <uri>model://conveyor</uri>
       <pose>1.2 5 0 0 0 -1.571</pose>
     </include>
@@ -51,7 +51,14 @@
     <include>
       <uri>model://deletion_wall</uri>
       <pose>1.2 -5.1 1.425 0 0 1.5708</pose>
-    </include>
+    </include> -->
+    
+    <plugin name="gazebo_ros_state" filename="libgazebo_ros_state.so">
+      <ros>
+        <namespace>/gazebo</namespace>
+      </ros>
+      <update_rate>5.0</update_rate>
+    </plugin>
 
   </world>
 </sdf>

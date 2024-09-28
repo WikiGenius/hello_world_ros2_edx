@@ -1,6 +1,8 @@
+import os
+from glob import glob
 from setuptools import find_packages, setup
 
-package_name = 'hrwros_week3_assignment'
+package_name = 'move_mobile_robot'
 
 setup(
     name=package_name,
@@ -10,16 +12,20 @@ setup(
         ('share/ament_index/resource_index/packages',
             ['resource/' + package_name]),
         ('share/' + package_name, ['package.xml']),
+        ('share/' + package_name + '/launch', glob(os.path.join('launch', "*.py"))),
+
     ],
     install_requires=['setuptools'],
     zip_safe=True,
     maintainer='muhammed',
     maintainer_email='elyamani.muhammed.eng@gmail.com',
-    description='The hrwros_week3_assignment package',
+    description='TODO: Package description',
     license='TODO: License declaration',
     tests_require=['pytest'],
     entry_points={
         'console_scripts': [
+            'move_mobile_robot=move_mobile_robot.move_mobile_robot:main',
+            'create_unknown_obstacles=move_mobile_robot.create_unknown_obstacles:main'
         ],
     },
 )
