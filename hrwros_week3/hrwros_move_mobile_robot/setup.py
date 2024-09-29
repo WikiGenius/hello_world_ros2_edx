@@ -25,7 +25,7 @@ setup(
     entry_points={
         'console_scripts': [
             'move_mobile_robot=hrwros_move_mobile_robot.move_mobile_robot:main',
-            'create_unknown_obstacles=hrwros_move_mobile_robot.create_unknown_obstacles:main'
+            'create_unknown_obstacles=hrwros_move_mobile_robot.create_unknown_obstacles:main',
         ],
     },
 )

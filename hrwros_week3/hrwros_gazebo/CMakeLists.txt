@@ -105,6 +105,7 @@ install(TARGETS
 )
 install(PROGRAMS scripts/env_setup.bash DESTINATION lib/${PROJECT_NAME})
 install(PROGRAMS scripts/timed_ros2_launch.sh DESTINATION lib/${PROJECT_NAME})
+install(PROGRAMS scripts/timed_ros2_run.sh DESTINATION lib/${PROJECT_NAME})
 
 # Install directories
 install(DIRECTORY config DESTINATION share/${PROJECT_NAME})

@@ -20,17 +20,20 @@ function showHelp(){
     echo "Run it from command line as shown above. Or run it from another ROS2 launch file:"
     echo
     echo 'from launch import LaunchDescription'
-    echo 'from launch_ros.actions import Node'
+    echo 'from launch.actions import ExecuteProcess'
     echo
     echo 'def generate_launch_description():'
-    echo '    return LaunchDescription(['
-    echo '        Node('
-    echo '            package="your_package_name",'
-    echo '            executable="timed_ros2_launch.sh",'
-    echo '            arguments=["5", "nav2_bringup", "navigation_launch.py", "use_sim_time:=true"],'
-    echo '            name="timed_ros2_launch"'
-    echo '        )'
-    echo '    ])'
+    echo '    return LaunchDescription('
+    echo '     ['
+    echo '      ExecuteProcess('
+    echo '     cmd=["ros2", "run", "hrwros_gazebo", "timed_ros2_launch.sh",' 
+    echo '           str(5),'
+    echo '         "hrwros_gazebo", "spawn_turtlebot.launch.py"],'
+    echo '     output="screen")'
+    echo '     ]'
+    echo '                              )'
+
+
 }
  
 if [ "$1" = "-h" ]; then
