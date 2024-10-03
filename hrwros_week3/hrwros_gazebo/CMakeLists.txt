@@ -38,8 +38,8 @@ include_directories(
 )
 
 # Function to add a library with dependencies
-function(add_hrwros_library target src_file)
-  add_library(${target} ${src_file})
+function(add_hrwros_library target TYPE src_file)
+  add_library(${target} ${TYPE} ${src_file})
   ament_target_dependencies(${target} ${ARGN})
 endfunction()
 
@@ -55,8 +55,8 @@ function(link_hrwros_target target)
 endfunction()
 
 # Libraries and executables
-add_hrwros_library(urdf_creator src/urdf_creator.cpp rclcpp tinyxml2_vendor urdf)
-add_hrwros_library(conveyor_spawner src/conveyor_spawner.cpp rclcpp std_msgs std_srvs geometry_msgs gazebo_msgs tf2_geometry_msgs urdf)
+add_hrwros_library(urdf_creator STATIC src/urdf_creator.cpp rclcpp tinyxml2_vendor urdf)
+add_hrwros_library(conveyor_spawner STATIC src/conveyor_spawner.cpp rclcpp std_msgs std_srvs geometry_msgs gazebo_msgs tf2_geometry_msgs urdf)
 link_hrwros_target(conveyor_spawner urdf_creator)
 
 add_hrwros_executable(conveyor_spawner_node src/conveyor_spawner_node.cpp rclcpp std_msgs std_srvs geometry_msgs gazebo_msgs tf2_geometry_msgs urdf)
@@ -66,25 +66,25 @@ add_hrwros_executable(urdf_creator_test_node src/urdf_creator_test.cpp rclcpp st
 link_hrwros_target(urdf_creator_test_node urdf_creator)
 
 # Plugin libraries
-add_hrwros_library(SideContactPlugin src/plugins/SideContactPlugin.cc)
-add_hrwros_library(VacuumGripperPlugin src/plugins/VacuumGripperPlugin.cc)
-add_hrwros_library(ROSVacuumGripperPlugin src/plugins/ROSVacuumGripperPlugin.cc rclcpp hrwros_interface)
+add_hrwros_library(SideContactPlugin SHARED src/plugins/SideContactPlugin.cc)
+add_hrwros_library(VacuumGripperPlugin SHARED src/plugins/VacuumGripperPlugin.cc)
+add_hrwros_library(ROSVacuumGripperPlugin SHARED src/plugins/ROSVacuumGripperPlugin.cc rclcpp hrwros_interface)
 link_hrwros_target(ROSVacuumGripperPlugin VacuumGripperPlugin)
 
-add_hrwros_library(ProximityRayPlugin src/plugins/ProximityRayPlugin.cc)
-add_hrwros_library(ROSProximityRayPlugin src/plugins/ROSProximityRayPlugin.cc rclcpp hrwros_interface)
+add_hrwros_library(ProximityRayPlugin SHARED src/plugins/ProximityRayPlugin.cc)
+add_hrwros_library(ROSProximityRayPlugin SHARED src/plugins/ROSProximityRayPlugin.cc rclcpp hrwros_interface)
 link_hrwros_target(ROSProximityRayPlugin ProximityRayPlugin)
 
-add_hrwros_library(ConveyorBeltPlugin src/plugins/ConveyorBeltPlugin.cc)
+add_hrwros_library(ConveyorBeltPlugin SHARED src/plugins/ConveyorBeltPlugin.cc)
 link_hrwros_target(ConveyorBeltPlugin SideContactPlugin)
 
-add_hrwros_library(ROSConveyorBeltPlugin src/plugins/ROSConveyorBeltPlugin.cc rclcpp hrwros_interface)
+add_hrwros_library(ROSConveyorBeltPlugin SHARED src/plugins/ROSConveyorBeltPlugin.cc rclcpp hrwros_interface)
 link_hrwros_target(ROSConveyorBeltPlugin ConveyorBeltPlugin)
 
-add_hrwros_library(ObjectDisposalPlugin src/plugins/ObjectDisposalPlugin.cc)
+add_hrwros_library(ObjectDisposalPlugin SHARED src/plugins/ObjectDisposalPlugin.cc)
 link_hrwros_target(ObjectDisposalPlugin SideContactPlugin)
 
-add_hrwros_library(ROSLogicalCameraPlugin src/plugins/ROSLogicalCameraPlugin.cc rclcpp hrwros_interface tf2_ros)
+add_hrwros_library(ROSLogicalCameraPlugin SHARED src/plugins/ROSLogicalCameraPlugin.cc rclcpp hrwros_interface tf2_ros)
 
 # Install targets
 install(TARGETS
