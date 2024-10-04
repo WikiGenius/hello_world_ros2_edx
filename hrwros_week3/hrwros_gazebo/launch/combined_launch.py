@@ -67,12 +67,12 @@ def generate_launch_description():
         launch_args +
         [
             gzserver_launch,
-            gzclient_launch,
+            # gzclient_launch,
             spawn_static_objects,
-            spawn_robots,
-            spawn_turtlebot,
-            twist_mux_node,
-            bringup_launch
+            # spawn_robots,
+            # spawn_turtlebot,
+            # twist_mux_node,
+            # bringup_launch
         ]
-        + tf_static_nodes
+        # + tf_static_nodes
     )

@@ -25,7 +25,7 @@ find_package(gazebo_ros REQUIRED)
 
 # Include directories
 include_directories(
-  include
+  include/
   ${ament_cmake_INCLUDE_DIRS}
   ${gazebo_dev_INCLUDE_DIRS}
   ${gazebo_ros_INCLUDE_DIRS}
@@ -36,7 +36,9 @@ include_directories(
   ${tf2_INCLUDE_DIRS}
   ${tinyxml_vendor_INCLUDE_DIRS}
 )
-
+link_directories(
+  ${GAZEBO_LIBRARY_DIRS}
+)
 # Function to add a library with dependencies
 function(add_hrwros_library target TYPE src_file)
   add_library(${target} ${TYPE} ${src_file})
@@ -67,24 +69,31 @@ link_hrwros_target(urdf_creator_test_node urdf_creator)
 
 # Plugin libraries
 add_hrwros_library(SideContactPlugin SHARED src/plugins/SideContactPlugin.cc)
+link_hrwros_target(SideContactPlugin ${GAZEBO_LIBRARIES})
 add_hrwros_library(VacuumGripperPlugin SHARED src/plugins/VacuumGripperPlugin.cc)
+link_hrwros_target(VacuumGripperPlugin ${GAZEBO_LIBRARIES} ${roscpp_LIBRARIES}
+  ${sensor_msgs_LIBRARIES})
 add_hrwros_library(ROSVacuumGripperPlugin SHARED src/plugins/ROSVacuumGripperPlugin.cc rclcpp hrwros_interface)
-link_hrwros_target(ROSVacuumGripperPlugin VacuumGripperPlugin)
+link_hrwros_target(ROSVacuumGripperPlugin VacuumGripperPlugin ${GAZEBO_LIBRARIES}
+  ${roscpp_LIBRARIES} ${sensor_msgs_LIBRARIES})
 
 add_hrwros_library(ProximityRayPlugin SHARED src/plugins/ProximityRayPlugin.cc)
+link_hrwros_target(ProximityRayPlugin ${GAZEBO_LIBRARIES})
 add_hrwros_library(ROSProximityRayPlugin SHARED src/plugins/ROSProximityRayPlugin.cc rclcpp hrwros_interface)
-link_hrwros_target(ROSProximityRayPlugin ProximityRayPlugin)
+link_hrwros_target(ROSProximityRayPlugin ProximityRayPlugin ${GAZEBO_LIBRARIES})
 
 add_hrwros_library(ConveyorBeltPlugin SHARED src/plugins/ConveyorBeltPlugin.cc)
-link_hrwros_target(ConveyorBeltPlugin SideContactPlugin)
+link_hrwros_target(ConveyorBeltPlugin SideContactPlugin ${GAZEBO_LIBRARIES})
 
 add_hrwros_library(ROSConveyorBeltPlugin SHARED src/plugins/ROSConveyorBeltPlugin.cc rclcpp hrwros_interface)
-link_hrwros_target(ROSConveyorBeltPlugin ConveyorBeltPlugin)
+link_hrwros_target(ROSConveyorBeltPlugin ConveyorBeltPlugin ${GAZEBO_LIBRARIES})
 
 add_hrwros_library(ObjectDisposalPlugin SHARED src/plugins/ObjectDisposalPlugin.cc)
-link_hrwros_target(ObjectDisposalPlugin SideContactPlugin)
+link_hrwros_target(ObjectDisposalPlugin SideContactPlugin ${GAZEBO_LIBRARIES})
 
 add_hrwros_library(ROSLogicalCameraPlugin SHARED src/plugins/ROSLogicalCameraPlugin.cc rclcpp hrwros_interface tf2_ros)
+link_hrwros_target(ROSLogicalCameraPlugin ${GAZEBO_LIBRARIES} ${roscpp_LIBRARIES}
+  ${sensor_msgs_LIBRARIES})
 
 # Install targets
 install(TARGETS
@@ -101,7 +110,9 @@ install(TARGETS
   ROSConveyorBeltPlugin
   ObjectDisposalPlugin
   ROSLogicalCameraPlugin
-  DESTINATION lib/${PROJECT_NAME}
+  ARCHIVE DESTINATION lib
+  LIBRARY DESTINATION lib
+  RUNTIME DESTINATION lib/${PROJECT_NAME}
 )
 install(PROGRAMS scripts/env_setup.bash DESTINATION lib/${PROJECT_NAME})
 install(PROGRAMS scripts/timed_ros2_launch.sh DESTINATION lib/${PROJECT_NAME})
