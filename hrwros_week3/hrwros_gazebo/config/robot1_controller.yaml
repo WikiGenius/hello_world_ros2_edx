@@ -1,7 +1,7 @@
 robot1:
   controller_manager:
     ros__parameters:
-      update_rate: 100 # Hz
+      update_rate: 1000 # Hz
 
       robot1_controller:
         type: joint_trajectory_controller/JointTrajectoryController
@@ -25,7 +25,7 @@ robot1:
         - robot1_wrist_3_joint
 
 
-      state_publish_rate: 50.0 # Defaults to 50
+      state_publish_rate: 250.0 # Defaults to 250
       action_monitor_rate: 20.0 # Defaults to 20
 
       allow_partial_joints_goal: false # Defaults to false
